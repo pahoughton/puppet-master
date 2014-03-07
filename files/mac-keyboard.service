@@ -1,0 +1,17 @@
+# mac-keyboard.service - 2014-02-27 09:55
+#
+# Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
+#
+# From: https://www.dalemacartney.com/2013/06/14/changing-the-default-function-key-behaviour-in-fedora/
+#
+[Unit]
+Description=mac-keyboard
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "echo 2 > /sys/module/hid_apple/parameters/fnmode"
+ExecStop=/bin/sh -c "echo 1 > /sys/module/hid_apple/parameters/fnmode"
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

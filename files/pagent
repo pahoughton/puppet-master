@@ -1,0 +1,10 @@
+# pagent - 2014-02-15 07:29
+#
+# Copyright (c) 2014 Paul Houghton <paul_houghton@cable.comcast.com>
+#
+time puppet agent --test > ~/puppet.out 2>&1
+if grep Error ~/puppet.out ; then
+  echo "* * ERRORS * *"
+else
+  fold -w 78 -s ~/puppet.out
+fi

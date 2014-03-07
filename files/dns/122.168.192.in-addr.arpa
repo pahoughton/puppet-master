@@ -1,0 +1,14 @@
+$ORIGIN .
+$TTL 604800	; 1 week
+122.168.192.in-addr.arpa	IN SOA	tdns.test192.lan.122.168.192.in-addr.arpa. puppet.test192.lan.122.168.192.in-addr.arpa. (
+				150        ; serial
+				604800     ; refresh (1 week)
+				86400      ; retry (1 day)
+				2419200    ; expire (4 weeks)
+				604800     ; minimum (1 week)
+				)
+			NS	tdns.test192.lan.
+21			PTR	tcmac.test192.lan.
+19			PTR	tcport.test192.lan.
+16			PTR	tkitchen.test192.lan.
+52			PTR     tgandalf.test192.lan.

@@ -1,0 +1,19 @@
+$ORIGIN .
+$TTL 604800	; 1 week
+test192.lan		IN SOA	tdns.test192.lan. puppet.test192.lan. (
+				205        ; serial
+				604800     ; refresh (1 week)
+				86400      ; retry (1 day)
+				2419200    ; expire (4 weeks)
+				604800     ; minimum (1 week)
+				)
+			NS	tdns.test192.lan.
+			A	192.168.122.193
+$ORIGIN test192.lan.
+tdns			A	192.168.122.193
+tcworld 		A	192.168.122.8
+tcmac			A	192.168.122.21
+tcport			A	192.168.122.19
+tkitchen		A	192.168.122.16
+tgandalf		A	192.168.122.52
+

@@ -1,0 +1,8 @@
+# runbedework.erb - 2014-02-25 13:47
+#
+# Copyright (c) 2014 Paul Houghton <paul_houghton@cable.comcast.com>
+#
+export JAVA_HOME="<%= @java_home %>"
+cd /var/www/bedework
+./bw -quickstart dirstart 
+./startjboss
