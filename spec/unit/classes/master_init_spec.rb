@@ -4,10 +4,10 @@
 #
 require 'spec_helper'
 
-describe 'master' do
+describe 'master', :type => :class do
 
   it 'provides the master class' do
-    should contain_file('stuff')
+    should contain_class('master')
   end
 
 end
