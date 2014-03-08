@@ -1,0 +1,50 @@
+# -*- mode: conf -*-
+# fedora.mirror.repo.erb - 2014-03-08 11:45
+#
+# Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
+#
+[<%= @repo_mirror %>-fedora]
+name=Fedora - <%= @repo_mirror %> - $releasever - $basearch
+baseurl=http://<%= @repo_mirror %>/mirrors/yum/fedora
+enabled=1
+metadata_expire=2d
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
+
+[<%= @repo_mirror %>-fedora-updates]
+name=Fedora - <%= @repo_mirror %> - $releasever - $basearch - Updates
+baseurl=http://<%= @repo_mirror %>/mirrors/yum/fedora-updates
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
+
+[<%= @repo_mirror %>-rpmfusion-free]
+name=RPM Fusion for EL 6 - Free - <%= @repo_mirror %> -
+baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-free
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-20
+
+[<%= @repo_mirror %>-rpmfusion-free-updates-released]
+name=RPM Fusion for EL 6 - Free - <%= @repo_mirror %> - updates-released
+baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-free-updates-released
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-20
+
+[<%= @repo_mirror %>-rpmfusion-nonfree]
+name=RPM Fusion for EL 6 - Nonfree - <%= @repo_mirror %> -
+baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-nonfree
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-20
+
+[<%= @repo_mirror %>-rpmfusion-nonfree-updates-released]
+name=RPM Fusion for EL 6 - Nonfree - <%= @repo_mirror %> - updates-released
+baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-nonfree-updates-released
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-20
+

@@ -1,5 +1,11 @@
+# Rakefile - 2014-03-07 01:44
+#
+# Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
+#
 require 'rake'
 require 'rspec/core/rake_task'
+
+task :default => :rspec
 
 require 'rubygems'
 require 'puppetlabs_spec_helper/rake_tasks'
@@ -19,7 +25,6 @@ namespace :rspec do
     end
   end
 end
-task :default => :rspec
 
 begin
   if Gem::Specification::find_by_name('puppet-lint')
