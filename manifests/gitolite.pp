@@ -69,5 +69,11 @@ class master::gitolite (
     owner   => $user,
     group   => $group,
     source  => 'puppet:///modules/master/gitolite.rc',
+  }->
+  file { "${basedir}/.gitolite/hooks/post-receive" :
+    ensure  => 'file',
+    owner   => $user,
+    group   => $group,
+    source  => 'puppet:///modules/master/gitolite-hook-default-post-receive',
   }
 }

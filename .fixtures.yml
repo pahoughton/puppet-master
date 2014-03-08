@@ -1,8 +1,9 @@
 fixtures:
 
   repositories:
-    "stdlib": "git://github.com/puppetlabs/puppetlabs-stdlib.git"
+    "stdlib": "http://github.com/puppetlabs/puppetlabs-stdlib"
     "policykit": "http://github.com/pahoughton/puppet-policykit"
-
+    "vcsrepo": "http://github.com/puppetlabs/puppetlabs-vcsrepo"
+    
   symlinks:
     master: "#{source_dir}"
