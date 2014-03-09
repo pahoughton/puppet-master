@@ -25,6 +25,8 @@ $basedir = '/srv/gitolite'
         it "installs default post-receive hook" do
           should contain_file("#{$basedir}/.gitolite/hooks/common/post-receive").with({
             'ensure' => 'file',
+            'mode'   => '0755',
+
           })
         end
       end
