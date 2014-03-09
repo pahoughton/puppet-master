@@ -6,10 +6,10 @@
 #
 require 'spec_helper'
 
-$test_object = 'master::gitolite'
 $basedir = '/srv/gitolite'
 ['Fedora','CentOS'].each { |os|
-  describe $test_object, :type => :class do
+
+  describe 'master::gitolite', :type => :class do
     let(:facts) do {
         :osfamily  => 'redhat',
         :operatingsystem => os,
@@ -19,13 +19,14 @@ $basedir = '/srv/gitolite'
         :basedir   => $basedir,
       } end
     context "supports operating system: #{os}" do
-      context "provides master::#{$test_object} class which" do
-        it { should contain_class($test_object) }
-      end
-      it "installs default post-receive hook" do
-        should contain_file("#{$basedir}/.gitolite/hooks/post-receive").with({
-          'ensure' => 'file',
-        })
+      context "provides master::gitolite class which" do
+        it { should contain_class('master::gitolite') }
+      
+        it "installs default post-receive hook" do
+          should contain_file("#{$basedir}/.gitolite/hooks/post-receive").with({
+            'ensure' => 'file',
+          })
+        end
       end
     end
   end
