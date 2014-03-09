@@ -4,6 +4,7 @@ fixtures:
     "stdlib": "http://github.com/puppetlabs/puppetlabs-stdlib"
     "policykit": "http://github.com/pahoughton/puppet-policykit"
     "vcsrepo": "http://github.com/puppetlabs/puppetlabs-vcsrepo"
+    "sudo": "http://github.com/saz/puppet-sudo"
     
   symlinks:
     master: "#{source_dir}"
