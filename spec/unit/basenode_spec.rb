@@ -47,7 +47,7 @@ $packages = {
   'Ubuntu' => $common_pkgs,
 }
 
-  $mirror='gandalf'
+$mirror='gandalf'
   
 ['Fedora','CentOS'].each { |os|
   describe 'master::basenode', :type => :class do
