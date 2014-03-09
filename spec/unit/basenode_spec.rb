@@ -55,27 +55,36 @@ $mirror='gandalf'
         :osfamily  => 'redhat',
         :operatingsystem => os,
       } end 
-    let :params do {
-        :repo_mirror => $mirror,
-      } end
     context "supports operating system: #{os}" do
-      context "provides master::basenode class which" do
-        it { should contain_class('master::basenode') }
+      context "FIXME defaults not supported yet" do
+      end
+      context "given repo_mirror param" do
+        let :params do {
+            :repo_mirror => $mirror,
+        } end
+        context "provides master::basenode class which" do
+          it { should contain_class('master::basenode') }
 
-        context "disables existing repos provided by mirror: #{$mirror}" do
-          $repo_files[os].each {|rfile|
-            #            $repo_files['Fedora'].each {|rfile|
-            it "ensures #{rfile} absent" do 
-              should contain_file(rfile).with(
-                'ensure' => 'absent',
-              )
-            end
-          }
+          context "disables existing repos provided by mirror: #{$mirror}" do
+            $repo_files[os].each {|rfile|
+              it "ensures #{rfile} absent" do 
+                should contain_file(rfile).with(
+                  'ensure' => 'absent',
+                )
+              end
+            }
+          end
+          it "installs repo mirror file for yum for #{os}" do
+            should contain_file("/etc/yum.repos.d/#{$mirror}.repo").
+              with_content(/#{$mirror}/)
+          end
         end
-        it "installs repo mirror file for yum for #{os}" do
-          should contain_file("/etc/yum.repos.d/#{$mirror}.repo").
-            with_content(/#{$mirror}/)
-        end
+      end
+      context "param independent features" do
+        # FIXME - temp workaround until support of default params
+        let :params do {
+            :repo_mirror => $mirror,
+        } end
         context "installs base packages" do
           $packages[os].each{|pkg|
             it "ensure #{pkg} is installed" do
@@ -85,6 +94,19 @@ $mirror='gandalf'
             end
           }
         end
+        it { should contain_service('zfs-fuse').
+          with( 'ensure' => 'running',
+                'enable' => true, )
+        }
+        it { should contain_file('/root/scripts/pagent').
+          with( 'ensure' => 'file',
+                'mode'   => '+x',)
+        }
+        # this is redhat
+        $sudo_grp = 'wheel'
+        it { should contain_sudo_conf("group: #{$sudo_grp}") }
+        it { should contain_ssh_authorized_key("root-paul") }
+        it { should contain_exec('update info dir') }
       end
     end
   end
