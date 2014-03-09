@@ -8,9 +8,13 @@
 #
 class master::basenode (
   $repo_mirror,
+  $auth_key_type  = undef,
+  $auth_key_value = undef,
+  $auth_key_name  = undef,
   ) {  
   $common_pkgs = ['xterm',
                   'emacs',
+                  'make',
                   'git',
                   'subversion',
                   'cvs',
@@ -22,6 +26,7 @@ class master::basenode (
                   'iftop',
                   'lynx',
                   'zfs-fuse',
+                  'policycoreutils-python',
                   'unar',]
                    
   if $repo_mirror {
@@ -64,9 +69,53 @@ class master::basenode (
       }
     }
   } else {
-    fail("repo_mirror '$repo_mirror' is not supported - yet")
+    fail("repo_mirror '${repo_mirror}' is not supported - yet")
   }
+  
   package { $common_pkgs :
     ensure => 'installed',
+  }
+  service { 'zfs-fuse' :
+    ensure  => 'running',
+    enable  => true,
+    require => Package['zfs-fuse'],
+  }
+  file { '/root/scripts' :
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'root',   
+  }->
+  file { '/root/scripts/pagent' :
+    ensure => 'file',
+    mode   => '+x',
+    owner  => 'root',
+    group  => 'root',
+    source => 'puppet:///modules/master/pagent',
+  }
+  $sudo_grp = $::osfamily ? {
+    'debian' => 'adm',
+    'redhat' => 'wheel',
+  }
+  sudo::conf { "group: ${admin_grp}" :
+    priority => 10,
+    content  => "%${sudo_grp} ALL=(ALL) NOPASSWD: ALL\n",
+  }
+  if $auth_key_value {
+    ssh_authorized_key { 'root-paul' :
+      ensure => 'present',
+      user   => 'root',
+      name   => $auth_key_name,
+      key    => $auth_key_value,
+      type   => $auth_key_type,
+    }
+  }
+  file { '/usr/bin/info-dir-update.bash' :
+    ensure => 'file',
+    source => 'puppet:///extra_files/info-dir-update.bash',
+    mode   => '0755',
+  }->
+  exec { 'update info dir' :
+    command => 'info-dir-update.bash',
+    cwd     => '/usr/share/info',
   }
 }
