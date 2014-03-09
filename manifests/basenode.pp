@@ -22,7 +22,8 @@ class master::basenode (
                   'iftop',
                   'lynx',
                   'zfs-fuse',
-                  'unar',]
+                  'unar',
+                  'xorg-x11-apps',]
                    
   if $repo_mirror {
     $existing_repo_files = $::operatingsystem ? {
