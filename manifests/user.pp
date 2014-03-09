@@ -12,6 +12,7 @@ define master::user (
   $home    = undef,
   $pass    = undef,
   $rsa     = undef,
+  $libvirt = undef,
   ) {
   
   $user    = $name
@@ -66,6 +67,15 @@ define master::user (
       group   => $group,
       mode    => '0600',
       source  => "${rsa}.pub",
+    }
+  }
+  if $libvirt { 
+    policykit::localauthority { "${user}-libvirt-management" :
+      identity        => "unix-user:${user}",
+      action          => 'org.libvirt.unix.manage',
+      result_active   => 'yes',
+      result_any      => 'yes',
+      result_inactive => 'yes',
     }
   }
 }
