@@ -81,6 +81,8 @@ $mirror='gandalf'
           end
         end
       end
+# FIXME param dependent!
+#        it { should contain_ssh_authorized_key("root-paul") }
       context "param independent features" do
         # FIXME - temp workaround until support of default params
         let :params do {
@@ -105,8 +107,7 @@ $mirror='gandalf'
         }
         # this is redhat
         $sudo_grp = 'wheel'
-        it { should contain_sudo_conf("group: #{$sudo_grp}") }
-        it { should contain_ssh_authorized_key("root-paul") }
+        it { should contain_sudo__conf("group: #{$sudo_grp}") }
         it { should contain_exec('update info dir') }
       end
     end
