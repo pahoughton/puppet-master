@@ -74,6 +74,7 @@ class master::gitolite (
     ensure  => 'file',
     owner   => $user,
     group   => $group,
+    mode    => '0755',
     source  => 'puppet:///modules/master/gitolite-hook-default-post-receive',
   }
 }
