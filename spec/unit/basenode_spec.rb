@@ -38,6 +38,7 @@ $common_pkgs = [
   'lynx',
   'zfs-fuse',
   'unar',
+  'xorg-x11-apps',
 ]
    
                 

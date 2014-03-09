@@ -27,7 +27,8 @@ class master::basenode (
                   'lynx',
                   'zfs-fuse',
                   'policycoreutils-python',
-                  'unar',]
+                  'unar',
+                  'xorg-x11-apps',]
                    
   if $repo_mirror {
     $existing_repo_files = $::operatingsystem ? {
@@ -96,7 +97,7 @@ class master::basenode (
     'debian' => 'adm',
     'redhat' => 'wheel',
   }
-  sudo::conf { "group: ${admin_grp}" :
+  sudo::conf { "group: wheel" :
     priority => 10,
     content  => "%${sudo_grp} ALL=(ALL) NOPASSWD: ALL\n",
   }

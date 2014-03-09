@@ -23,7 +23,7 @@ $basedir = '/srv/gitolite'
         it { should contain_class('master::gitolite') }
       
         it "installs default post-receive hook" do
-          should contain_file("#{$basedir}/.gitolite/hooks/post-receive").with({
+          should contain_file("#{$basedir}/.gitolite/hooks/common/post-receive").with({
             'ensure' => 'file',
           })
         end
