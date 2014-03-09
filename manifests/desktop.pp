@@ -44,7 +44,6 @@ class master::desktop {
                 #'vlc',
               ] :
       ensure => 'installed',
-      require => Class['rpmfusion'],
     }
     exec { 'open xserver port' :
       command => '/bin/firewall-cmd --permanent --zone=public --add-port=6000/tcp'
