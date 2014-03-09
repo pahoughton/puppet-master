@@ -25,7 +25,6 @@ class master::desktop {
                 'xorg-x11-twm',
                 'xorg-x11-utils',
                 'xorg-x11-util-macros',
-                'xorg-x11-apps',
                 'xorg-x11-docs',
                 'xorg-x11-resutils',
                 'xorg-x11-xbitmaps',
@@ -44,7 +43,6 @@ class master::desktop {
                 #'vlc',
               ] :
       ensure => 'installed',
-      require => Class['rpmfusion'],
     }
     exec { 'open xserver port' :
       command => '/bin/firewall-cmd --permanent --zone=public --add-port=6000/tcp'
