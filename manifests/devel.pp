@@ -42,6 +42,7 @@ class master::devel {
   }
 
   package { [ 'git-svn',
+              'flex',
               'meld' ] :
     ensure => 'installed'
   }
