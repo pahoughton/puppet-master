@@ -17,9 +17,7 @@ $repo_files = {
               '/etc/yum.repos.d/CentOS-Debuginfo.repo',
               '/etc/yum.repos.d/CentOS-Media.repo',
               '/etc/yum.repos.d/CentOS-Vault.repo',
-              '/etc/yum.repos.d/epel.repo',
-              '/etc/yum.repos.d/pjku.repo',
-              '/etc/yum.repos.d/puppetlabs.repo',],
+              '/etc/yum.repos.d/epel.repo',],
   'Ubuntu' => [''],
 }
 
@@ -42,22 +40,45 @@ $common_pkgs = [
 ]
    
                 
-$packages = {
-  'Fedora' => $common_pkgs,
-  'CentOS' => $common_pkgs,
-  'Ubuntu' => $common_pkgs,
+$os_pkgs = {
+  'Fedora' => ['redhat-lsb',],
+  'CentOS' => ['redhat-lsb',],
+  'Ubuntu' => [],
+}
+
+$os_family = {
+  'Fedora' => 'redhat',
+  'CentOS' => 'redhat',
+  'Ubuntu' => 'debian',
+}
+$os_release = {
+  'Fedora' => '20',
+  'CentOS' => '6',
+  'Ubuntu' => '13',
 }
 
 $mirror='gandalf'
   
-['Fedora','CentOS'].each { |os|
+['Fedora','CentOS','Ubuntu'].each { |os|
   describe 'master::basenode', :type => :class do
     let(:facts) do {
-        :osfamily  => 'redhat',
-        :operatingsystem => os,
+        :osfamily               => $os_family[os],
+        :operatingsystem        => os,
+        :operatingsystemrelease => $os_release[os],
+        :os_maj_version         => $os_release[os],
       } end 
     context "supports operating system: #{os}" do
-      context "FIXME defaults not supported yet" do
+      context "default params" do
+        context "provides master::basenode class which" do
+          it { should contain_class('master::basenode') }
+          if $os_family[os] == 'redhat'
+            it { should contain_class('epel') }
+            it { should contain_class('rpmfusion') }
+          end
+          if os == 'CentOS'
+            it { should contain_yumrepo('pjku') }
+          end
+        end
       end
       context "given repo_mirror param" do
         let :params do {
@@ -66,30 +87,37 @@ $mirror='gandalf'
         context "provides master::basenode class which" do
           it { should contain_class('master::basenode') }
 
-          context "disables existing repos provided by mirror: #{$mirror}" do
-            $repo_files[os].each {|rfile|
-              it "ensures #{rfile} absent" do 
-                should contain_file(rfile).with(
-                  'ensure' => 'absent',
-                )
-              end
-            }
-          end
-          it "installs repo mirror file for yum for #{os}" do
-            should contain_file("/etc/yum.repos.d/#{$mirror}.repo").
-              with_content(/#{$mirror}/)
+          if $os_family[os] == 'redhat'
+            context "disables existing repos provided by mirror: #{$mirror}" do
+              $repo_files[os].each {|rfile|
+                it "ensures #{rfile} absent" do 
+                  should contain_file(rfile).with(
+                    'ensure' => 'absent',
+                  )
+                end
+              }
+            end
+            it "installs repo mirror file for yum for #{os}" do
+              should contain_file("/etc/yum.repos.d/#{$mirror}-#{os}.repo").
+                with_content(/#{$mirror}/)
+              should contain_file("/etc/yum.repos.d/#{$mirror}-rpmfusion.repo").
+                with_content(/#{$mirror}/)
+            end
           end
         end
       end
 # FIXME param dependent!
 #        it { should contain_ssh_authorized_key("root-paul") }
       context "param independent features" do
-        # FIXME - temp workaround until support of default params
-        let :params do {
-            :repo_mirror => $mirror,
-        } end
         context "installs base packages" do
-          $packages[os].each{|pkg|
+          $common_pkgs.each{|pkg|
+            it "ensure #{pkg} is installed" do
+              should contain_package(pkg).with(
+                'ensure' => 'installed',
+              )
+            end
+          }
+          $os_pkgs[os].each{|pkg|
             it "ensure #{pkg} is installed" do
               should contain_package(pkg).with(
                 'ensure' => 'installed',
