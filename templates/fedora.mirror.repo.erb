@@ -12,6 +12,39 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
 skip_if_unavailable=False
 
+[fedora]
+name=Fedora $releasever - $basearch
+failovermethod=priority
+#baseurl=http://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os/
+metalink=https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
+enabled=1
+metadata_expire=7d
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
+
+[fedora-debuginfo]
+name=Fedora $releasever - $basearch - Debug
+failovermethod=priority
+#baseurl=http://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/debug/
+metalink=https://mirrors.fedoraproject.org/metalink?repo=fedora-debug-$releasever&arch=$basearch
+enabled=0
+#metadata_expire=7d
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
+
+[fedora-source]
+name=Fedora $releasever - Source
+failovermethod=priority
+#baseurl=http://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/source/SRPMS/
+metalink=https://mirrors.fedoraproject.org/metalink?repo=fedora-source-$releasever&arch=$basearch
+enabled=0
+#metadata_expire=7d
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
+
 [<%= @repo_mirror %>-fedora-updates]
 name=Fedora - <%= @repo_mirror %> - $releasever - $basearch - Updates
 baseurl=http://<%= @repo_mirror %>/mirrors/yum/fedora-updates
@@ -20,31 +53,33 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
 skip_if_unavailable=False
 
-[<%= @repo_mirror %>-rpmfusion-free]
-name=RPM Fusion for EL 6 - Free - <%= @repo_mirror %> -
-baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-free
-enabled=1
+[fedora-updates]
+name=Fedora $releasever - $basearch - Updates
+failovermethod=priority
+#baseurl=http://download.fedoraproject.org/pub/fedora/linux/updates/$releasever/$basearch/
+metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-f$releasever&arch=$basearch
+enabled=0
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
 
-[<%= @repo_mirror %>-rpmfusion-free-updates-released]
-name=RPM Fusion for EL 6 - Free - <%= @repo_mirror %> - updates-released
-baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-free-updates-released
-enabled=1
+[fedora-updates-debuginfo]
+name=Fedora $releasever - $basearch - Updates - Debug
+failovermethod=priority
+#baseurl=http://download.fedoraproject.org/pub/fedora/linux/updates/$releasever/$basearch/debug/
+metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-debug-f$releasever&arch=$basearch
+enabled=0
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
 
-[<%= @repo_mirror %>-rpmfusion-nonfree]
-name=RPM Fusion for EL 6 - Nonfree - <%= @repo_mirror %> -
-baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-nonfree
-enabled=1
+[fedora-updates-source]
+name=Fedora $releasever - Updates Source
+failovermethod=priority
+#baseurl=http://download.fedoraproject.org/pub/fedora/linux/updates/$releasever/SRPMS/
+metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-source-f$releasever&arch=$basearch
+enabled=0
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-20
-
-[<%= @repo_mirror %>-rpmfusion-nonfree-updates-released]
-name=RPM Fusion for EL 6 - Nonfree - <%= @repo_mirror %> - updates-released
-baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-nonfree-updates-released
-enabled=1
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
+skip_if_unavailable=False
 
