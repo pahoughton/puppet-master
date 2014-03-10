@@ -44,7 +44,7 @@ class master::desktop {
               ] :
       ensure => 'installed',
     }
-    exec { 'open xserver port' :
+    exec { 'open X11 port' :
       command => '/bin/firewall-cmd --permanent --zone=public --add-port=6000/tcp'
     }
     # Adobe Flash
