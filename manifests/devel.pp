@@ -20,7 +20,6 @@ class master::devel {
       package { [ 'man-pages',
                   'yum-utils',
                   'emacs-el',
-                  'gcc-c++',
                   'postgresql-devel',] :
                     ensure => 'installed',
       }
@@ -82,21 +81,5 @@ class master::devel {
   #   provider  => 'gem',
   }
 
-  class { 'nginx' :
-
-  }
-  php::ini { '/etc/php.ini' :
-    display_errors  => 'On',
-    short_open_tag  => 'Off',
-    date_timezone   => 'America/Denver',
-  }
-  class { 'php::cli' : }
-  class { 'php::fpm::daemon' : }
-  php::fpm::conf { 'www' :
-    listen  => '127.0.0.1:9000',
-    user    => 'nginx',
-    group   => 'nginx',
-    require => Package['nginx'],
-  }
   class { 'python' : }
 }
