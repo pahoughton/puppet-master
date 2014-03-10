@@ -25,6 +25,7 @@ $os_family = {
 }
   
 $common_pkgs = ['git-svn',
+                'flex',
                 'meld',
                 'rspec-core',
                 'puppet-gem',
