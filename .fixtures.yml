@@ -1,10 +1,17 @@
 fixtures:
 
   repositories:
+    "gcc": "http://github.com/puppetlabs/puppetlabs-gcc"
     "stdlib": "http://github.com/puppetlabs/puppetlabs-stdlib"
     "policykit": "http://github.com/pahoughton/puppet-policykit"
     "vcsrepo": "http://github.com/puppetlabs/puppetlabs-vcsrepo"
+    "apt": "http://github.com/puppetlabs/puppetlabs-apt"
     "sudo": "http://github.com/saz/puppet-sudo"
+    "epel": "http://github.com/stahnma/puppet-module-epel"
+    "rpmfusion": "http://github.com/pahoughton/puppet-rpmfusion"
+    "php": "http://github.com/pahoughton/puppet-php"
+    "python": "http://github.com/pahoughton/puppet-python"
+    #    "nginx": "http://github.com/pahoughton/puppet-nginx"
     
   symlinks:
     master: "#{source_dir}"
