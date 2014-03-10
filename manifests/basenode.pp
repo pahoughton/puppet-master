@@ -7,7 +7,7 @@
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
 class master::basenode (
-  $repo_mirror,
+  $repo_mirror    = undef,
   $auth_key_type  = undef,
   $auth_key_value = undef,
   $auth_key_name  = undef,
@@ -29,50 +29,128 @@ class master::basenode (
                   'policycoreutils-python',
                   'unar',
                   'xorg-x11-apps',]
-                   
-  if $repo_mirror {
-    $existing_repo_files = $::operatingsystem ? {
-      'fedora' => [ '/etc/yum.repos.d/fedora.repo',
-                    '/etc/yum.repos.d/fedora-updates.repo',
-                    '/etc/yum.repos.d/fedora-updates-testing.repo',
-                    '/etc/yum.repos.d/rpmfusion-free.repo',
-                    '/etc/yum.repos.d/rpmfusion-free-updates-released.repo',
-                    '/etc/yum.repos.d/rpmfusion-nonfree.repo',
-                    '/etc/yum.repos.d/rpmfusion-nonfree-updates-released.repo',],
-      'centos' => ['/etc/yum.repos.d/CentOS-Base.repo',
-                   '/etc/yum.repos.d/CentOS-Debuginfo.repo',
-                   '/etc/yum.repos.d/CentOS-Media.repo',
-                   '/etc/yum.repos.d/CentOS-Vault.repo',
-                   '/etc/yum.repos.d/epel.repo',
-                   '/etc/yum.repos.d/pjku.repo',
-                   '/etc/yum.repos.d/puppetlabs.repo',],
 
-      'ubuntu' => [],
-      default  => undef,
-    }
-    if ! $existing_repo_files {
-      fail("Unsupported operatingsystem ${::operatingsystem}")
-    } else {
-# FIXME      fail("files  ${::operatingsystem}  ${existing_repo_files}")
-      file { $existing_repo_files : 
-        ensure => 'absent',
-      }->
-      file { "/etc/yum.repos.d/${repo_mirror}.repo" :
-        ensure => 'file',
-        content => template('master/fedora.mirror.repo.erb'),
-      }->
-      # I'm hopping this forces my mirror to be installed
-      # before any packages
-      yumrepo { 'dummy' :
-        descr   => 'dummy-for-puppet',
-        baseurl => 'http://nowhere/',
-        enabled => 0,
+  if $repo_mirror {
+    case $::operatingsystem {
+      'fedora' : {
+        $existing_repo_files =
+          [ '/etc/yum.repos.d/fedora.repo',
+            '/etc/yum.repos.d/fedora-updates.repo',
+            '/etc/yum.repos.d/fedora-updates-testing.repo',
+            '/etc/yum.repos.d/rpmfusion-free.repo',
+            '/etc/yum.repos.d/rpmfusion-free-updates-released.repo',
+            '/etc/yum.repos.d/rpmfusion-nonfree.repo',
+            '/etc/yum.repos.d/rpmfusion-nonfree-updates-released.repo',]
+        
+        file { $existing_repo_files : 
+          ensure => 'absent',
+        }    
+        ->
+        file { "/etc/yum.repos.d/${repo_mirror}-${::operatingsystem}.repo" :
+          ensure  => 'file',
+          content => template('master/fedora.mirror.repo.erb')
+        }
+        file { "/etc/yum.repos.d/${repo_mirror}-rpmfusion.repo" :
+          ensure => 'file',
+          content => template('master/rpmfusion.mirror.repo.erb'),
+        }
+        ->
+        # I am hopping this forces my mirror to be installed
+        # before any packages    
+        yumrepo { 'dummy' :
+          descr   => 'dummy-for-puppet',
+          baseurl => 'http://nowhere/',
+          enabled => 0,
+        }
+      }
+      'centos' : {
+        $existing_repo_files =
+          [ '/etc/yum.repos.d/CentOS-Base.repo',
+            '/etc/yum.repos.d/CentOS-Debuginfo.repo',
+            '/etc/yum.repos.d/CentOS-Media.repo',
+            '/etc/yum.repos.d/CentOS-Vault.repo',
+            '/etc/yum.repos.d/epel.repo',]
+        file { $existing_repo_files : 
+          ensure => 'absent',
+        }    
+        ->
+        file { "/etc/yum.repos.d/${repo_mirror}-${::operatingsystem}.repo" :
+          ensure  => 'file',
+          content => template('master/centos.mirror.repo.erb')
+        }
+        file { "/etc/yum.repos.d/${repo_mirror}-rpmfusion.repo" :
+          ensure => 'file',
+          content => template('master/rpmfusion.mirror.repo.erb'),
+        }
+        ->
+        # I am hopping this forces my mirror to be installed
+        # before any packages    
+        yumrepo { 'dummy' :
+          descr   => 'dummy-for-puppet',
+          baseurl => 'http://nowhere/',
+          enabled => 0,
+        }
+      }
+      'ubuntu' : {
+        # apt::source { "${repo_mirror}-ubuntu" :
+        #   location => "http://${repo_mirror}/mirrors/apt/ubuntu",
+        #   repos    => 'saucy main restricted',
+        # }
+        # apt::source { "${repo_mirror}-ubuntu-updates" :
+        #   location => "http://${repo_mirror}/mirrors/apt/ubuntu",
+        #   repos    => 'saucy-updates main restricted',
+        # }
+      }
+      default : {
+        fail("Unsupported operatingsystem ${::operatingsystem}")
+      }
+    }    
+  } else {
+    # ensure repos are avaiable
+    case $::operatingsystem {
+      'fedora' : {
+        class { 'epel' : }
+        ->
+        class { 'rpmfusion' :
+          nonfree    => 1,
+          repos      => [ '-','updates-released',],
+        }
+      }
+      'centos' : {
+        class { 'epel' : }
+        ->
+        class { 'rpmfusion' :
+          nonfree    => 1,
+          repos      => [ '-','updates-released',],
+        }
+        ->
+        file { '/etc/pki/rpm-gpg/PaulJohnson-BinaryPackageSigningKey' :
+          source => 'puppet:///master/PaulJohnson-BinaryPackageSigningKey',
+        }
+        yumrepo { 'pjku' :
+          descr       => 'pjku',
+          baseurl     => 'http://pj.freefaculty.org/EL/6/$basearch',
+          enabled     => 1,
+          gpgcheck    => 1,
+          includepkgs => 'emacs*',
+          gpgkey      => 'file:///etc/pki/rpm-gpg/PaulJohnson-BinaryPackageSigningKey',
+        }
+      }
+      'ubuntu' : {
+      }
+      default : {
+        fail("unsupported operatingsystem ${::operatingsystem}")
       }
     }
-  } else {
-    fail("repo_mirror '${repo_mirror}' is not supported - yet")
   }
-  
+
+  case $::osfamily {
+    'redhat' : {
+      package { 'redhat-lsb' :
+        ensure => 'installed',
+      }
+    }
+  }
   package { $common_pkgs :
     ensure => 'installed',
   }
