@@ -28,25 +28,14 @@ class master::puppetmaster {
       command => '/bin/firewall-cmd --permanent --zone=public --add-port=8140/tcp'
     }
   }
-  case $::osfamily {
-    'redhat' : {
-      file { '/root/scripts/puppet.update.bash' :
-        ensure  => 'file',
-        owner   => 'root',
-        group   => 'root',
-        mode    => '755',
-        source => 'puppet:///modules/master/puppet.update.bash',
-      }
-      file { '/root/scripts/puppet.apply.bash' :
-        ensure  => 'file',
-        owner   => 'root',
-        group   => 'root',
-        mode    => '755',
-        source  => 'puppet:///modules/master/puppet.apply.bash',
-      }
-    }
-    default : {
-      fail( "Unsupported osfamily ${::osfamily}" )
-    }
+  file { '/root/scripts/puppet.update.bash' :
+    ensure  => 'file',
+    mode    => '755',
+    source => 'puppet:///modules/master/puppet.update.bash',
+  }
+  file { '/root/scripts/puppet.apply.bash' :
+    ensure  => 'file',
+    mode    => '755',
+    source  => 'puppet:///modules/master/puppet.apply.bash',
   }
 }
