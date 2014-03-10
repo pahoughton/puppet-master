@@ -6,7 +6,7 @@ class master::app::jenkins (
   $basedir  = '/srv/jenkins',
   $user     = 'jenkins',
   $port     = '7237',
-  $vhost    = 'localhost',
+  $vhost    = undef,
   $location = '/jenkins'
   ) {
   case $::osfamily {
@@ -58,13 +58,15 @@ class master::app::jenkins (
     enable  => true,
     require => [File['/etc/sysconfig/jenkins'],File[$basedir],],
   }
-  nginx::resource::location { "jenkins_proxy":
-    ensure              => 'present',
-    vhost               => $vhost,
-    location            => "~ ^${location}/",
-    proxy               => "http://$vhost:$port",
-    proxy_read_timeout  => undef,
-    location_cfg_append => { include => '/etc/nginx/conf.d/proxy.conf' },
+  if $vhost {
+    nginx::resource::location { "jenkins_proxy":
+      ensure              => 'present',
+      vhost               => $vhost,
+      location            => "~ ^${location}/",
+      proxy               => "http://$vhost:$port",
+      proxy_read_timeout  => undef,
+      location_cfg_append => { include => '/etc/nginx/conf.d/proxy.conf' },
+    }
   }
   
 }
