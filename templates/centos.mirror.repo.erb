@@ -36,7 +36,7 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
 
 #additional packages that may be useful
-[extras]
+[centos-extras]
 name=CentOS-$releasever - Extras
 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
 #baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/
@@ -53,7 +53,7 @@ enabled=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
 
 #contrib - packages by Centos Users
-[contrib]
+[centos-contrib]
 name=CentOS-$releasever - Contrib
 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=contrib
 #baseurl=http://mirror.centos.org/centos/$releasever/contrib/$basearch/
