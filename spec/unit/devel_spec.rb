@@ -15,7 +15,7 @@ $osfamily_pkgs = {
 }
 $os_pkgs = {
   'Fedora' => ['mariadb-devel'],
-  'CentOS' => ['mysql-devel','man'],
+  'CentOS' => ['mysql-devel',],
   'Ubuntu' => [],
 }
 $os_family = {

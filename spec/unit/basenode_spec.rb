@@ -16,8 +16,7 @@ $repo_files = {
   'CentOS' => ['/etc/yum.repos.d/CentOS-Base.repo',
               '/etc/yum.repos.d/CentOS-Debuginfo.repo',
               '/etc/yum.repos.d/CentOS-Media.repo',
-              '/etc/yum.repos.d/CentOS-Vault.repo',
-              '/etc/yum.repos.d/epel.repo',],
+              '/etc/yum.repos.d/CentOS-Vault.repo',],
   'Ubuntu' => [''],
 }
 
@@ -35,15 +34,14 @@ $common_pkgs = [
   'iftop',
   'lynx',
   'zfs-fuse',
-  'unar',
   'xorg-x11-apps',
 ]
    
                 
 $os_pkgs = {
-  'Fedora' => ['redhat-lsb',],
+  'Fedora' => ['redhat-lsb','unar',],
   'CentOS' => ['redhat-lsb',],
-  'Ubuntu' => [],
+  'Ubuntu' => ['unar'],
 }
 
 $os_family = {

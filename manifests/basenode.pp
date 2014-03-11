@@ -27,9 +27,14 @@ class master::basenode (
                   'lynx',
                   'zfs-fuse',
                   'policycoreutils-python',
-                  'unar',
                   'xorg-x11-apps',]
 
+  $os_pkgs = $::operatingsystem ? {
+    'Fedora' => ['unar'],
+    'CentOS' => ['man'],
+    'Ubuntu' => ['unar'],
+  }
+  
   if $repo_mirror {
     case $::operatingsystem {
       'fedora' : {
@@ -68,8 +73,7 @@ class master::basenode (
           [ '/etc/yum.repos.d/CentOS-Base.repo',
             '/etc/yum.repos.d/CentOS-Debuginfo.repo',
             '/etc/yum.repos.d/CentOS-Media.repo',
-            '/etc/yum.repos.d/CentOS-Vault.repo',
-            '/etc/yum.repos.d/epel.repo',]
+            '/etc/yum.repos.d/CentOS-Vault.repo',]
         file { $existing_repo_files : 
           ensure => 'absent',
         }    
@@ -83,12 +87,18 @@ class master::basenode (
           content => template('master/rpmfusion.mirror.repo.erb'),
         }
         ->
-        # I am hopping this forces my mirror to be installed
-        # before any packages    
-        yumrepo { 'dummy' :
-          descr   => 'dummy-for-puppet',
-          baseurl => 'http://nowhere/',
-          enabled => 0,
+        class { 'epel' : }
+        ->
+        file { '/etc/pki/rpm-gpg/PaulJohnson-BinaryPackageSigningKey' :
+          source => 'puppet:///modules/master/PaulJohnson-BinaryPackageSigningKey',
+        }
+        yumrepo { 'pjku' :
+          descr       => 'pjku',
+          baseurl     => 'http://pj.freefaculty.org/EL/6/$basearch',
+          enabled     => 1,
+          gpgcheck    => 1,
+          includepkgs => 'emacs*',
+          gpgkey      => 'file:///etc/pki/rpm-gpg/PaulJohnson-BinaryPackageSigningKey',
         }
       }
       'ubuntu' : {
@@ -125,7 +135,7 @@ class master::basenode (
         }
         ->
         file { '/etc/pki/rpm-gpg/PaulJohnson-BinaryPackageSigningKey' :
-          source => 'puppet:///master/PaulJohnson-BinaryPackageSigningKey',
+          source => 'puppet:///modules/master/PaulJohnson-BinaryPackageSigningKey',
         }
         yumrepo { 'pjku' :
           descr       => 'pjku',
@@ -150,6 +160,9 @@ class master::basenode (
         ensure => 'installed',
       }
     }
+  }
+  package { $os_pkgs :
+    ensure => 'installed',
   }
   package { $common_pkgs :
     ensure => 'installed',
@@ -190,7 +203,7 @@ class master::basenode (
   }
   file { '/usr/bin/info-dir-update.bash' :
     ensure => 'file',
-    source => 'puppet:///extra_files/info-dir-update.bash',
+    source => 'puppet:///modules/master/info-dir-update.bash',
     mode   => '0755',
   }->
   exec { 'update info dir' :
