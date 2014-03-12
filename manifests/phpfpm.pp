@@ -5,8 +5,8 @@
 class master::phpfpm (
   $basedir     = '/srv/www',
   $php_modules = undef,
-  $www_user    = 'nginx',
-  $www_group   = 'nginx'
+  $user        = 'nginx',
+  $group       = 'nginx'
   ) {
   
   # ubuntu has seperate ini for php-fpm
@@ -26,8 +26,8 @@ class master::phpfpm (
   class { 'php::fpm::daemon' : }
   php::fpm::conf { 'www' :
     listen  => '127.0.0.1:9000',
-    user    => 'nginx',
-    group   => 'nginx',
+    user    => $user,
+    group   => $group,
     require => Package['nginx'],
   }
   if $php_modules {
@@ -39,23 +39,23 @@ class master::phpfpm (
   }
   file { "${php_base_dir}/session" :
     ensure => 'directory',
-    owner   => $www_user,
-    group   => $www_group,
+    owner   => $user,
+    group   => $group,
     mode    => '0775',
   }
   
   if $basedir {
     file { $basedir :
       ensure => 'directory',
-      owner   => $www_user,
-      group   => $www_group,
+      owner   => $user,
+      group   => $group,
       mode    => '0775',
       require => Package['nginx'],
     }->
     file { "${basedir}/phpinfo.php" :
       ensure => 'file',
-      owner   => $www_user,
-      group   => $www_group,
+      owner   => $user,
+      group   => $group,
       content => "<?php phpinfo(); ?>\n",
     }
   }
