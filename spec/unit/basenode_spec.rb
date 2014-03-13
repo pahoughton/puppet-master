@@ -131,7 +131,10 @@ $mirror='gandalf'
           with( 'ensure' => 'file',
                 'mode'   => '+x',)
         }
-        # this is redhat
+        # FIXME this is redhat
+        it { should contain_file('/var/log/yum.log').
+          with( 'mode' => '0644' )
+        }
         $sudo_grp = 'wheel'
         it { should contain_sudo__conf("group: #{$sudo_grp}") }
         it { should contain_exec('update info dir') }

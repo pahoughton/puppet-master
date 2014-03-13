@@ -159,6 +159,9 @@ class master::basenode (
       package { 'redhat-lsb' :
         ensure => 'installed',
       }
+      file { '/var/log/yum.log' :
+        mode  => '0644',
+      }
     }
   }
   package { $os_pkgs :
