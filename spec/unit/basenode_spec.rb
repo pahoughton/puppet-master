@@ -106,6 +106,26 @@ $mirror='gandalf'
       end
 # FIXME param dependent!
 #        it { should contain_ssh_authorized_key("root-paul") }
+      context "osfamily dependent features for #{os}-#{$os_family[os]}" do
+
+        if $os_family[os] == 'redhat'
+          it { should contain_file('/var/log/yum.log').
+            with( 'mode' => '0644' )
+          }
+          $sudo_grp = 'wheel'
+        else
+          it { should_contain_horible_confusion('me') }
+        end
+        
+        # if $os_family[os] == 'debianxsasdf'
+        #     $sudo_grp = 'admFU'
+        #   else
+        #     $sudo_grp = 'sudo'
+        #   end
+        # end
+
+        # it { should contain_sudo__conf("group: #{$sudo_grp}") }
+      end
       context "param independent features" do
         context "installs base packages" do
           $common_pkgs.each{|pkg|
@@ -131,12 +151,6 @@ $mirror='gandalf'
           with( 'ensure' => 'file',
                 'mode'   => '+x',)
         }
-        # FIXME this is redhat
-        it { should contain_file('/var/log/yum.log').
-          with( 'mode' => '0644' )
-        }
-        $sudo_grp = 'wheel'
-        it { should contain_sudo__conf("group: #{$sudo_grp}") }
         it { should contain_exec('update info dir') }
       end
     end

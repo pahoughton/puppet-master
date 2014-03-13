@@ -191,7 +191,7 @@ class master::basenode (
     'debian' => 'adm',
     'redhat' => 'wheel',
   }
-  sudo::conf { "group: wheel" :
+  sudo::conf { "group: ${sudo_grp}" :
     priority => 10,
     content  => "%${sudo_grp} ALL=(ALL) NOPASSWD: ALL\n",
   }
