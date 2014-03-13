@@ -9,5 +9,10 @@ project_page 'https://github.com/pahoughton/puppet-master'
 
 # FIXME dependency 'puppetlabs/policykit', '>=0.0.1'
 # FIXME - see .fixures.yml - ping file for testing
-dependency 'puppetlabs/vcsrepo', '>= 0.0.0'
-dependency 'puppetlabs/java', '>= 0.0.0'
+# See non published dendencies in (soon to be Puppetfile)
+#dependency 'puppetlabs/apt'
+#dependency 'stahnma/epel'
+#dependency 'puppetlabs/gcc'
+#dependency 'puppetlabs/stdlib'
+#dependency 'saz/sudo'
+#dependency 'puppetlabs/vcsrepo'

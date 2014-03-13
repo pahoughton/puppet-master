@@ -15,6 +15,11 @@ RSpec::Core::RakeTask.new(:rspec) do |t|
   t.rspec_opts = File.read("spec/spec.opts").chomp || ""
 end
 
+desc "Test prep with librarian-puppet"
+task :unittest_prep do
+ sh "librarian-puppet install --path=spec/fixtures/modules/"
+end
+
 SPEC_SUITES = (Dir.entries('spec') - ['.', '..','fixtures']).select {|e| File.directory? "spec/#{e}" }
 namespace :rspec do
   SPEC_SUITES.each do |suite|
@@ -24,6 +29,12 @@ namespace :rspec do
       t.rspec_opts = File.read("spec/spec.opts").chomp || ""
     end
   end
+end
+
+desc "Unit tests"
+RSpec::Core::RakeTask.new(:unittest) do |t|
+  t.rspec_opts = ['--format=d']
+  t.pattern = 'spec/unit/**/*_spec.rb'
 end
 
 begin
