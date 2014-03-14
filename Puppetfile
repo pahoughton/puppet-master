@@ -30,4 +30,5 @@ mod 'nginx',
 # mod 'python',
 #   :git => 'http://github.com/pahoughton/puppet-python'
 mod 'rpmfusion',
-  :git => 'http://github.com/pahoughton/puppet-rpmfusion'
+  :git => 'http://github.com/pahoughton/puppet-rpmfusion',
+  :ref => 'pahoughton-devel'

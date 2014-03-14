@@ -45,8 +45,8 @@ $os_pkgs = {
 }
 
 $os_family = {
-  'Fedora' => 'redhat',
-  'CentOS' => 'redhat',
+  'Fedora' => 'RedHat',
+  'CentOS' => 'RedHat',
   'Ubuntu' => 'debian',
 }
 $os_release = {
@@ -108,23 +108,22 @@ $mirror='gandalf'
 #        it { should contain_ssh_authorized_key("root-paul") }
       context "osfamily dependent features for #{os}-#{$os_family[os]}" do
 
-        if $os_family[os] == 'redhat'
+        if $os_family[os].casecmp("RedHat")
           it { should contain_file('/var/log/yum.log').
             with( 'mode' => '0644' )
           }
           $sudo_grp = 'wheel'
         else
-          it { should_contain_horible_confusion('me') }
+          $sudo_grp = "sudo #{os}-#{$os_family[os]}"
         end
         
         # if $os_family[os] == 'debianxsasdf'
-        #     $sudo_grp = 'admFU'
         #   else
         #     $sudo_grp = 'sudo'
         #   end
         # end
 
-        # it { should contain_sudo__conf("group: #{$sudo_grp}") }
+        it { should contain_sudo__conf("group: #{$sudo_grp}") }
       end
       context "param independent features" do
         context "installs base packages" do
