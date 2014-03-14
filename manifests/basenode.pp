@@ -177,13 +177,13 @@ class master::basenode (
     group  => 'root',
     source => 'puppet:///modules/master/pagent',
   }
-  $sudo_grp = $::osfamily ? {
-    'debian' => 'adm',
-    'redhat' => 'wheel',
+  group { 'sudo' :
+    ensure => 'present',
   }
-  sudo::conf { "group: ${sudo_grp}" :
+  ->
+  sudo::conf { "group: sudo" :
     priority => 10,
-    content  => "%${sudo_grp} ALL=(ALL) NOPASSWD: ALL\n",
+    content  => "%sudo ALL=(ALL) NOPASSWD: ALL\n",
   }
   if $auth_key_value {
     ssh_authorized_key { 'root-paul' :

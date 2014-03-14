@@ -107,23 +107,7 @@ $mirror='gandalf'
 # FIXME param dependent!
 #        it { should contain_ssh_authorized_key("root-paul") }
       context "osfamily dependent features for #{os}-#{$os_family[os]}" do
-
-        if $os_family[os].casecmp("RedHat")
-          it { should contain_file('/var/log/yum.log').
-            with( 'mode' => '0644' )
-          }
-          $sudo_grp = 'wheel'
-        else
-          $sudo_grp = "sudo #{os}-#{$os_family[os]}"
-        end
-        
-        # if $os_family[os] == 'debianxsasdf'
-        #   else
-        #     $sudo_grp = 'sudo'
-        #   end
-        # end
-
-        it { should contain_sudo__conf("group: #{$sudo_grp}") }
+        it { should contain_sudo__conf("group: sudo") }
       end
       context "param independent features" do
         context "installs base packages" do
