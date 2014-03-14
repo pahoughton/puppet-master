@@ -16,8 +16,7 @@ $repo_files = {
   'CentOS' => ['/etc/yum.repos.d/CentOS-Base.repo',
               '/etc/yum.repos.d/CentOS-Debuginfo.repo',
               '/etc/yum.repos.d/CentOS-Media.repo',
-              '/etc/yum.repos.d/CentOS-Vault.repo',
-              '/etc/yum.repos.d/epel.repo',],
+              '/etc/yum.repos.d/CentOS-Vault.repo',],
   'Ubuntu' => [''],
 }
 
@@ -35,20 +34,19 @@ $common_pkgs = [
   'iftop',
   'lynx',
   'zfs-fuse',
-  'unar',
   'xorg-x11-apps',
 ]
    
                 
 $os_pkgs = {
-  'Fedora' => ['redhat-lsb',],
+  'Fedora' => ['redhat-lsb','unar',],
   'CentOS' => ['redhat-lsb',],
-  'Ubuntu' => [],
+  'Ubuntu' => ['unar'],
 }
 
 $os_family = {
-  'Fedora' => 'redhat',
-  'CentOS' => 'redhat',
+  'Fedora' => 'RedHat',
+  'CentOS' => 'RedHat',
   'Ubuntu' => 'debian',
 }
 $os_release = {
@@ -108,6 +106,9 @@ $mirror='gandalf'
       end
 # FIXME param dependent!
 #        it { should contain_ssh_authorized_key("root-paul") }
+      context "osfamily dependent features for #{os}-#{$os_family[os]}" do
+        it { should contain_sudo__conf("group: sudo") }
+      end
       context "param independent features" do
         context "installs base packages" do
           $common_pkgs.each{|pkg|
@@ -133,9 +134,6 @@ $mirror='gandalf'
           with( 'ensure' => 'file',
                 'mode'   => '+x',)
         }
-        # this is redhat
-        $sudo_grp = 'wheel'
-        it { should contain_sudo__conf("group: #{$sudo_grp}") }
         it { should contain_exec('update info dir') }
       end
     end

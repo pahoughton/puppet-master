@@ -33,6 +33,7 @@ define master::user (
     gid      => $group,
     groups   => $groups,
     home     => "${homedir}",
+    require  => Group[$groups],
   }->
   file { "${homedir}" :
     ensure  => 'directory',

@@ -11,7 +11,7 @@ class master::devel {
           $os_packages = ['mariadb-devel']
         }
         'CentOS' : {
-          $os_packages = ['mysql-devel', 'man']
+          $os_packages = ['mysql-devel']
         }
         default : {
           fail("Unsupported os: ${::operatingsystem}")
