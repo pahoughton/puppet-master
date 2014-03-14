@@ -2,4 +2,4 @@
 
 Puppet modules for configuring top level apps.
 
-jenkins trigger.
+do Jenkins trigger.
