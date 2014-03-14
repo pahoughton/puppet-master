@@ -1,4 +1,5 @@
 #!/usr/bin/env python3.3
+# -*- python -*-
 '''gitolite post-receive hook
 
 Executed after successful push to the repo to notify, jenkins, trac and/or
