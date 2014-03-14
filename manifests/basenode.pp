@@ -116,23 +116,13 @@ class master::basenode (
       }
     }    
   } else {
-    # ensure repos are avaiable
+    # no mirror, so ensure repos are avaiable
     case $::operatingsystem {
       'fedora' : {
-        class { 'epel' : }
-        ->
-        class { 'rpmfusion' :
-          nonfree    => 1,
-          repos      => [ '-','updates-released',],
-        }
+        class { 'rpmfusion' : }
       }
       'centos' : {
-        class { 'epel' : }
-        ->
-        class { 'rpmfusion' :
-          nonfree    => 1,
-          repos      => [ '-','updates-released',],
-        }
+        class { 'rpmfusion' : }
         ->
         file { '/etc/pki/rpm-gpg/PaulJohnson-BinaryPackageSigningKey' :
           source => 'puppet:///modules/master/PaulJohnson-BinaryPackageSigningKey',
