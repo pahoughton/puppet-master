@@ -23,12 +23,12 @@ mod 'puppetlabs/vcsrepo'
 
 mod 'nginx',
   :git => 'http://github.com/pahoughton/puppet-nginx'
-# mod 'php',
-#   :git => 'http://github.com/pahoughton/puppet-php'
-# mod 'policykit',
-#   :git => 'http://github.com/pahoughton/puppet-policykit'
-# mod 'python',
-#   :git => 'http://github.com/pahoughton/puppet-python'
+mod 'php',
+  :git => 'http://github.com/pahoughton/puppet-php'
+mod 'policykit',
+  :git => 'http://github.com/pahoughton/puppet-policykit'
+mod 'python',
+  :git => 'http://github.com/pahoughton/puppet-python'
 mod 'rpmfusion',
   :git => 'http://github.com/pahoughton/puppet-rpmfusion',
   :ref => 'pahoughton-devel'

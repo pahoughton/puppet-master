@@ -99,7 +99,7 @@ def notify_jenkins(jenkinsUrl, branches):
     if reqUrl:
         try:
             resp = urllib.request.urlopen(reqUrl)
-            if resp and resp.status == 200:
+            if resp and resp.status == 201:
                 print('Jenkins notified via:',
                       reqUrl,
                       'response was:',
