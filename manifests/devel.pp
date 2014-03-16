@@ -58,7 +58,7 @@ class master::devel {
   package { 'puppet-gem' :
     ensure    => 'installed',
     name      => 'puppet',
-    provider  => 'gem',    
+    provider  => 'gem',
   }->
   package { [ 'rake',
               'bundler',

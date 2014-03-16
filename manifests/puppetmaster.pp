@@ -30,12 +30,12 @@ class master::puppetmaster {
   }
   file { '/root/scripts/puppet.update.bash' :
     ensure  => 'file',
-    mode    => '755',
-    source => 'puppet:///modules/master/puppet.update.bash',
+    mode    => '0755',
+    source  => 'puppet:///modules/master/puppet.update.bash',
   }
   file { '/root/scripts/puppet.apply.bash' :
     ensure  => 'file',
-    mode    => '755',
+    mode    => '0755',
     source  => 'puppet:///modules/master/puppet.apply.bash',
   }
 }

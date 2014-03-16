@@ -1,15 +1,15 @@
-# jenkins-bkup.pp - 2014-03-05 06:22
+# jenkins_bkup.pp - 2014-03-05 06:22
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
 # host - jenkins host name
 #
   # FIXME - we need puppetmaster wide params for these
-class master::app::jenkins-bkup (
+class master::app::jenkins_bkup (
   $host     = undef,
   $basedir  = $master::app::jenkins::basedir,
   $configfn = $master::app::jenkins::configfn,
-  $sched    = undef,
+  $sched    = 'WeeklyCycle',
   $pool     = undef,
   $fileset  = 'jenkins-ci',
   ) {
@@ -19,11 +19,11 @@ class master::app::jenkins-bkup (
   }
 
   bacula::fileset { $fileset :
-    include  => [ [[$basedir, $configfn],
-                   ['compression = GZIP9',
-                    'signature = MD5',
+    include  => [ [ [$basedir, $configfn],
+                    [ 'compression = GZIP9',
+                      'signature = MD5',
+                      ],
                     ],
-                   ],
                   ],
   }->
   bacula::job { $title :
@@ -32,9 +32,6 @@ class master::app::jenkins-bkup (
     jobdefs        => 'Default',
     pool           => $pool,
     fileset        => $fileset,
-    sched          => $sched ? {
-      undef    => 'WeeklyCycle',
-      default  => $sched,
-    },
+    sched          => $sched,
   }
 }

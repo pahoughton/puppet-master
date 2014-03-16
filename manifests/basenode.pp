@@ -57,7 +57,7 @@ class master::basenode (
           content => template('master/fedora.mirror.repo.erb')
         }
         file { "/etc/yum.repos.d/${repo_mirror}-rpmfusion.repo" :
-          ensure => 'file',
+          ensure  => 'file',
           content => template('master/rpmfusion.mirror.repo.erb'),
         }
         ->
@@ -84,7 +84,7 @@ class master::basenode (
           content => template('master/centos.mirror.repo.erb')
         }
         file { "/etc/yum.repos.d/${repo_mirror}-rpmfusion.repo" :
-          ensure => 'file',
+          ensure  => 'file',
           content => template('master/rpmfusion.mirror.repo.erb'),
         }
         ->
@@ -154,6 +154,8 @@ class master::basenode (
         mode  => '0644',
       }
     }
+    default : {
+    }
   }
   package { $os_pkgs :
     ensure => 'installed',
@@ -185,11 +187,11 @@ class master::basenode (
     'debian' => ['sudo','adm','puppet'],
     default  => ['puppet'],
   }
-  group { $osgroups :
+  group { $admgroups :
     ensure => 'present',
   }
   ->
-  sudo::conf { "group: sudo" :
+  sudo::conf { 'group: sudo' :
     priority => 10,
     content  => "%sudo ALL=(ALL) NOPASSWD: ALL\n",
   }

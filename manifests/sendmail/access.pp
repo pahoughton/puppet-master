@@ -12,7 +12,7 @@ class master::sendmail::access (
   ) {
 
   file { '/etc/mail/access' :
-    ensure => 'file',
+    ensure  => 'file',
     content => template('master/sendmail/access.erb')
   }
 }

@@ -8,7 +8,11 @@ class master::phpfpm (
   $user        = 'nginx',
   $group       = 'nginx'
   ) {
-  
+
+  File {
+    owner   => $user,
+    group   => $group,
+  }
   # ubuntu has seperate ini for php-fpm
   if $::osfamily == 'debian' {
     php::ini { '/etc/php5/fpm/php.ini' :
@@ -38,24 +42,18 @@ class master::phpfpm (
     'redhat'  => '/var/lib/php',
   }
   file { "${php_base_dir}/session" :
-    ensure => 'directory',
-    owner   => $user,
-    group   => $group,
+    ensure  => 'directory',
     mode    => '0775',
   }
-  
+
   if $basedir {
     file { $basedir :
-      ensure => 'directory',
-      owner   => $user,
-      group   => $group,
+      ensure  => 'directory',
       mode    => '0775',
       require => Package['nginx'],
     }->
     file { "${basedir}/phpinfo.php" :
-      ensure => 'file',
-      owner   => $user,
-      group   => $group,
+      ensure  => 'file',
       content => "<?php phpinfo(); ?>\n",
     }
   }

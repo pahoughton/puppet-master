@@ -13,7 +13,7 @@ class master::app::jenkins (
     'redhat' : {
       $keyfn = 'jenkins-ci.org.key'
       file { "/etc/pki/rpm-gpg/${keyfn}" :
-        source => "puppet:///modules/master/$keyfn",
+        source => "puppet:///modules/master/${keyfn}",
       }
       ->
       yumrepo { 'jenkins-ci' :
@@ -36,9 +36,10 @@ class master::app::jenkins (
       }
     }
     default : {
-      fail("unspported osfamily $::osfamily")
+      fail("unspported osfamily ${::osfamily}")
     }
   }
+
   file { $configfn :
     ensure  => 'file',
     mode    => '0644',
@@ -59,14 +60,14 @@ class master::app::jenkins (
     require => [File['/etc/sysconfig/jenkins'],File[$basedir],],
   }
   if $vhost {
-    nginx::resource::location { "jenkins_proxy":
+    nginx::resource::location { 'jenkins_proxy' :
       ensure              => 'present',
       vhost               => $vhost,
       location            => "~ ^${location}/",
-      proxy               => "http://$vhost:$port",
+      proxy               => "http://${vhost}:${port}",
       proxy_read_timeout  => undef,
       location_cfg_append => { include => '/etc/nginx/conf.d/proxy.conf' },
     }
   }
-  
+
 }

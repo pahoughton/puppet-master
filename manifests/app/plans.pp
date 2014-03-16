@@ -5,7 +5,7 @@
 class  master::app::plans (
   $app     = 'plans',
   $vhost   = 'localhost',
-  $appdir  = 'plans',  
+  $appdir  = 'plans',
   $tarball = 'plans.tar.gz',
   $db_host = 'localhost',
   ) {
@@ -31,7 +31,7 @@ class  master::app::plans (
     location        => "~ /${appdir}/(.*\.cgi)\$",
     www_root        => $master::nginxphp::basedir,
     proxy           => undef,
-    fastcgi         => "127.0.0.1:8999",
+    fastcgi         => '127.0.0.1:8999',
   }
   # nginx::resource::location { "${title}_static":
   #   ensure          => 'present',
@@ -39,6 +39,6 @@ class  master::app::plans (
   #   location        => "~ /${appdir}/.*",
   #   www_root        => $master::nginxphp::basedir,
   #   proxy           => undef,
-  # }  
-  
+  # }
+
 }

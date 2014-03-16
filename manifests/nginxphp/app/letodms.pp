@@ -42,10 +42,10 @@ class master::nginxphp::app::letodms (
   }
   ->
   file { "${rootdir}/${httproot}/conf/settings.xml" :
-    ensure => 'present',
+    ensure  => 'present',
     content => template('master/letodms/settings.xml.erb'),
-    owner   => $www_user,
-    group   => $www_group,
+    owner   => $master::nginxphp::www_user,
+    group   => $master::nginxphp::www_group,
     mode    => '0664',
   }
 }

@@ -30,5 +30,5 @@ class master::nginxphp::app::tiki (
     group   => $master::nginxphp::www_group,
     creates => '/var/www/tiki12/index.php',
   }
-  
+
 }
