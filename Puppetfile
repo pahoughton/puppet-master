@@ -13,7 +13,7 @@ mod 'puppetlabs/apt'
 # # mod 'camptocamp/augeas'
 # # mod 'domcleal/augeasproviders'
 mod 'stahnma/epel'
-# # mod 'puppetlabs/firewall'
+mod 'puppetlabs/firewall'
 mod 'puppetlabs/gcc'
 # # mod 'puppetlabs/lvm'
 # # mod 'puppetlabs/postgresql'
@@ -31,4 +31,9 @@ mod 'python',
   :git => 'http://github.com/pahoughton/puppet-python'
 mod 'rpmfusion',
   :git => 'http://github.com/pahoughton/puppet-rpmfusion',
+  :ref => 'pahoughton-devel'
+
+# FIXME - mirror to github
+mod 'bacula',
+  :git => 'git@cworld:puppet-bacula',
   :ref => 'pahoughton-devel'

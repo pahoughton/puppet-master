@@ -7,11 +7,12 @@
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
 class master::basenode (
-  $repo_mirror    = undef,
-  $auth_key_type  = undef,
-  $auth_key_value = undef,
-  $auth_key_name  = undef,
-  ) {  
+  $repo_mirror     = undef,
+  $bacula_director = undef,
+  $auth_key_type   = undef,
+  $auth_key_value  = undef,
+  $auth_key_name   = undef,
+  ) {
   $common_pkgs = ['xterm',
                   'emacs',
                   'make',
@@ -34,7 +35,7 @@ class master::basenode (
     'CentOS' => ['man'],
     'Ubuntu' => ['unar'],
   }
-  
+
   if $repo_mirror {
     case $::operatingsystem {
       'fedora' : {
@@ -46,10 +47,10 @@ class master::basenode (
             '/etc/yum.repos.d/rpmfusion-free-updates-released.repo',
             '/etc/yum.repos.d/rpmfusion-nonfree.repo',
             '/etc/yum.repos.d/rpmfusion-nonfree-updates-released.repo',]
-        
-        file { $existing_repo_files : 
+
+        file { $existing_repo_files :
           ensure => 'absent',
-        }    
+        }
         ->
         file { "/etc/yum.repos.d/${repo_mirror}-${::operatingsystem}.repo" :
           ensure  => 'file',
@@ -61,7 +62,7 @@ class master::basenode (
         }
         ->
         # I am hopping this forces my mirror to be installed
-        # before any packages    
+        # before any packages
         yumrepo { 'dummy' :
           descr   => 'dummy-for-puppet',
           baseurl => 'http://nowhere/',
@@ -74,9 +75,9 @@ class master::basenode (
             '/etc/yum.repos.d/CentOS-Debuginfo.repo',
             '/etc/yum.repos.d/CentOS-Media.repo',
             '/etc/yum.repos.d/CentOS-Vault.repo',]
-        file { $existing_repo_files : 
+        file { $existing_repo_files :
           ensure => 'absent',
-        }    
+        }
         ->
         file { "/etc/yum.repos.d/${repo_mirror}-${::operatingsystem}.repo" :
           ensure  => 'file',
@@ -114,7 +115,7 @@ class master::basenode (
       default : {
         fail("Unsupported operatingsystem ${::operatingsystem}")
       }
-    }    
+    }
   } else {
     # no mirror, so ensure repos are avaiable
     case $::operatingsystem {
@@ -168,7 +169,7 @@ class master::basenode (
   file { '/root/scripts' :
     ensure => 'directory',
     owner  => 'root',
-    group  => 'root',   
+    group  => 'root',
   }->
   file { '/root/scripts/pagent' :
     ensure => 'file',
@@ -177,7 +178,14 @@ class master::basenode (
     group  => 'root',
     source => 'puppet:///modules/master/pagent',
   }
-  group { 'sudo' :
+
+  # addmin groups
+  $admgroups = $::osfamily ? {
+    'RedHat' => ['sudo','adm','wheel','puppet'],
+    'debian' => ['sudo','adm','puppet'],
+    default  => ['puppet'],
+  }
+  group { $osgroups :
     ensure => 'present',
   }
   ->
@@ -185,13 +193,33 @@ class master::basenode (
     priority => 10,
     content  => "%sudo ALL=(ALL) NOPASSWD: ALL\n",
   }
-  if $auth_key_value {
-    ssh_authorized_key { 'root-paul' :
+  if $auth_key_value and $auth_key_name and $auth_key_type {
+    ssh_authorized_key { "root:${auth_key_name}" :
       ensure => 'present',
       user   => 'root',
       name   => $auth_key_name,
       key    => $auth_key_value,
       type   => $auth_key_type,
+    }
+  }
+
+  Firewall {
+    before  => Class['master::firewall::post'],
+    require => Class['master::firewall::pre'],
+  }
+
+  class { ['master::firewall::pre', 'master::firewall::post']: }
+  class { 'firewall': }
+
+  firewall { '010 accept http(s)(80,443)' :
+    proto   => 'tcp',
+    port    => [80,443],
+    action  => 'accept',
+  }
+
+  if $bacula_director {
+    class { 'bacula::fd' :
+      dir_host => $bacula_director,
     }
   }
   file { '/usr/bin/info-dir-update.bash' :

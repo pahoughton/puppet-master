@@ -36,8 +36,8 @@ $common_pkgs = [
   'zfs-fuse',
   'xorg-x11-apps',
 ]
-   
-                
+
+
 $os_pkgs = {
   'Fedora' => ['redhat-lsb','unar',],
   'CentOS' => ['redhat-lsb',],
@@ -56,7 +56,7 @@ $os_release = {
 }
 
 $mirror='gandalf'
-  
+
 ['Fedora','CentOS','Ubuntu'].each { |os|
   describe 'master::basenode', :type => :class do
     let(:facts) do {
@@ -64,7 +64,8 @@ $mirror='gandalf'
         :operatingsystem        => os,
         :operatingsystemrelease => $os_release[os],
         :os_maj_version         => $os_release[os],
-      } end 
+        :kernel                 => 'Linux',
+      } end
     context "supports operating system: #{os}" do
       context "default params" do
         context "provides master::basenode class which" do
@@ -88,7 +89,7 @@ $mirror='gandalf'
           if $os_family[os] == 'redhat'
             context "disables existing repos provided by mirror: #{$mirror}" do
               $repo_files[os].each {|rfile|
-                it "ensures #{rfile} absent" do 
+                it "ensures #{rfile} absent" do
                   should contain_file(rfile).with(
                     'ensure' => 'absent',
                   )
@@ -104,38 +105,59 @@ $mirror='gandalf'
           end
         end
       end
-# FIXME param dependent!
-#        it { should contain_ssh_authorized_key("root-paul") }
       context "osfamily dependent features for #{os}-#{$os_family[os]}" do
         it { should contain_sudo__conf("group: sudo") }
       end
       context "param independent features" do
         context "installs base packages" do
           $common_pkgs.each{|pkg|
-            it "ensure #{pkg} is installed" do
-              should contain_package(pkg).with(
-                'ensure' => 'installed',
-              )
-            end
+            it { should contain_package(pkg)
+                .with( 'ensure' => 'installed', )
+            }
           }
           $os_pkgs[os].each{|pkg|
-            it "ensure #{pkg} is installed" do
-              should contain_package(pkg).with(
-                'ensure' => 'installed',
-              )
-            end
+            it { should contain_package(pkg)
+                .with( 'ensure' => 'installed', )
+            }
           }
         end
         it { should contain_service('zfs-fuse').
           with( 'ensure' => 'running',
                 'enable' => true, )
         }
+        it { should contain_firewall('010 accept http(s)(80,443)') }
         it { should contain_file('/root/scripts/pagent').
           with( 'ensure' => 'file',
                 'mode'   => '+x',)
         }
         it { should contain_exec('update info dir') }
       end
+
+      bacdir_host='testbacdirhost'
+      context "param bacula_director => '#{bacdir_host}'" do
+        let :params do {
+            :bacula_director => bacdir_host,
+        } end
+        it { should contain_class('bacula::fd').
+          with('dir_host' => bacdir_host)
+        }
+      end
+
+      context 'param auth_key_[type,value&name] set' do
+        ktype='ssh-rsa'
+        kval='test-key-value'
+        kname='tester@nowhere.com'
+        let :params do {
+            :auth_key_type  => ktype,
+            :auth_key_value => kval,
+            :auth_key_name => kname,
+        } end
+        it { should contain_ssh_authorized_key("root:#{kname}").
+          with('ensure' => 'present',
+               'user'   => 'root',
+               'name'   => kname, )
+        }
+      end
     end
   end
-} # end os loop 
+} # end os loop
