@@ -6,9 +6,10 @@ class master::phpfpm (
   $basedir     = '/srv/www',
   $php_modules = undef,
   $user        = 'nginx',
-  $group       = 'nginx'
+  $group       = 'nginx',
+  $listen      = 'localhost:9000',
   ) {
-  
+
   # ubuntu has seperate ini for php-fpm
   if $::osfamily == 'debian' {
     php::ini { '/etc/php5/fpm/php.ini' :
@@ -25,7 +26,7 @@ class master::phpfpm (
   class { 'php::cli' : }
   class { 'php::fpm::daemon' : }
   php::fpm::conf { 'www' :
-    listen  => '127.0.0.1:9000',
+    listen  => $listen,
     user    => $user,
     group   => $group,
     require => Package['nginx'],
@@ -43,7 +44,7 @@ class master::phpfpm (
     group   => $group,
     mode    => '0775',
   }
-  
+
   if $basedir {
     file { $basedir :
       ensure => 'directory',
