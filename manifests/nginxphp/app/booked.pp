@@ -11,10 +11,10 @@ class master::nginxphp::app::booked (
   $db_pass      = 'booked',
   $app_timezone = 'America/Denver',
   $admin_email  = 'paul_houghton@cable.comcast.com',
- 
+
   ) {
 
-  
+
   master::nginxphp::app { $app :
     appdir      => $app,
     db_host     => $db_host,
@@ -53,11 +53,11 @@ class master::nginxphp::app::booked (
     owner   => $master::nginxphp::www_user,
     group   => $master::nginxphp::www_group,
     mode    => '0664',
-    notify  => Exec["$app database prep"],
+    notify  => Exec["${app} database prep"],
     require => File["${master::nginxphp::basedir}/booked/config/config.php"]
   }
-  exec { "$app database prep" :
-    command     => "/usr/bin/mysql --user='${db_user}' --password='${db_pass}' '${db_name}' < $db_sql_file",
+  exec { "${app} database prep" :
+    command     => "/usr/bin/mysql --user='${db_user}' --password='${db_pass}' '${db_name}' < ${db_sql_file}",
     require     => File[$db_sql_file],
     logoutput   => true,
     environment => "HOME=${::root_home}",

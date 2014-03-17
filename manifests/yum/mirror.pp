@@ -20,6 +20,6 @@ class master::yum::mirror (
     ensure => 'directory',
   }->
   exec { 'create repo' :
-    command => "createrepo --database /var/lib/yum/mirrors/fedora",
+    command => 'createrepo --database /var/lib/yum/mirrors/fedora',
   }
 }

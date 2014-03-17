@@ -2,8 +2,9 @@
 #
 # Copyright (c) 2014 Paul Houghton <paul_houghton@cable.comcast.com>
 #
-class master::bedework (
+class master::app::bedework (
   $tarball = 'bedework.tar.gz',
+  $app     = 'bedework',
   ) {
 
   class { 'java' : }
@@ -12,12 +13,12 @@ class master::bedework (
     'debian'  => '/usr/lib/jvm/java-7-openjdk-i386',
     default   => undef,
   }
-  
-  file { "/root/runbedework" :
+
+  file { '/root/runbedework' :
     ensure  => 'file',
     content => template('master/runbedework.erb'),
   }
-  file { "/var/www/${tarball}" :
+  file { "/srv/www/${tarball}" :
     ensure  => 'file',
     owner   => $master::nginxphp::www_user,
     group   => $master::nginxphp::www_group,
@@ -26,11 +27,11 @@ class master::bedework (
     notify  => Exec["extract ${app} tar"],
   }
   exec { "extract ${app} tar" :
-    command => "/bin/tar xzf /var/www/${tarball}",
+    command => "/bin/tar xzf /srv/www/${tarball}",
     cwd     => $master::nginxphp::basedir,
     user    => $master::nginxphp::www_user,
     group   => $master::nginxphp::www_group,
     creates => '/var/www/bedework/VERSION',
   }
-  
+
 }

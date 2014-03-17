@@ -11,11 +11,18 @@ class master::gitolite (
   $admin_key,
   $package    = 'gitolite',
   $bacula_dir = undef,
-  
+
   ) {
   # We roll our own to get access to gl-admin-push from latest code
   package { $package: ensure => absent }
-
+  File {
+    owner   => $user,
+    group   => $group,
+  }
+  Exec {
+    user    => $user,
+    group   => $group,
+  }
   # Create user/group at install to have a dir to unpack in
   group { $group:
     ensure  => 'present',
@@ -30,50 +37,38 @@ class master::gitolite (
   file { [$basedir,"${basedir}/bin"]:
     ensure  => directory,
     mode    => 'g+s',
-    owner   => $user,
-    group   => $group,
     require => User[$user]
   }->
   vcsrepo { "${basedir}/gitolite" :
-    provider   => 'git',
     ensure     => 'present',
+    provider   => 'git',
     source     => $source,
     revision   => $version,
-    owner      => $user, 
+    owner      => $user,
     group      => $group,
   }->
   file { "${basedir}/${admin_key}" :
     ensure  => 'file',
-    owner   => $user,
-    group   => $group,
     source  => "puppet:///extra_files/${admin_key}",
   }->
-  exec { "install gitolite" :
+  exec { 'install gitolite' :
     command     => "${basedir}/gitolite/install -ln",
     environment => ["HOME=${basedir}",],
-    user        => $user,
-    group       => $group,
     cwd         => $basedir,
     creates     => "${basedir}/bin/gitolite",
   }->
-  exec { "gitolite admin setup" :
+  exec { 'gitolite admin setup' :
     command     => "${basedir}/bin/gitolite setup -pk ${basedir}/${admin_key}",
     environment => ["HOME=${basedir}",],
-    user        => $user,
-    group       => $group,
     cwd         => $basedir,
     creates     => "${basedir}/.gitolite/conf/gitolite.conf",
   }->
   file { "${basedir}/.gitolite.rc" :
     ensure  => 'file',
-    owner   => $user,
-    group   => $group,
     source  => 'puppet:///modules/master/gitolite.rc',
   }->
   file { "${basedir}/.gitolite/hooks/common/post-receive" :
     ensure  => 'file',
-    owner   => $user,
-    group   => $group,
     mode    => '0755',
     source  => 'puppet:///modules/master/gitolite-hook-default-post-receive',
   }
