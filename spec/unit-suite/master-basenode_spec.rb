@@ -125,7 +125,14 @@ $mirror='gandalf'
           with( 'ensure' => 'running',
                 'enable' => true, )
         }
-        it { should contain_firewall('010 accept http(s)(80,443)') }
+        # ugg - test for one iteration of the loop
+        if os.casecmp('fedora' )
+          it { should
+            contain_exec('firewall-cmd --zone=public --add-service=https')
+          }
+        else
+          it { should contain_firewall('010 accept http(s)(80,443)') }
+        end
         it { should contain_file('/root/scripts/pagent').
           with( 'ensure' => 'file',
                 'mode'   => '+x',)

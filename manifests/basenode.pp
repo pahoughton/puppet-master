@@ -211,13 +211,22 @@ class master::basenode (
     require => Class['master::firewall::pre'],
   }
 
-  class { ['master::firewall::pre', 'master::firewall::post']: }
-  class { 'firewall': }
-
-  firewall { '010 accept http(s)(80,443)' :
-    proto   => 'tcp',
-    port    => [80,443],
-    action  => 'accept',
+  # does not work with fedora - todo
+  if $::operatingsystem != 'Fedora' {
+    class { ['master::firewall::pre', 'master::firewall::post']: }
+    class { 'firewall': }
+    firewall { '010 accept http(s)(80,443)' :
+      proto   => 'tcp',
+      port    => [80,443],
+      action  => 'accept',
+    }
+  } else {
+    # FIXME - there has to be a better way
+    exec { ['firewall-cmd --zone=public --add-service=http',
+            'firewall-cmd --permanent --zone=public --add-service=http',
+            'firewall-cmd --zone=public --add-service=https',
+            'firewall-cmd --permanent --zone=public --add-service=https',
+            ] : }
   }
 
   if $bacula_director {
