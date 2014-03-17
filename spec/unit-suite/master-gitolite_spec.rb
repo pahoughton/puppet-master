@@ -1,4 +1,4 @@
-# gitolite_spec.rb - 2014-03-08 14:25
+# master-gitolite_spec.rb - 2014-03-08 14:25
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
@@ -13,7 +13,7 @@ $basedir = '/srv/gitolite'
     let(:facts) do {
         :osfamily  => 'redhat',
         :operatingsystem => os,
-      } end 
+      } end
     let :params do {
         :admin_key => 'paul.pub',
         :basedir   => $basedir,
@@ -21,7 +21,7 @@ $basedir = '/srv/gitolite'
     context "supports operating system: #{os}" do
       context "provides master::gitolite class which" do
         it { should contain_class('master::gitolite') }
-      
+
         it "installs default post-receive hook" do
           should contain_file("#{$basedir}/.gitolite/hooks/common/post-receive").with({
             'ensure' => 'file',

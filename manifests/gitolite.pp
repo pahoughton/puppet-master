@@ -3,15 +3,14 @@
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
 class master::gitolite (
-  $user       = 'git',
-  $group      = 'git',
-  $basedir    = '/var/lib/gitolite',
-  $source     = 'https://github.com/sitaramc/gitolite',
-  $version    = undef,
-  $admin_key,
-  $package    = 'gitolite',
-  $bacula_dir = undef,
-
+  $user          = 'git',
+  $group         = 'git',
+  $basedir       = '/srv/gitolite',
+  $source        = 'https://github.com/sitaramc/gitolite',
+  $version       = undef,
+  $admin_key     = undef,
+  $admin_key_src = undef,
+  $package       = 'gitolite',
   ) {
   # We roll our own to get access to gl-admin-push from latest code
   package { $package: ensure => absent }

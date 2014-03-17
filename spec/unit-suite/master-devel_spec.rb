@@ -1,4 +1,4 @@
-# devel_spec.rb - 2014-03-09 09:40
+# master-devel_spec.rb - 2014-03-09 09:40
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
@@ -23,7 +23,7 @@ $os_family = {
   'CentOS' => 'redhat',
   'Ubuntu' => 'debian',
 }
-  
+
 $common_pkgs = ['git-svn',
                 'flex',
                 'meld',
@@ -38,7 +38,7 @@ $common_pkgs = ['git-svn',
         :osfamily        => $os_family[os],
         :operatingsystem => os,
         :kernel          => 'Linux',
-    } end 
+    } end
     context "supports operating system: #{os}" do
       context "provides master::devel class which" do
         it { should contain_class('master::devel') }
@@ -50,7 +50,7 @@ $common_pkgs = ['git-svn',
                 'ensure' => 'installed',
               )
             end
-          }          
+          }
           $os_pkgs[os].each{|pkg|
             it "ensure #{pkg} is installed" do
               should contain_package(pkg).with(

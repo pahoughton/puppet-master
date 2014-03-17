@@ -21,6 +21,8 @@ mod 'puppetlabs/stdlib'
 mod 'saz/sudo'
 mod 'puppetlabs/vcsrepo'
 
+mod 'tomcat',
+  :git => 'http://github.com/camptocamp/puppet-tomcat'
 mod 'nginx',
   :git => 'http://github.com/pahoughton/puppet-nginx'
 mod 'php',
@@ -34,6 +36,6 @@ mod 'rpmfusion',
   :ref => 'pahoughton-devel'
 
 # FIXME - mirror to github
-mod 'bacula',
-  :git => 'git@cworld:puppet-bacula',
-  :ref => 'pahoughton-devel'
+# mod 'bacula',
+#   :git => 'git@cworld:puppet-bacula',
+#   :ref => 'pahoughton-devel'

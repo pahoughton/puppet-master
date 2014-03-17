@@ -3,6 +3,7 @@
 # Copyright (c) 2014  <paul4hough@gmail.com>
 #
 class master::puppetmaster {
+
   package { ['puppet-server',] :
     ensure => 'installed',
   }->
@@ -27,6 +28,8 @@ class master::puppetmaster {
     exec { 'open port 8140 for puppet' :
       command => '/bin/firewall-cmd --permanent --zone=public --add-port=8140/tcp'
     }
+  } else {
+    fail("only fedora supported: ${::operatingsystem}")
   }
   file { '/root/scripts/puppet.update.bash' :
     ensure  => 'file',

@@ -1,4 +1,4 @@
-# desktop_spec.rb - 2014-03-09 09:33
+# master-desktop_spec.rb - 2014-03-09 09:33
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
@@ -47,7 +47,7 @@ $common_pkgs = [
     let(:facts) do {
         :osfamily  => 'redhat',
         :operatingsystem => os,
-    } end 
+    } end
     context "supports operating system: #{os}" do
       context "provides master::desktop class which" do
         it { should contain_class('master::desktop') }
@@ -61,7 +61,7 @@ $common_pkgs = [
           }
         end
         it "opens X11 port 6000" do
-          if os == 'Fedora' 
+          if os == 'Fedora'
             should contain_exec('open X11 port')
           end
         end
@@ -69,5 +69,3 @@ $common_pkgs = [
     end
   end
 }
-
-        
