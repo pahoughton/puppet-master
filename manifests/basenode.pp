@@ -11,7 +11,7 @@ class master::basenode (
   $auth_key_type  = undef,
   $auth_key_value = undef,
   $auth_key_name  = undef,
-  ) {  
+  ) {
   $common_pkgs = ['xterm',
                   'emacs',
                   'make',
@@ -21,6 +21,7 @@ class master::basenode (
                   'rcs',
                   'automake',
                   'sysstat',
+                  'bind-utils',
                   'lsof',
                   'nmap',
                   'iftop',
@@ -34,7 +35,7 @@ class master::basenode (
     'CentOS' => ['man'],
     'Ubuntu' => ['unar'],
   }
-  
+
   if $repo_mirror {
     case $::operatingsystem {
       'fedora' : {
@@ -46,10 +47,10 @@ class master::basenode (
             '/etc/yum.repos.d/rpmfusion-free-updates-released.repo',
             '/etc/yum.repos.d/rpmfusion-nonfree.repo',
             '/etc/yum.repos.d/rpmfusion-nonfree-updates-released.repo',]
-        
-        file { $existing_repo_files : 
+
+        file { $existing_repo_files :
           ensure => 'absent',
-        }    
+        }
         ->
         file { "/etc/yum.repos.d/${repo_mirror}-${::operatingsystem}.repo" :
           ensure  => 'file',
@@ -61,7 +62,7 @@ class master::basenode (
         }
         ->
         # I am hopping this forces my mirror to be installed
-        # before any packages    
+        # before any packages
         yumrepo { 'dummy' :
           descr   => 'dummy-for-puppet',
           baseurl => 'http://nowhere/',
@@ -74,9 +75,9 @@ class master::basenode (
             '/etc/yum.repos.d/CentOS-Debuginfo.repo',
             '/etc/yum.repos.d/CentOS-Media.repo',
             '/etc/yum.repos.d/CentOS-Vault.repo',]
-        file { $existing_repo_files : 
+        file { $existing_repo_files :
           ensure => 'absent',
-        }    
+        }
         ->
         file { "/etc/yum.repos.d/${repo_mirror}-${::operatingsystem}.repo" :
           ensure  => 'file',
@@ -114,7 +115,7 @@ class master::basenode (
       default : {
         fail("Unsupported operatingsystem ${::operatingsystem}")
       }
-    }    
+    }
   } else {
     # no mirror, so ensure repos are avaiable
     case $::operatingsystem {
@@ -168,7 +169,7 @@ class master::basenode (
   file { '/root/scripts' :
     ensure => 'directory',
     owner  => 'root',
-    group  => 'root',   
+    group  => 'root',
   }->
   file { '/root/scripts/pagent' :
     ensure => 'file',
