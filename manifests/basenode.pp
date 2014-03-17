@@ -13,6 +13,12 @@ class master::basenode (
   $auth_key_value  = undef,
   $auth_key_name   = undef,
   ) {
+
+  # FIXME - repo host mirror needs to be reachable
+  # FIXME - systest - package install attempted with no repos enabled.
+  # make all pacakges dependent on all yumrepos.
+  Yumrepo <| |> -> Package <| |>
+
   $common_pkgs = ['xterm',
                   'emacs',
                   'make',
@@ -211,6 +217,7 @@ class master::basenode (
     require => Class['master::firewall::pre'],
   }
 
+  # FIXME - some 'firewall' still being applied to fedora - looks ok though
   # does not work with fedora - todo
   if $::operatingsystem != 'Fedora' {
     class { ['master::firewall::pre', 'master::firewall::post']: }
