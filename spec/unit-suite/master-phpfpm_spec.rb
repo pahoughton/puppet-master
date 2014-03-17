@@ -17,7 +17,7 @@ $os_family = {
     let(:facts) do {
         :osfamily  => $os_family[os],
         :operatingsystem => os,
-    } end 
+    } end
 
     context "supports operating system: #{os}" do
       context "provides master::phpfpm class which" do
@@ -26,7 +26,7 @@ $os_family = {
         it { should contain_class('php::cli') }
         it { should contain_class('php::fpm::daemon') }
         it { should contain_php__fpm__conf('www').with(
-            'listen' => '127.0.0.1:9000',
+            'listen' => 'localhost:9000',
             'user'   => 'nginx',
             'group'  => 'nginx',
           )
