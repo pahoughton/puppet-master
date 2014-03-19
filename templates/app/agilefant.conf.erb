@@ -3,7 +3,7 @@ agilefant {
 		jndi-name = "jdbc/agilefant"
 
 		driver-class = "com.mysql.jdbc.Driver"
-		username = "agilefant"
+		username = "<%= @mydb_user %>"
 		password = "<%= @mydb_pass %>"
 		url = "jdbc:mysql://<%= @mydb_host %>/<%= @mydb_name %>?relaxAutoCommit=true&autoReconnect=true&useUnicode=true&characterEncoding=utf-8&autoReconnectForPools=true"
 	}

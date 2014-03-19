@@ -6,22 +6,25 @@
 class master::app::agilefant (
   $db_host    = undef,
   $mydb_name = 'agilefant',
-  $tomcatdir = '/var/lib/tomcat/webapps/tomcat',
+  $tomcatdir = '/var/lib/tomcat/webapps',
   ) {
 
   $passwords = hiera('passwords',{})
   $servers = hiera('servers')
-  $mydb_pass = $passwords['mysql-agilefant']
 
   $mydb_host = $db_host ? {
     undef   => $servers['mysql'],
     default => $db_host,
   }
-  mysql::db { $mydb_name :
-    host     => $mydb_host,
-    user     => 'agilefant',
-    password => $mydb_pass,
-    grant    => ['ALL',],
+  $mydb_user = 'agilefant'
+  $mydb_pass = $passwords['mysql-agilefant']
+  if $mydb_host == $::hostname or $mydb_host == 'localhost' {
+    mysql::db { $mydb_name :
+      host     => $mydb_host,
+      user     => $mydb_user,
+      password => $mydb_pass,
+      grant    => ['ALL',],
+    }
   }
   exec { 'fetch-agilefant' :
     cwd      => $tomcatdir,
