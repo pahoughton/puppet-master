@@ -21,10 +21,11 @@ mod 'puppetlabs/stdlib'
 mod 'saz/sudo'
 mod 'puppetlabs/vcsrepo'
 
-mod 'tomcat',
-  :git => 'http://github.com/camptocamp/puppet-tomcat'
+mod 'mysql',
+  :git => 'http://github.com/pahoughton/puppetlabs-mysql'
 mod 'nginx',
-  :git => 'http://github.com/pahoughton/puppet-nginx'
+  :git => 'http://github.com/pahoughton/puppet-nginx',
+  :ref => 'pahoughton-devel'
 mod 'php',
   :git => 'http://github.com/pahoughton/puppet-php'
 mod 'policykit',
