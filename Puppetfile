@@ -36,7 +36,6 @@ mod 'rpmfusion',
   :git => 'http://github.com/pahoughton/puppet-rpmfusion',
   :ref => 'pahoughton-devel'
 
-# FIXME - mirror to github
-# mod 'bacula',
-#   :git => 'git@cworld:puppet-bacula',
-#   :ref => 'pahoughton-devel'
+mod 'bacula',
+  :git => 'git@cworld:puppet-bacula',
+  :ref => 'pahoughton-devel'
