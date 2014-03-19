@@ -36,7 +36,7 @@ class master::app::agilefant (
   ->
   exec { 'extract-agilefant' :
     cwd      => $tomcatdir,
-    command  => "unar agilefant.war",
+    command  => 'unar agilefant.war',
     creates  => "${tomcatdir}/agilefant",
     notify   => Service['tomcat'],
     require  => File[$tomcatdir],

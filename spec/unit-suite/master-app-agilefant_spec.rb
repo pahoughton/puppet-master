@@ -17,7 +17,7 @@ os_release = {
 
 tobject = 'master::app::agilefant'
 ['Fedora','CentOS','Ubuntu',].each { |os|
-  dtomcatdir = '/var/lib/tomcat/webapps/tomcat'
+  tomcatdir = '/var/lib/tomcat/webapps'
   describe tobject, :type => :class do
     tfacts = {
       :osfamily               => os_family[os],
@@ -29,14 +29,17 @@ tobject = 'master::app::agilefant'
     }
     let(:facts) do tfacts end
     context "supports facts #{tfacts}" do
+      let :params do { 'db_host' => 'localhost' } end
       #it { should compile } #?- fail: expected that the catalogue would include
       it { should contain_class(tobject) }
-      it { should contain_mysql__db('agilefant') }
+      it { should contain_mysql__db('agilefant').
+        with( 'host' => 'localhost', )
+      }
       it { should contain_exec('extract-agilefant').
         with( 'notify'  => 'Service[tomcat]',
-              'require' => "File[#{dtomcatdir}]", )
+              'require' => "File[#{tomcatdir}]", )
       }
-      it { should contain_file("#{dtomcatdir}/agilefant/WEB-INF/agilefant.conf").
+      it { should contain_file("#{tomcatdir}/agilefant/WEB-INF/agilefant.conf").
         with( 'content' => /pass.*testMysqlPass/ )
       }
     end
