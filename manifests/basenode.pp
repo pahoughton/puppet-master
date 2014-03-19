@@ -94,9 +94,9 @@ class master::basenode (
           ensure  => 'file',
           content => template('master/rpmfusion.mirror.repo.erb'),
         }
-        ->
+
         class { 'epel' : }
-        ->
+
         file { '/etc/pki/rpm-gpg/PaulJohnson-BinaryPackageSigningKey' :
           source => 'puppet:///modules/master/PaulJohnson-BinaryPackageSigningKey',
         }
