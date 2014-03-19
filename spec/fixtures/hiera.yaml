@@ -1,0 +1,12 @@
+# hiera.yaml - 2014-03-18 15:10
+#
+# Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
+#
+---
+:backends:
+  - json
+:json:
+  :datadir: spec/fixtures/hiera
+:hierarchy:
+  - "node/%{::fqdn}"
+  - common

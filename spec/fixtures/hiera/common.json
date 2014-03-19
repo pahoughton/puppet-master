@@ -1,0 +1,10 @@
+{ "servers" : { "app" :  "gandalf/mirrors/apps",
+		"bacula-dir" : "tbacdir",
+	        "bacula-sd" : "tbacsd",
+		"gitolite" : "tgitolite",
+		"jenkins" : "tjenkins",
+		"mysql" : "tmysql"
+	      },
+  "passwords" : { "mysql-agilefant" : "testMysqlPass"
+		}
+}
