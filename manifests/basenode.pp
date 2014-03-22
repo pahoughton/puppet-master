@@ -14,8 +14,10 @@ class master::basenode (
   $auth_key_name   = undef,
   ) {
 
-  # FIXME - repo host mirror needs to be reachable
-  # FIXME - systest - package install attempted with no repos enabled.
+  notify { 'FIXME - repo host mirror needs to be reachable' : }
+  notify { 'FIXME - systest - package install attempted w/o repos enabled.' : }
+  notify { 'fixme - all systemd files notify systemd' : }
+
   # make all pacakges dependent on all yumrepos.
   Yumrepo <| |> -> Package <| |>
 
@@ -28,19 +30,26 @@ class master::basenode (
                   'rcs',
                   'automake',
                   'sysstat',
-                  'bind-utils',
                   'lsof',
                   'nmap',
                   'iftop',
                   'lynx',
                   'zfs-fuse',
-                  'policycoreutils-python',
                   'xorg-x11-apps',]
 
   $os_pkgs = $::operatingsystem ? {
-    'Fedora' => ['unar'],
-    'CentOS' => ['man'],
-    'Ubuntu' => ['unar'],
+    'Fedora' => [ 'unar',
+                  'policycoreutils-python',
+                  'bind-utils',
+                  ],
+    'CentOS' => [ 'man',
+                  'policycoreutils-python',
+                  'bind-utils',
+                  ],
+    'Ubuntu' => [ 'unar',
+                  'bind9utils',
+                  'policycoreutils',
+                  ],
   }
 
   if $repo_mirror {
