@@ -31,16 +31,13 @@ tobject = 'master::nginx::tomcat'
       #it { should compile } #?- fail: expected that the catalogue would include
       it { should contain_class(tobject) }
       it { should contain_package('tomcat') }
+      it { should contain_file('/etc/tomcat/server.xml').
+        with( 'content' => /1234/ )
+      }
       it { should contain_service('tomcat').
         with( 'ensure' => 'running',
               'enable' => true )
       }
-      it { should contain_nginx__resource__location('localhost-tomcat-static').
-        with( 'location' => '~ ^/tomcat.*png$' )
-      }
-      it { should contain_nginx__resource__location('localhost-tomcat-proxy').
-        with( 'location' => '~ ^/tomcat.*',
-              'proxy'    => 'http://localhost:8080' )      }
     end
   end
 }
