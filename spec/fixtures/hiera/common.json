@@ -6,5 +6,8 @@
 		"mysql" : "tmysql"
 	      },
   "passwords" : { "mysql-agilefant" : "testMysqlPass"
-		}
+		},
+  "ports" : { "tomcat" : "1234",
+	      "tomcat-ssl" : "7343"
+	    }
 }
