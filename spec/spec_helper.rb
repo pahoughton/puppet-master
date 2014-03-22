@@ -6,4 +6,7 @@ RSpec.configure do |c|
   c.module_path = File.join(fixture_path, 'modules')
   c.manifest_dir = File.join(fixture_path, 'manifests')
   c.hiera_config = 'spec/fixtures/hiera.yaml'
+  c.default_facts = {
+    :kernel         => 'Linux',
+  }
 end
