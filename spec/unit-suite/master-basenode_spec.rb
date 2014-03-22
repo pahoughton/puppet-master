@@ -20,28 +20,39 @@ $repo_files = {
   'Ubuntu' => [''],
 }
 
-$common_pkgs = [
-  'xterm',
-  'emacs',
-  'git',
-  'subversion',
-  'cvs',
-  'rcs',
-  'automake',
-  'sysstat',
-  'lsof',
-  'nmap',
-  'iftop',
-  'lynx',
-  'zfs-fuse',
-  'xorg-x11-apps',
-]
+$common_pkgs = ['xterm',
+                'emacs',
+                'make',
+                'git',
+                'subversion',
+                'cvs',
+                'rcs',
+                'automake',
+                'sysstat',
+                'lsof',
+                'nmap',
+                'iftop',
+                'lynx',
+                'zfs-fuse',
+                'xorg-x11-apps',]
+
 
 
 $os_pkgs = {
-  'Fedora' => ['redhat-lsb','unar',],
-  'CentOS' => ['redhat-lsb',],
-  'Ubuntu' => ['unar'],
+  'Fedora' => ['redhat-lsb',
+               'policycoreutils-python',
+               'bind-utils',
+               'unar',
+              ],
+  'CentOS' => ['redhat-lsb',
+               'policycoreutils-python',
+               'man',
+               'bind-utils',
+              ],
+  'Ubuntu' => ['unar',
+               'policycoreutils',
+               'bind9utils',
+              ],
 }
 
 $os_family = {
@@ -64,7 +75,6 @@ $mirror='gandalf'
         :operatingsystem        => os,
         :operatingsystemrelease => $os_release[os],
         :os_maj_version         => $os_release[os],
-        :kernel                 => 'Linux',
       } end
     context "supports operating system: #{os}" do
       context "default params" do
