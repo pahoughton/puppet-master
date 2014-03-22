@@ -16,32 +16,38 @@ os_release = {
 }
 
 tobject = 'master::app::agilefant'
-['Fedora','CentOS','Ubuntu',].each { |os|
-  tomcatdir = '/var/lib/tomcat/webapps'
-  describe tobject, :type => :class do
-    tfacts = {
-      :osfamily               => os_family[os],
-      :operatingsystem        => os,
-      :operatingsystemrelease => os_release[os],
-      :os_maj_version         => os_release[os],
-      :kernel                 => 'Linux',
-      :concat_basedir         => 'ugg postgres',
+os = 'Fedora' # os independent, using template code
+tomcatdir = '/srv/webapps' # default
+describe tobject, :type => :class do
+  tfacts = {
+    :osfamily               => os_family[os],
+    :operatingsystem        => os,
+    :operatingsystemrelease => os_release[os],
+    :os_maj_version         => os_release[os],
+    :kernel                 => 'Linux',
+    :concat_basedir         => 'ugg postgres',
+  }
+  let(:facts) do tfacts end
+  context "supports facts #{tfacts}" do
+    let :params do { 'db_host' => 'localhost' } end
+    #it { should compile } #?- fail: expected that the catalogue would include
+    it { should contain_class(tobject) }
+    it { should contain_class('master::app::tomcatbase').
+      with( 'vhost'     => 'localhost',
+            'tport'     => '1234', # from hiera/common.json
+            'app'       => 'agilefant',
+            'tomcatdir' => '/srv/webapps')
     }
-    let(:facts) do tfacts end
-    context "supports facts #{tfacts}" do
-      let :params do { 'db_host' => 'localhost' } end
-      #it { should compile } #?- fail: expected that the catalogue would include
-      it { should contain_class(tobject) }
-      it { should contain_mysql__db('agilefant').
-        with( 'host' => 'localhost', )
-      }
-      it { should contain_exec('extract-agilefant').
-        with( 'notify'  => 'Service[tomcat]',
-              'require' => "File[#{tomcatdir}]", )
-      }
-      it { should contain_file("#{tomcatdir}/agilefant/WEB-INF/agilefant.conf").
-        with( 'content' => /pass.*testMysqlPass/ )
-      }
-    end
+    it { should contain_mysql__db('agilefant').
+      with( 'host'     => 'localhost',
+            'password' => 'testMysqlPass',)
+    }
+    it { should contain_exec('extract-agilefant').
+      with( 'notify'  => 'Service[tomcat]',
+            'require' => "File[#{tomcatdir}]", )
+    }
+    it { should contain_file("#{tomcatdir}/agilefant/WEB-INF/agilefant.conf").
+      with( 'content' => /pass.*testMysqlPass/ )
+    }
   end
-}
+end
