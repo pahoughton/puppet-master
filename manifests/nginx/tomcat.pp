@@ -3,15 +3,25 @@
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
 class master::nginx::tomcat (
-  $host       = undef,
+  $host       = 'localhost',
   $package    = 'tomcat',
   $service    = 'tomcat',
   $location   = '/tomcat',
-  $port       = '8080',
-  $webappsdir = '/var/lib/tomcat/webapps/',
+  $tport      = undef,
+  $sport      = undef,
+  $webappsdir = '/srv/webapps/',
   ) {
-  # todo - reconfig tomcat - look at tomcat puppet modules.
-  # currently this is just the nginx tie in
+
+  $ports = hiera('ports',{ 'tomcat' => '8080' })
+
+  $port = $tport ? {
+    undef   => $ports['tomcat'],
+    default => $tport,
+  }
+  $sslport = $sport ? {
+    undef   => $ports['tomcat-ssl'],
+    default => $sport,
+  }
 
   if $package {
     package { $package :
@@ -27,34 +37,18 @@ class master::nginx::tomcat (
     require => Package[$package],
   }
 
-  file { [$webappsdir,"${webappsdir}${location}",] :
+  file { [$webappsdir,] :
     ensure  => 'directory',
     mode    => '0755',
     require => Package[$package],
   }
-
-  if ! $host {
-    $vhost = 'localhost'
-    nginx::resource::vhost { $vhost :
-      ensure   => 'present',
-      www_root => '/srv/www/',
-    }
-  } else {
-    $vhost = $host
+  file { '/usr/share/tomcat/webapps' :
+    ensure  => 'link',
+    target  => $webappsdir,
+    require => File[$webappsdir],
   }
-  nginx::resource::location { "${vhost}-tomcat-static" :
-    ensure              => 'present',
-    vhost               => $vhost,
-    location            => "~ ^${location}.*png\$",
-    index_files         => undef,
-    www_root            => $webappsdir,
-  }
-  nginx::resource::location { "${vhost}-tomcat-proxy" :
-    ensure              => 'present',
-    vhost               => $vhost,
-    location            => "~ ^${location}.*",
-    proxy               => "http://${vhost}:${port}",
-    proxy_read_timeout  => undef,
-    location_cfg_append => { include => '/etc/nginx/conf.d/proxy.conf' },
+  file { '/etc/tomcat/server.xml' :
+    ensure  => 'file',
+    content => template('master/nginx-tomcat-server.xml.erb'),
   }
 }
