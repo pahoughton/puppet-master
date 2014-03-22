@@ -4,18 +4,37 @@
 #
 # Fixme - http://java.sun.com/jsp/jstl/fmt cannot be resolved
 class master::app::agilefant (
-  $db_host    = undef,
+  $vhost     = 'localhost',
+  $tport     = undef,
+  $app       = 'agilefant',
+  $db_host   = undef,
   $mydb_name = 'agilefant',
-  $tomcatdir = '/var/lib/tomcat/webapps',
+  $tomcatdir = '/srv/webapps',
   ) {
 
   $passwords = hiera('passwords',{})
   $servers = hiera('servers')
+  $ports = hiera('ports',{ 'tomcat' => '8080' } )
+
+  $port = $tport ? {
+    undef   => $ports['tomcat'],
+    default => $tport,
+  }
+  if ! $port {
+    fail('need tport (tomcat port) value, hiera ports:tomcat not defined')
+  }
+  class { 'master::app::tomcatbase' :
+    vhost     => $vhost,
+    tport     => $port,
+    app       => $app,
+    tomcatdir => $tomcatdir,
+  }
 
   $mydb_host = $db_host ? {
     undef   => $servers['mysql'],
     default => $db_host,
   }
+
   $mydb_user = 'agilefant'
   $mydb_pass = $passwords['mysql-agilefant']
   if $mydb_host == $::hostname or $mydb_host == 'localhost' {
