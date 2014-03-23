@@ -20,7 +20,9 @@ class master::devel {
       package { [ 'man-pages',
                   'yum-utils',
                   'emacs-el',
-                  'postgresql-devel',] :
+                  # fixme - being installed by gitlab
+                  #'postgresql-devel',
+                  ] :
                     ensure => 'installed',
       }
       package { $os_packages :

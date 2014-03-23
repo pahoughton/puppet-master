@@ -6,7 +6,6 @@ $osfamily_pkgs = {
   'redhat' => [ 'yum-utils',
                 'man-pages',
                 'emacs-el',
-                'postgresql-devel',
                 'ruby-devel',],
   'debian' => [ 'libpq-devel',
                 'mysql-client',
