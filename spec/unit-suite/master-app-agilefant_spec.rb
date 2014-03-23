@@ -44,7 +44,9 @@ describe tobject, :type => :class do
     }
     it { should contain_exec('extract-agilefant').
       with( 'notify'  => 'Service[tomcat]',
-            'require' => "File[#{tomcatdir}]", )
+            'require' => "File[#{tomcatdir}]",
+            'user'    => 'tomcat',
+            'group'   => 'tomcat' )
     }
     it { should contain_file("#{tomcatdir}/agilefant/WEB-INF/agilefant.conf").
       with( 'content' => /pass.*testMysqlPass/ )

@@ -7,6 +7,9 @@ class master::app::tomcatbase(
   $tport,
   $app,
   $tomcatdir,
+  # todo hardcode
+  $user  = 'tomcat',
+  $group = 'tomcat',
   ) {
   $ports = hiera('ports',{'tomcat' => '8080'})
   $port = $tport ? {

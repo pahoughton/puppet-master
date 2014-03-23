@@ -14,6 +14,14 @@ class master::nginx::tomcat (
 
   $ports = hiera('ports',{ 'tomcat' => '8080' })
 
+  #todo hardcode
+  $user  = 'tomcat'
+  $group = 'tomcat'
+
+  # fixme this will break
+  user { 'nginx' :
+    groups => ['tomcat',],
+  }
   $port = $tport ? {
     undef   => $ports['tomcat'],
     default => $tport,
@@ -39,7 +47,9 @@ class master::nginx::tomcat (
 
   file { [$webappsdir,] :
     ensure  => 'directory',
-    mode    => '0755',
+    mode    => '0775',
+    owner   => $user,
+    group   => $group,
     require => Package[$package],
   }
   file { '/usr/share/tomcat/webapps' :
@@ -49,6 +59,8 @@ class master::nginx::tomcat (
   }
   file { '/etc/tomcat/server.xml' :
     ensure  => 'file',
+    owner   => $user,
+    group   => $group,
     content => template('master/nginx-tomcat-server.xml.erb'),
   }
 }

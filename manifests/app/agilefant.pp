@@ -16,6 +16,12 @@ class master::app::agilefant (
   $servers = hiera('servers')
   $ports = hiera('ports',{ 'tomcat' => '8080' } )
 
+  # fixme - tomcatbase some how?
+  Exec {
+    user    => 'tomcat', # $master::app::tomcatbase::user,
+    group   => 'tomcat', # $master::app::tomcatbase::group,
+    require => Class['master::app::tomcatbase'],
+  }
   $port = $tport ? {
     undef   => $ports['tomcat'],
     default => $tport,

@@ -38,6 +38,8 @@ tobject = 'master::nginx::tomcat'
         with( 'ensure' => 'running',
               'enable' => true )
       }
+      # fixme this will break
+      it { should contain_user('nginx') }
     end
   end
 }
