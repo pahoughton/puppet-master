@@ -29,14 +29,15 @@ tobject = 'master::nginx::mygitlab'
       #it { should compile } #?- fail: expected that the catalogue would include
       it { should contain_class(tobject) }
       it { should contain_class('gitlab').
-        with( 'git_home'      => '/srv/tgitolite',
-              'git_email'     => 'tester@nowhere.com',
-              'git_comment'   => 'gitolite and gitlab user',
-              'gitlab_dbtype' => 'pgsql',
-              'gitlab_dbhost' => 'tpostgres',
-              'gitlab_dbname' => 'gitlab',
-              'gitlab_dbuser' => 'gitlab',
-              'gitlab_dbpwd'  => 'tpsqlglab', )
+        with( 'git_create_user' => false,
+              'git_home'        => '/srv/tgitolite',
+              'git_email'       => 'tester@nowhere.com',
+              'git_comment'     => 'gitolite and gitlab user',
+              'gitlab_dbtype'   => 'pgsql',
+              'gitlab_dbhost'   => 'tpostgres',
+              'gitlab_dbname'   => 'gitlab',
+              'gitlab_dbuser'   => 'gitlab',
+              'gitlab_dbpwd'    => 'tpsqlglab', )
       }
    end
   end

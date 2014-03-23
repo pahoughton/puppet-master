@@ -63,7 +63,8 @@ class master::devel {
     provider  => 'gem',
   }->
   package { [ 'rake',
-              'bundler',
+              #fixme - installed by gitlab module
+              #'bundler',
               'puppet-lint',
               'rspec-puppet',
               'puppetlabs_spec_helper',

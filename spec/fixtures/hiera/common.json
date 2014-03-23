@@ -25,6 +25,7 @@
 		"gitlab" : "tgitlab",
 		"gitolite" : "tgitolite",
 		"jenkins" : "tjenkins",
+		"repo-mirror" : "tmirror",
 		"mysql" : "tmysql",
 		"postgres" : "tpostgres"
 	      }

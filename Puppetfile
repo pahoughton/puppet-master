@@ -23,7 +23,8 @@ mod 'saz/sudo'
 mod 'puppetlabs/vcsrepo'
 
 mod 'gitlab',
-  :git => 'http://github.com/sbadia/puppet-gitlab'
+  :git => 'http://github.com/pahoughton/puppet-gitlab',
+  :ref => 'pahoughton-devel'
 mod 'mysql',
   :git => 'http://github.com/pahoughton/puppetlabs-mysql'
 mod 'nginx',
