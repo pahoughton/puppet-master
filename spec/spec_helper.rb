@@ -8,6 +8,7 @@ RSpec.configure do |c|
   c.fail_fast     = true,
   c.hiera_config  = 'spec/fixtures/hiera.yaml'
   c.default_facts = {
+    :concat_basedir => 'ugg postgres',
     :kernel         => 'Linux',
   }
 end
