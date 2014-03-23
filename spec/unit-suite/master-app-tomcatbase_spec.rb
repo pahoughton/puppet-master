@@ -40,7 +40,7 @@ describe tobject, :type => :class do
     it { should contain_nginx__resource__location("#{host}-#{app}-tomcat-proxy").
       with( 'vhost' => 'localhost',
             'location' => "/#{app}",
-            'proxy'     => "http://#{host}:1234", # hiera test value
+            'proxy'     => "http://#{host}:1230",
             )
     }
   end

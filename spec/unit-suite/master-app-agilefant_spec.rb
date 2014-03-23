@@ -34,13 +34,13 @@ describe tobject, :type => :class do
     it { should contain_class(tobject) }
     it { should contain_class('master::app::tomcatbase').
       with( 'vhost'     => 'localhost',
-            'tport'     => '1234', # from hiera/common.json
+            'tport'     => '1230', # from hiera/common.json
             'app'       => 'agilefant',
             'tomcatdir' => '/srv/webapps')
     }
     it { should contain_mysql__db('agilefant').
       with( 'host'     => 'localhost',
-            'password' => 'testMysqlPass',)
+            'password' => 'tagile',)
     }
     it { should contain_exec('extract-agilefant').
       with( 'notify'  => 'Service[tomcat]',
@@ -49,7 +49,7 @@ describe tobject, :type => :class do
             'group'   => 'tomcat' )
     }
     it { should contain_file("#{tomcatdir}/agilefant/WEB-INF/agilefant.conf").
-      with( 'content' => /pass.*testMysqlPass/ )
+      with( 'content' => /pass.*tagile/ )
     }
   end
 end

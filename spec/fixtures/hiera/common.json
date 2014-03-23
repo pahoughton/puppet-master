@@ -1,13 +1,31 @@
-{ "servers" : { "app" :  "gandalf/mirrors/apps",
+{ "common.json" : "2014-03-19 04:29",
+  "Copyright" : "(c) 2014 Paul Houghton <paul4hough@gmail.com>",
+
+  "email" : { "bacula-dir" : "tester@nowhere.com",
+	      "gitlab" : "tester@nowhere.com"
+	    },
+
+  "homedirs" : { "git" : "/srv/tgitolite",
+		 "paul" : "/home/tpaul"
+	       },
+
+  "passwords" : { "mysql-root" : "tmysql",
+		  "mysql-agilefant" : "tagile",
+		  "postgres-root" : "tpsql",
+		  "postgres-bacula" : "tpsqlbac",
+		  "postgres-gitlab" : "tpsqlglab"
+		},
+
+  "ports" : { "tomcat" : "1230",
+	      "tomcat-ssl" : "1233"
+	    },
+  "servers" : { "app" :  "tgandalf/mirrors/apps",
 		"bacula-dir" : "tbacdir",
 	        "bacula-sd" : "tbacsd",
+		"gitlab" : "tgitlab",
 		"gitolite" : "tgitolite",
 		"jenkins" : "tjenkins",
-		"mysql" : "tmysql"
-	      },
-  "passwords" : { "mysql-agilefant" : "testMysqlPass"
-		},
-  "ports" : { "tomcat" : "1234",
-	      "tomcat-ssl" : "7343"
-	    }
+		"mysql" : "tmysql",
+		"postgres" : "tpostgres"
+	      }
 }

@@ -32,7 +32,7 @@ tobject = 'master::nginx::tomcat'
       it { should contain_class(tobject) }
       it { should contain_package('tomcat') }
       it { should contain_file('/etc/tomcat/server.xml').
-        with( 'content' => /1234/ )
+        with( 'content' => /1230/ )
       }
       it { should contain_service('tomcat').
         with( 'ensure' => 'running',
