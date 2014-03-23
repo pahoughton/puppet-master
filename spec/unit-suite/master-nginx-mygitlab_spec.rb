@@ -38,18 +38,6 @@ tobject = 'master::nginx::mygitlab'
               'gitlab_dbuser' => 'gitlab',
               'gitlab_dbpwd'  => 'tpsqlglab', )
       }
-
-
-      # it { should contain_package('tomcat') }
-      # it { should contain_file('/etc/tomcat/server.xml').
-      #   with( 'content' => /1234/ )
-      # }
-      # it { should contain_service('tomcat').
-      #   with( 'ensure' => 'running',
-      #         'enable' => true )
-      # }
-      # # fixme this will break
-      # it { should contain_user('nginx') }
-    end
+   end
   end
 }
