@@ -10,6 +10,27 @@ class master::nginx::mygitlab (
   $passwords = hiera('passwords')
   $homedirs = hiera('homedirs')
 
+  package { ['redis',] :
+    ensure => 'installed',
+  }
+  ->
+  service { 'redis' :
+    ensure => 'running',
+    enable => true,
+  }
+
+  postgresql::server::role { 'gitlab' :
+    createdb      => true,
+    password_hash => postgresql_password( 'gitlab', $passwords['postgres-gitlab']),
+  }
+  ->
+  postgresql::server::db { 'gitlab' :
+    user     => 'gitlab',
+    # fixme really!
+    encoding => 'unicode',
+    password => postgresql_password( 'gitlab', $passwords['postgres-gitlab']),
+  }
+  ->
   class { 'gitlab' :
     git_create_user => $git_create_user,
     git_home        => $homedirs['git'],
@@ -21,5 +42,6 @@ class master::nginx::mygitlab (
     gitlab_dbpwd    => $passwords['postgres-gitlab'],
     gitlab_dbname   => 'gitlab',
     gitlab_repodir  => "${homedirs[git]}/repositories",
+    require         => Service['redis'],
   }
 }

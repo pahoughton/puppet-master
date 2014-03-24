@@ -28,6 +28,7 @@ tobject = 'master::nginx::mygitlab'
     context "supports facts #{tfacts}" do
       #it { should compile } #?- fail: expected that the catalogue would include
       it { should contain_class(tobject) }
+      it { should contain_postgresql__server__db('gitlab') }
       it { should contain_class('gitlab').
         with( 'git_create_user' => false,
               'git_home'        => '/srv/tgitolite',
