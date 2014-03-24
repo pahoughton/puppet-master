@@ -11,7 +11,7 @@ class master::devel {
           $os_packages = ['mariadb-devel']
         }
         'CentOS' : {
-          $os_packages = ['mysql-devel', 'man']
+          $os_packages = ['mysql-devel']
         }
         default : {
           fail("Unsupported os: ${::operatingsystem}")
@@ -68,6 +68,10 @@ class master::devel {
               'puppet-syntax', ] :
     ensure    => 'installed',
     provider  => 'gem',
+  }->
+  package { ['librarian-puppet'] :
+    ensure   => 'installed',
+    provider => 'gem',
   }->
   package { 'rspec-mocks' :
     ensure   => 'installed',
