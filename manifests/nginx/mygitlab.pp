@@ -5,10 +5,15 @@
 class master::nginx::mygitlab (
   $git_create_user = false,
   ) {
-  $servers = hiera('servers')
-  $email = hiera('email')
-  $passwords = hiera('passwords')
-  $homedirs = hiera('homedirs')
+  # fixme args for all values
+  $servers   = hiera('servers',{ 'pgsql' => 'localhost' } )
+  $email     = hiera('emails', { 'gitlab' => "gitlab@${::hostname}" })
+  $passwords = hiera('passwords', { 'pgsql-gitlab' => 'gitlab' })
+  $homedirs  = hiera('homedirs',{ 'git' => '/srv/gitolite'} )
+  $users     = hiera('users',{ 'git' => 'git' })
+  # for templates
+  $user    = $users['git']
+  $homedir = $homedirs[$user]
 
   package { ['redis',] :
     ensure => 'installed',
@@ -21,14 +26,14 @@ class master::nginx::mygitlab (
 
   postgresql::server::role { 'gitlab' :
     createdb      => true,
-    password_hash => postgresql_password( 'gitlab', $passwords['postgres-gitlab']),
+    password_hash => postgresql_password( 'gitlab', $passwords['pgsql-gitlab']),
   }
   ->
   postgresql::server::db { 'gitlab' :
     user     => 'gitlab',
     # fixme really!
     encoding => 'unicode',
-    password => postgresql_password( 'gitlab', $passwords['postgres-gitlab']),
+    password => postgresql_password( 'gitlab', $passwords['pgsql-gitlab']),
   }
   ->
   class { 'gitlab' :
@@ -37,9 +42,9 @@ class master::nginx::mygitlab (
     git_email       => $email['gitlab'],
     git_comment     => 'gitolite and gitlab user',
     gitlab_dbtype   => 'pgsql',
-    gitlab_dbhost   => $servers['postgres'],
+    gitlab_dbhost   => $servers['pgsql'],
     gitlab_dbuser   => 'gitlab',
-    gitlab_dbpwd    => $passwords['postgres-gitlab'],
+    gitlab_dbpwd    => $passwords['pgsql-gitlab'],
     gitlab_dbname   => 'gitlab',
     gitlab_repodir  => "${homedirs[git]}/repositories",
     require         => Service['redis'],
