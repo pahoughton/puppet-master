@@ -207,6 +207,11 @@ class master::basenode (
     ensure => 'present',
   }
   ->
+  class { 'sudo' :
+    purge               => false,
+    config_file_replace => false,
+  }
+  ->
   sudo::conf { 'group: sudo' :
     priority => 10,
     content  => "%sudo ALL=(ALL) NOPASSWD: ALL\n",
@@ -258,5 +263,9 @@ class master::basenode (
   exec { 'update info dir' :
     command => 'info-dir-update.bash',
     cwd     => '/usr/share/info',
+  }
+  file { '/etc/profile.d/custom.sh' :
+    ensure => 'file',
+    source => 'puppet:///modules/master/custom.sh',
   }
 }
