@@ -33,6 +33,11 @@ class master::gitolite (
     shell   => '/bin/bash',
     comment => 'Gitolite user',
   }->
+  file { ["${basedir}/.bash_profile",
+          "${basedir}/.bashrc",] :
+    ensure  => 'file',
+    content => "PATH=\$HOME/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin\n",
+  }
   file { [$basedir,"${basedir}/bin"]:
     ensure  => directory,
     mode    => 'g+s',
