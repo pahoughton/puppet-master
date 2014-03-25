@@ -1,9 +1,9 @@
 { "common.json" : "2014-03-19 04:29",
   "Copyright" : "(c) 2014 Paul Houghton <paul4hough@gmail.com>",
 
-  "email" : { "bacula-dir" : "tester@nowhere.com",
-	      "gitlab" : "tester@nowhere.com"
-	    },
+  "emails" : { "bacula-dir" : "tester@nowhere.com",
+	       "gitlab" : "tester@nowhere.com"
+	     },
 
   "homedirs" : { "git" : "/srv/tgitolite",
 		 "paul" : "/home/tpaul"
@@ -11,9 +11,9 @@
 
   "passwords" : { "mysql-root" : "tmysql",
 		  "mysql-agilefant" : "tagile",
-		  "postgres-root" : "tpsql",
-		  "postgres-bacula" : "tpsqlbac",
-		  "postgres-gitlab" : "tpsqlglab"
+		  "pgsql-root" : "tpsql",
+		  "pgsql-bacula" : "tpsqlbac",
+		  "pgsql-gitlab" : "tpsqlglab"
 		},
 
   "ports" : { "tomcat" : "1230",
@@ -27,6 +27,6 @@
 		"jenkins" : "tjenkins",
 		"repo-mirror" : "tmirror",
 		"mysql" : "tmysql",
-		"postgres" : "tpostgres"
+		"pgsql" : "tpostgres"
 	      }
 }
