@@ -22,6 +22,9 @@ mod 'puppetlabs/stdlib'
 mod 'saz/sudo'
 mod 'puppetlabs/vcsrepo'
 
+mod 'bacula',
+  :git => 'http://github.com/pahoughton/puppet-bacula',
+  :ref => 'pahoughton-devel'
 mod 'gitlab',
   :git => 'http://github.com/pahoughton/puppet-gitlab',
   :ref => 'pahoughton-devel'
@@ -40,6 +43,3 @@ mod 'rpmfusion',
   :git => 'http://github.com/pahoughton/puppet-rpmfusion',
   :ref => 'pahoughton-devel'
 
-mod 'bacula',
-  :git => 'git@cworld:puppet-bacula',
-  :ref => 'pahoughton-devel'
