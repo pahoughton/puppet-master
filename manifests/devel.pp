@@ -8,7 +8,10 @@ class master::devel {
     'redhat' : {
       case $::operatingsystem {
         'Fedora' : {
-          $os_packages = ['mariadb-devel']
+          $os_packages = ['mariadb-devel',
+                          'rubygem-nokogiri',
+                          'libxml2-devel',
+                          'libxslt-devel', ]
         }
         'CentOS' : {
           $os_packages = ['mysql-devel']
@@ -17,17 +20,12 @@ class master::devel {
           fail("Unsupported os: ${::operatingsystem}")
         }
       }
-      package { [ 'man-pages',
-                  'yum-utils',
-                  'emacs-el',
-                  # fixme - being installed by gitlab
-                  #'postgresql-devel',
-                  ] :
-                    ensure => 'installed',
-      }
-      package { $os_packages :
-        ensure => 'installed',
-      }
+      ensure_packages([ 'man-pages',
+                        'yum-utils',
+                        'emacs-el',
+                        'postgresql-devel',
+                        ])
+      ensure_packages( $os_packages )
       $ruby_pkg = 'ruby-devel'
     }
     'debian' : {
@@ -42,12 +40,17 @@ class master::devel {
       fail('unsupported osfamily')
     }
   }
-
-  package { [ 'git-svn',
-              'flex',
-              'meld' ] :
-    ensure => 'installed'
+  if ! defined( Package['bundler'] ) {
+    package { 'bundler' :
+      ensure   => 'installed',
+      provider => 'gem',
+    }
   }
+
+  ensure_packages( ['git-svn',
+                    'flex',
+                    'meld'] )
+
   class { 'gcc' : }
   # ruby stuff
   package { $ruby_pkg :
@@ -62,13 +65,7 @@ class master::devel {
     name      => 'puppet',
     provider  => 'gem',
   }->
-  package { [ 'rake',
-              #fixme - installed by gitlab module
-              #'bundler',
-              'puppet-lint',
-              'rspec-puppet',
-              'puppetlabs_spec_helper',
-              'puppet-syntax', ] :
+  package { [ 'rake', ] :
     ensure    => 'installed',
     provider  => 'gem',
   }->
@@ -79,10 +76,26 @@ class master::devel {
   package { 'rspec-expectations' :
     ensure   => 'installed',
     provider => 'gem',
-  # }->
-  # package { 'rspec-system-serverspec' :
-  #   ensure    => 'installed',
-  #   provider  => 'gem',
+  }->
+  package { 'rspec-system' :
+    ensure    => 'installed',
+    provider  => 'gem',
+  }->
+  package { 'rspec-system-puppet' :
+    ensure    => 'installed',
+    provider  => 'gem',
+  }->
+  package { 'rspec-system-serverspec' :
+    ensure    => 'installed',
+    provider  => 'gem',
+  }
+
+  package { [ 'puppet-lint',
+              'rspec-puppet',
+              'puppetlabs_spec_helper',
+              'puppet-syntax', ] :
+    ensure    => 'installed',
+    provider  => 'gem',
   }
 
   class { 'python' : }

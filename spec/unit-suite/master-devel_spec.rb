@@ -2,7 +2,9 @@
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
-$osfamily_pkgs = {
+require 'spec_helper'
+
+osfamily_pkgs = {
   'redhat' => [ 'yum-utils',
                 'man-pages',
                 'emacs-el',
@@ -12,60 +14,51 @@ $osfamily_pkgs = {
                 'emacs24-el',
                 'ruby-full',],
 }
-$os_pkgs = {
-  'Fedora' => ['mariadb-devel'],
+os_pkgs = {
+  'Fedora' => ['mariadb-devel',
+               'rubygem-nokogiri',
+               'libxml2-devel',
+               'libxslt-devel',],
   'CentOS' => ['mysql-devel',],
   'Ubuntu' => [],
 }
-$os_family = {
+os_family = {
   'Fedora' => 'redhat',
   'CentOS' => 'redhat',
   'Ubuntu' => 'debian',
 }
 
-$common_pkgs = ['git-svn',
+common_pkgs = ['git-svn',
                 'flex',
                 'meld',
                 'rspec-core',
                 'puppet-gem',
                 'rspec-mocks',
                 'rspec-expectations',]
-
+tobject = 'master::devel'
 ['Fedora','CentOS','Ubuntu'].each { |os|
-  describe 'master::devel', :type => :class do
-    let(:facts) do {
-        :osfamily        => $os_family[os],
-        :operatingsystem => os,
-        :kernel          => 'Linux',
-    } end
-    context "supports operating system: #{os}" do
-      context "provides master::devel class which" do
-        it { should contain_class('master::devel') }
-        context "installs devel packages" do
-
-          $osfamily_pkgs[$os_family[os]].each{|pkg|
-            it "ensure #{pkg} is installed" do
-              should contain_package(pkg).with(
-                'ensure' => 'installed',
-              )
-            end
-          }
-          $os_pkgs[os].each{|pkg|
-            it "ensure #{pkg} is installed" do
-              should contain_package(pkg).with(
-                'ensure' => 'installed',
-              )
-            end
-          }
-          $common_pkgs.each{|pkg|
-            it "ensure #{pkg} is installed" do
-              should contain_package(pkg).with(
-                'ensure' => 'installed',
-              )
-            end
-          }
-        end
-        it { should contain_class('python') }
+  describe tobject, :type => :class do
+    tfacts = {
+      :osfamily        => os_family[os],
+      :operatingsystem => os,
+    }
+    let(:facts) do tfacts end
+    context "supports facts #{tfacts}" do
+      [tobject,
+       'python',].each{ |cls|
+        it { should contain_class(cls) }
+      }
+      it { should contain_class(tobject) }
+      context "installs devel packages" do
+        osfamily_pkgs[os_family[os]].each{|pkg|
+          it { should contain_package(pkg) }
+        }
+        os_pkgs[os].each{|pkg|
+          it { should contain_package(pkg) }
+        }
+        common_pkgs.each{|pkg|
+          it { should contain_package(pkg) }
+        }
       end
     end
   end

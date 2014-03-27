@@ -163,9 +163,7 @@ class master::basenode (
 
   case $::osfamily {
     'redhat' : {
-      package { 'redhat-lsb' :
-        ensure => 'installed',
-      }
+      ensure_packages(['redhat-lsb',])
       file { '/var/log/yum.log' :
         mode  => '0644',
       }
@@ -173,12 +171,9 @@ class master::basenode (
     default : {
     }
   }
-  package { $os_pkgs :
-    ensure => 'installed',
-  }
-  package { $common_pkgs :
-    ensure => 'installed',
-  }
+  ensure_packages( $os_pkgs )
+  ensure_packages( $common_pkgs )
+
   service { 'zfs-fuse' :
     ensure  => 'running',
     enable  => true,
