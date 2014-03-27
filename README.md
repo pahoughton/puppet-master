@@ -2,7 +2,7 @@
 
 [![Test Build Status](https://travis-ci.org/pahoughton/puppet-master.png)](https://travis-ci.org/pahoughton/puppet-master)
 
- see wiki
+Not ready yet.
 
 ## Contribute
 
