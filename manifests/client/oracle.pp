@@ -27,6 +27,7 @@ class master::client::oracle (
     owner   => $user,
     group   => $group,
     mode    => '0775',
+    require => [User[$user],Group[$group]],
   }
 
   exec { "wget -q ${appsrc}/${pkg}" :
