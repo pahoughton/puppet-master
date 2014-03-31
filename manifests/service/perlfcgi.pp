@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
-class master::perlfcgi (
+class master::service::perlfcgi (
   $testdir = undef,
   ) {
 

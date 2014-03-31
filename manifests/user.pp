@@ -11,7 +11,7 @@ define master::user (
   $groups  = undef,
   $home    = undef,
   $pass    = undef,
-  $shell   = undef,
+  $shell   = '/bin/bash',
   $rsa     = undef,
   $libvirt = undef,
   ) {

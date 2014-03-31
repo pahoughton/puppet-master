@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2014  <paul4hough@gmail.com>
 #
-class master::puppetmaster {
+class master::service::puppetmaster {
 
   package { ['puppet-server',] :
     ensure => 'installed',

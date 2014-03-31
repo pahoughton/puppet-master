@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
-class master::phpfpm (
+class master::service::phpfpm (
   $basedir     = '/srv/www',
   $php_modules = undef,
   $user        = 'nginx',

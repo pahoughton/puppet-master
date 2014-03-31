@@ -51,7 +51,6 @@ class master::devel {
                     'flex',
                     'meld'] )
 
-  class { 'gcc' : }
   # ruby stuff
   package { $ruby_pkg :
     ensure   => 'installed',

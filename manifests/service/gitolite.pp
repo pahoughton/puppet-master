@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
-class master::gitolite (
+class master::service::gitolite (
   $user          = 'git',
   $group         = 'git',
   $basedir       = '/srv/gitolite',
