@@ -6,7 +6,7 @@ class master::gitolite (
   $user          = 'git',
   $group         = 'git',
   $basedir       = '/srv/gitolite',
-  $source        = 'https://github.com/sitaramc/gitolite',
+  $source        = 'http://github.com/sitaramc/gitolite',
   $version       = undef,
   $admin_key     = undef,
   $admin_key_src = undef,
