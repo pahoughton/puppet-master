@@ -86,11 +86,11 @@ tobject = 'master::basenode'
       end
       context "given repo_mirror param" do
         tparams = {
-          :repo_mirror => $mirror,
+          :repo_mirror => mirror,
         }
         let :params do tparams end
         if os_family[os] == 'redhat'
-          context "disables existing repos provided by mirror: #{$mirror}" do
+          context "disables existing repos provided by mirror: #{mirror}" do
             repo_files[os].each {|rfile|
               it "ensures #{rfile} absent" do
                 should contain_file(rfile).with(
@@ -101,13 +101,13 @@ tobject = 'master::basenode'
           end
           it "installs repo mirror file for yum for #{os}" do
             should contain_file("/etc/yum.repos.d/#{mirror}-#{os}.repo").
-              with_content(/#{$mirror}/)
+              with_content(/#{mirror}/)
             should contain_file("/etc/yum.repos.d/#{mirror}-rpmfusion.repo").
-              with_content(/#{$mirror}/)
+              with_content(/#{mirror}/)
           end
         end
       end
-      context "osfamily independent features for #{os}-#{os_family[os]}" do
+      context "osfamily independent features" do
         it { should contain_sudo__conf("group: sudo") }
       end
       context "param independent features" do
@@ -124,8 +124,7 @@ tobject = 'master::basenode'
       }
       # ugg - test for one iteration of the loop
       if os.casecmp('fedora' )
-        it { should
-          contain_exec('firewall-cmd --zone=public --add-service=https')
+        it { should contain_exec('firewall-cmd --zone=public --add-service=https')
         }
       else
         it { should contain_firewall('010 accept http(s)(80,443)') }
