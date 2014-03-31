@@ -3,10 +3,10 @@
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
 class master::service::oracle(
-  $user  = 'oracle',
-  $group = 'oracle',
+  $user   = 'oracle',
+  $group  = 'oracle',
   $source = undef,
-  $pkg
+  $pkg    = undef,
   ) {
 
   $directories = hiera('directories',{ 'oracle' => '/srv/oracle' })
