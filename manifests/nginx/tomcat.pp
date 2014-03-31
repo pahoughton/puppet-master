@@ -18,10 +18,6 @@ class master::nginx::tomcat (
   $user  = 'tomcat'
   $group = 'tomcat'
 
-  # fixme this will break
-  user { 'nginx' :
-    groups => ['tomcat',],
-  }
   $port = $tport ? {
     undef   => $ports['tomcat'],
     default => $tport,
@@ -43,6 +39,12 @@ class master::nginx::tomcat (
     ensure  => 'running',
     enable  => true,
     require => Package[$package],
+  }
+
+  # fixme this will break
+  user { 'nginx' :
+    groups  => ['tomcat',],
+    require => Sevice['tomcat'],
   }
 
   file { [$webappsdir,] :
