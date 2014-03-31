@@ -84,7 +84,6 @@ tobject = 'master::basenode'
       :lsbdistid              => os_lsbdist[os],
       :lsbdistcodename        => os_lsbname[os],
     }
-    let(:facts) do tfacts end
     context "supports facts #{tfacts}" do
       let(:facts) do tfacts end
       context "param independent features" do
@@ -92,24 +91,6 @@ tobject = 'master::basenode'
          'gcc',].each{ |cls|
           it { should contain_class(cls) }
         }
-        let :params do tparams end
-        if os_family[os] == 'redhat'
-          context "disables existing repos provided by mirror: #{$mirror}" do
-            repo_files[os].each {|rfile|
-              it "ensures #{rfile} absent" do
-                should contain_file(rfile).with(
-                  'ensure' => 'absent',
-                )
-              end
-            }
-          end
-          it "installs repo mirror file for yum for #{os}" do
-            should contain_file("/etc/yum.repos.d/#{mirror}-#{os}.repo").
-              with_content(/#{$mirror}/)
-            should contain_file("/etc/yum.repos.d/#{mirror}-rpmfusion.repo").
-              with_content(/#{$mirror}/)
-          end
-        end
       end
       context "osfamily independent features for #{os}-#{os_family[os]}" do
         it { should contain_sudo__conf("group: sudo") }
@@ -132,24 +113,27 @@ tobject = 'master::basenode'
         it { should contain_exec('update info dir') }
       end
       bacdir_host='testbacdirhost'
-      context "param bacula_director => '#{bacdir_host}'" do
-        let :params do {
-            :bacula_director => bacdir_host,
-          } end
+      tparams = {
+        :bacula_director => bacdir_host
+      }
+      context "param #{tparams}" do
+        # fixme
+        #let :params do tparams end
+        let (:params) do { :bacula_director => bacdir_host } end
         it { should contain_class('bacula::fd').
           with('dir_host' => bacdir_host)
         }
       end
-
+      ktype='ssh-rsa'
+      kval='test-key-value'
+      kname='tester@nowhere.com'
+      tparams = {
+        :auth_key_type  => ktype,
+        :auth_key_value => kval,
+        :auth_key_name  => kname,
+      }
       context 'param auth_key_[type,value&name] set' do
-        ktype='ssh-rsa'
-        kval='test-key-value'
-        kname='tester@nowhere.com'
-        let :params do {
-            :auth_key_type  => ktype,
-            :auth_key_value => kval,
-            :auth_key_name => kname,
-          } end
+        let :params do tparams end
         it { should contain_ssh_authorized_key("root:#{kname}").
           with('ensure' => 'present',
                'user'   => 'root',
