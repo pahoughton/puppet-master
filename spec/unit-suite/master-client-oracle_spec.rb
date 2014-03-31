@@ -36,6 +36,6 @@ describe tobject, :type => :class do
       it { should contain_class(cls) }
     }
     it { should contain_file("#{tinstdir}/install") }
-    it { should contain_exec("unar #{tinstdir}/install/#{pkg}") }
+    it { should contain_exec("tar xzf #{tinstdir}/install/#{pkg}") }
   end
 end
