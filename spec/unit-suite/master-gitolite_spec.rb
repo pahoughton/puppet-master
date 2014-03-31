@@ -6,10 +6,11 @@
 #
 require 'spec_helper'
 
-$basedir = '/srv/gitolite'
+basedir = '/srv/gitolite'
+tobject = 'master::service::gitolite'
 ['Fedora','CentOS'].each { |os|
 
-  describe 'master::gitolite', :type => :class do
+  describe tobject, :type => :class do
     let(:facts) do {
         :osfamily  => 'redhat',
         :operatingsystem => os,
