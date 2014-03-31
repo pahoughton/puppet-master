@@ -44,7 +44,7 @@ class master::nginx::tomcat (
   # fixme this will break
   user { 'nginx' :
     groups  => ['tomcat',],
-    require => Sevice['tomcat'],
+    require => Package['nginx'],
   }
 
   file { [$webappsdir,] :
