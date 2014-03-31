@@ -20,6 +20,9 @@ class master::basenode (
 
   # make all pacakges dependent on all yumrepos.
   Yumrepo <| |> -> Package <| |>
+  Apt::Source <| |> -> Package <| |>
+
+  class { 'gcc' : }
 
   $common_pkgs = ['xterm',
                   'emacs',
@@ -34,21 +37,23 @@ class master::basenode (
                   'nmap',
                   'iftop',
                   'lynx',
-                  'zfs-fuse',
-                  'xorg-x11-apps',]
+                  'zfs-fuse',]
 
   $os_pkgs = $::operatingsystem ? {
     'Fedora' => [ 'unar',
                   'policycoreutils-python',
                   'bind-utils',
+                  'xorg-x11-apps',
                   ],
     'CentOS' => [ 'man',
                   'policycoreutils-python',
                   'bind-utils',
+                  'xorg-x11-apps',
                   ],
     'Ubuntu' => [ 'unar',
                   'bind9utils',
                   'policycoreutils',
+                  'x11-apps',
                   ],
   }
 
@@ -77,8 +82,7 @@ class master::basenode (
           content => template('master/rpmfusion.mirror.repo.erb'),
         }
         ->
-        # I am hopping this forces my mirror to be installed
-        # before any packages
+        # this forces my mirror to be installed b4 any packages
         yumrepo { 'dummy' :
           descr   => 'dummy-for-puppet',
           baseurl => 'http://nowhere/',
@@ -119,12 +123,17 @@ class master::basenode (
         }
       }
       'ubuntu' : {
-        # apt::source { "${repo_mirror}-ubuntu" :
-        #   location => "http://${repo_mirror}/mirrors/apt/ubuntu",
-        #   repos    => 'saucy main restricted',
-        # }
-        # apt::source { "${repo_mirror}-ubuntu-updates" :
-        #   location => "http://${repo_mirror}/mirrors/apt/ubuntu",
+        class { 'apt' :
+          # purge_sources_list => true,
+        }
+
+        apt::source { "${repo_mirror}_saucy" :
+          location    => "http://${repo_mirror}/mirrors/apt/ubuntu/",
+          repos       => 'main restricted',
+          include_src => false,
+        }
+        # apt::source { "${repo_mirror}-saucy-updates" :
+        #   location => "http://${repo_mirror}/mirrors/apt/ubuntu/",
         #   repos    => 'saucy-updates main restricted',
         # }
       }
@@ -153,7 +162,7 @@ class master::basenode (
           gpgkey      => 'file:///etc/pki/rpm-gpg/PaulJohnson-BinaryPackageSigningKey',
         }
       }
-      'ubuntu' : {
+      'ubuntu' : { # todo
       }
       default : {
         fail("unsupported operatingsystem ${::operatingsystem}")

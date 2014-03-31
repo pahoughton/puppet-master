@@ -4,34 +4,34 @@
 #
 require 'spec_helper'
 
-$username = 'paul'
+username = 'paul'
 
-$os_family = {
+os_family = {
   'Fedora' => 'redhat',
   'CentOS' => 'redhat',
   'Ubuntu' => 'debian',
 }
+tobject = 'master::service::phpfpm'
 ['Fedora','CentOS','Ubuntu'].each { |os|
-  describe 'master::phpfpm', :type => :class do
-
-    let(:facts) do {
-        :osfamily  => $os_family[os],
-        :operatingsystem => os,
-    } end
-
-    context "supports operating system: #{os}" do
-      context "provides master::phpfpm class which" do
-        it { should contain_class('master::phpfpm') }
-        it { should contain_php__ini('/etc/php.ini') }
-        it { should contain_class('php::cli') }
-        it { should contain_class('php::fpm::daemon') }
-        it { should contain_php__fpm__conf('www').with(
-            'listen' => 'localhost:9000',
-            'user'   => 'nginx',
-            'group'  => 'nginx',
-          )
-        }
-      end
+  describe tobject, :type => :class do
+    tfacts = {
+      :osfamily               => os_family[os],
+      :operatingsystem        => os,
+    }
+    context "supports facts #{tfacts}" do
+      let(:facts) do tfacts end
+      [tobject,
+       'php::cli',
+       'php::fpm::daemon',
+      ].each { |cls|
+        it { should contain_class(cls) }
+      }
+      it { should contain_php__ini('/etc/php.ini') }
+      it { should contain_php__fpm__conf('www')
+          .with( 'listen' => 'localhost:9000',
+                 'user'   => 'nginx',
+                 'group'  => 'nginx', )
+      }
     end
   end
 }

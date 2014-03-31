@@ -6,7 +6,7 @@
 #   relays  => ['192.168.122',]
 #   rejects => ['trash.com',]
 # }
-class master::sendmail::access (
+class master::service::sendmail::access (
   $relays  = undef,
   $rejects = undef,
   ) {
