@@ -1,7 +1,9 @@
+#!/bin/bash
 # pagent - 2014-02-15 07:29
 #
 # Copyright (c) 2014 Paul Houghton <paul_houghton@cable.comcast.com>
 #
+test -f ~/puppet.out && mv ~/puppet.out ~/was.puppet.out
 time puppet agent --test > ~/puppet.out 2>&1
 if grep Error ~/puppet.out ; then
   echo "* * ERRORS * *"

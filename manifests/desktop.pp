@@ -3,7 +3,7 @@
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
 class master::desktop {
-  
+
   if $::operatingsystem == 'Fedora' {
 
     package { [ 'xorg-x11-server-Xorg',
@@ -15,13 +15,13 @@ class master::desktop {
                 'xorg-x11-fonts-ISO8859-14-100dpi',
                 'xorg-x11-fonts-misc',
                 'xorg-x11-fonts-ISO8859-1-100dpi',
-	        'xorg-x11-fonts-ISO8859-1-75dpi',
-	        'xorg-x11-fonts-ISO8859-15-100dpi',
-	        'xorg-x11-fonts-ISO8859-15-75dpi',
-	        'xorg-x11-fonts-ISO8859-2-100dpi',
-	        'xorg-x11-fonts-ISO8859-2-75dpi',
-	        'xorg-x11-fonts-ISO8859-9-100dpi',
-	        'xorg-x11-fonts-ISO8859-9-75dpi',
+                'xorg-x11-fonts-ISO8859-1-75dpi',
+                'xorg-x11-fonts-ISO8859-15-100dpi',
+                'xorg-x11-fonts-ISO8859-15-75dpi',
+                'xorg-x11-fonts-ISO8859-2-100dpi',
+                'xorg-x11-fonts-ISO8859-2-75dpi',
+                'xorg-x11-fonts-ISO8859-9-100dpi',
+                'xorg-x11-fonts-ISO8859-9-75dpi',
                 'xorg-x11-twm',
                 'xorg-x11-utils',
                 'xorg-x11-util-macros',

@@ -1,0 +1,49 @@
+{ "common.json" : "2014-03-19 04:29",
+  "Copyright" : "(c) 2014 Paul Houghton <paul4hough@gmail.com>",
+
+  "databases" : { "mysql-agilefant" : "agilefant",
+		  "mysql-xoctool" : "xoctool",
+		  "pgsql-bacula" : "bacula",
+		  "pgsql-gitlab" : "gitlab"
+		},
+  "devices" : { "drobo5" : "UUID=test"
+	      },
+  "directories" : { "mysqldb" : "/srv/mysql",
+		    "oracle" : "/srv/oracle",
+		    "pgsqldb" : "/srv/pgsql",
+		    "sched" : "/srv/sched",
+		    "srv" : "/srv",
+		    "tmp" : "/tmp",
+		    "www" : "/srv/www"
+		  },
+  "emails" : { "bacula-dir" : "tester@nowhere.com",
+	       "gitlab" : "tester@nowhere.com"
+	     },
+
+  "homedirs" : { "git" : "/srv/tgitolite",
+		 "paul" : "/home/tpaul"
+	       },
+
+  "passwords" : { "mysql-root" : "tmysql",
+		  "mysql-agilefant" : "tagile",
+		  "pgsql-root" : "tpsql",
+		  "pgsql-bacula" : "tpsqlbac",
+		  "pgsql-gitlab" : "tpsqlglab"
+		},
+
+  "ports" : { "tomcat" : "1230",
+	      "tomcat-ssl" : "1233"
+	    },
+  "servers" : { "app" :  "tgandalf/mirrors/apps",
+		"bacula-dir" : "tbacdir",
+	        "bacula-sd" : "tbacsd",
+		"gitlab" : "tgitlab",
+		"gitolite" : "tgitolite",
+		"jenkins" : "tjenkins",
+		"repo-mirror" : "tmirror",
+		"mysql" : "tmysql",
+		"pgsql" : "tpostgres"
+	      },
+  "uris" : { "app" : "http://tappshost/mirrors/apps" }
+
+}

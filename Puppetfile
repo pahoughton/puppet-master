@@ -13,16 +13,26 @@ mod 'puppetlabs/apt'
 # # mod 'camptocamp/augeas'
 # # mod 'domcleal/augeasproviders'
 mod 'stahnma/epel'
-# # mod 'puppetlabs/firewall'
+mod 'puppetlabs/firewall'
 mod 'puppetlabs/gcc'
+# # mod 'puppetlabs/java'
 # # mod 'puppetlabs/lvm'
 # # mod 'puppetlabs/postgresql'
 mod 'puppetlabs/stdlib'
 mod 'saz/sudo'
 mod 'puppetlabs/vcsrepo'
 
+mod 'bacula',
+  :git => 'http://github.com/pahoughton/puppet-bacula',
+  :ref => 'pahoughton-devel'
+mod 'gitlab',
+  :git => 'http://github.com/pahoughton/puppet-gitlab',
+  :ref => 'pahoughton-devel'
+mod 'mysql',
+  :git => 'http://github.com/pahoughton/puppetlabs-mysql'
 mod 'nginx',
-  :git => 'http://github.com/pahoughton/puppet-nginx'
+  :git => 'http://github.com/pahoughton/puppet-nginx',
+  :ref => 'pahoughton-devel'
 mod 'php',
   :git => 'http://github.com/pahoughton/puppet-php'
 mod 'policykit',
@@ -32,3 +42,4 @@ mod 'python',
 mod 'rpmfusion',
   :git => 'http://github.com/pahoughton/puppet-rpmfusion',
   :ref => 'pahoughton-devel'
+

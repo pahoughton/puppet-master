@@ -13,16 +13,16 @@ class master::dns::server (
   bind::server::conf { '/etc/named.conf':
     listen_on_addr    => [ 'any' ],
     listen_on_v6_addr => [ 'any' ],
-    forwarders        => [ '8.8.8.8',
-                           '8.8.4.4' ],
+    forwarders        => ['8.8.8.8',
+                          '8.8.4.4' ],
     allow_query       => [ 'localnets' ],
     zones             => {
-      "${domain}.lan"              => ['type master',
-                                       "file \"${domain}.lan\"",
-                                       ],
-      "${raddr_base}.in-addr.arpa" => ['type master',
-                                       "file \"${raddr_base}.in-addr.arpa\"",
-                                       ],
+      "${domain}.lan"              => [ 'type master',
+                                        "file \"${domain}.lan\"",
+                                        ],
+      "${raddr_base}.in-addr.arpa" => [ 'type master',
+                                        "file \"${raddr_base}.in-addr.arpa\"",
+                                        ],
     },
   }
   bind::server::file { ["${domain}.lan",
@@ -31,4 +31,3 @@ class master::dns::server (
     source_base => $zone_src_base,
   }
 }
-

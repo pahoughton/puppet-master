@@ -11,66 +11,77 @@ define master::user (
   $groups  = undef,
   $home    = undef,
   $pass    = undef,
+  $shell   = '/bin/bash',
   $rsa     = undef,
   $libvirt = undef,
   ) {
-  
+
   $user    = $name
-  
+  $pgroup = $group ? {
+    undef   => $user,
+    default => $group,
+  }
   $homedir = $home ? {
-    undef   => "${master::homebase}/${user}",
+    undef   => "/home/${user}",
     default => $home,
   }
-  
-  group { $group :
+
+  File {
+    owner   => $user,
+    group   => $pgroup,
+  }
+
+  group { $pgroup :
     ensure => 'present',
     gid    => $gid,
-  }->
+  }
   user { $user :
     ensure   => 'present',
     comment  => $comment,
     uid      => $uid,
-    gid      => $group,
+    gid      => $pgroup,
     groups   => $groups,
-    home     => "${homedir}",
-    require  => Group[$groups],
+    home     => $homedir,
+    shell    => $shell,
+    require  => Group[$pgroup],
   }->
-  file { "${homedir}" :
+  file { $homedir :
     ensure  => 'directory',
-    owner   => $user,
-    group   => $group,
     mode    => '0755',
   }->
   file { "${homedir}/.ssh" :
     ensure  => 'directory',
-    owner   => $user,
-    group   => $group,
     mode    => '0700',
   }
+  $gitconfig_tmpl = $::operatingsystem ? {
+    'CentOS' => 'master/users/gitconfig-old.erb',
+    default  => 'master/users/gitconfig.erb',
+  }
+  file { "${homedir}/.gitconfig" :
+    ensure  => 'file',
+    mode    => '0644',
+    content => template($gitconfig_tmpl),
+    require => File[$homedir],
+  }
+
   if $rsa {
     file { "${homedir}/.ssh/id_rsa" :
       ensure  => 'file',
-      owner   => $user,
-      group   => $group,
       mode    => '0600',
       source  => $rsa
     }->
     file { "${homedir}/.ssh/id_rsa.pub" :
       ensure  => 'file',
-      owner   => $user,
-      group   => $group,
       mode    => '0644',
       source  => "${rsa}.pub",
     }
     file { "${homedir}/.ssh/authorized_keys" :
       ensure  => 'file',
-      owner   => $user,
-      group   => $group,
       mode    => '0600',
       source  => "${rsa}.pub",
     }
   }
-  if $libvirt { 
+  if $libvirt {
     policykit::localauthority { "${user}-libvirt-management" :
       identity        => "unix-user:${user}",
       action          => 'org.libvirt.unix.manage',

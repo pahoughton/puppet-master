@@ -7,11 +7,23 @@
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
 class master::basenode (
-  $repo_mirror    = undef,
-  $auth_key_type  = undef,
-  $auth_key_value = undef,
-  $auth_key_name  = undef,
-  ) {  
+  $repo_mirror     = undef,
+  $bacula_director = undef,
+  $auth_key_type   = undef,
+  $auth_key_value  = undef,
+  $auth_key_name   = undef,
+  ) {
+
+  notify { 'FIXME - repo host mirror needs to be reachable' : }
+  notify { 'FIXME - systest - package install attempted w/o repos enabled.' : }
+  notify { 'fixme - all systemd files notify systemd' : }
+
+  # make all pacakges dependent on all yumrepos.
+  Yumrepo <| |> -> Package <| |>
+  Apt::Source <| |> -> Package <| |>
+
+  class { 'gcc' : }
+
   $common_pkgs = ['xterm',
                   'emacs',
                   'make',
@@ -25,16 +37,26 @@ class master::basenode (
                   'nmap',
                   'iftop',
                   'lynx',
-                  'zfs-fuse',
-                  'policycoreutils-python',
-                  'xorg-x11-apps',]
+                  'zfs-fuse',]
 
   $os_pkgs = $::operatingsystem ? {
-    'Fedora' => ['unar'],
-    'CentOS' => ['man'],
-    'Ubuntu' => ['unar'],
+    'Fedora' => [ 'unar',
+                  'policycoreutils-python',
+                  'bind-utils',
+                  'xorg-x11-apps',
+                  ],
+    'CentOS' => [ 'man',
+                  'policycoreutils-python',
+                  'bind-utils',
+                  'xorg-x11-apps',
+                  ],
+    'Ubuntu' => [ 'unar',
+                  'bind9utils',
+                  'policycoreutils',
+                  'x11-apps',
+                  ],
   }
-  
+
   if $repo_mirror {
     case $::operatingsystem {
       'fedora' : {
@@ -46,22 +68,21 @@ class master::basenode (
             '/etc/yum.repos.d/rpmfusion-free-updates-released.repo',
             '/etc/yum.repos.d/rpmfusion-nonfree.repo',
             '/etc/yum.repos.d/rpmfusion-nonfree-updates-released.repo',]
-        
-        file { $existing_repo_files : 
+
+        file { $existing_repo_files :
           ensure => 'absent',
-        }    
+        }
         ->
         file { "/etc/yum.repos.d/${repo_mirror}-${::operatingsystem}.repo" :
           ensure  => 'file',
           content => template('master/fedora.mirror.repo.erb')
         }
         file { "/etc/yum.repos.d/${repo_mirror}-rpmfusion.repo" :
-          ensure => 'file',
+          ensure  => 'file',
           content => template('master/rpmfusion.mirror.repo.erb'),
         }
         ->
-        # I am hopping this forces my mirror to be installed
-        # before any packages    
+        # this forces my mirror to be installed b4 any packages
         yumrepo { 'dummy' :
           descr   => 'dummy-for-puppet',
           baseurl => 'http://nowhere/',
@@ -74,21 +95,21 @@ class master::basenode (
             '/etc/yum.repos.d/CentOS-Debuginfo.repo',
             '/etc/yum.repos.d/CentOS-Media.repo',
             '/etc/yum.repos.d/CentOS-Vault.repo',]
-        file { $existing_repo_files : 
+        file { $existing_repo_files :
           ensure => 'absent',
-        }    
+        }
         ->
         file { "/etc/yum.repos.d/${repo_mirror}-${::operatingsystem}.repo" :
           ensure  => 'file',
           content => template('master/centos.mirror.repo.erb')
         }
         file { "/etc/yum.repos.d/${repo_mirror}-rpmfusion.repo" :
-          ensure => 'file',
+          ensure  => 'file',
           content => template('master/rpmfusion.mirror.repo.erb'),
         }
-        ->
+
         class { 'epel' : }
-        ->
+
         file { '/etc/pki/rpm-gpg/PaulJohnson-BinaryPackageSigningKey' :
           source => 'puppet:///modules/master/PaulJohnson-BinaryPackageSigningKey',
         }
@@ -102,19 +123,24 @@ class master::basenode (
         }
       }
       'ubuntu' : {
-        # apt::source { "${repo_mirror}-ubuntu" :
-        #   location => "http://${repo_mirror}/mirrors/apt/ubuntu",
-        #   repos    => 'saucy main restricted',
-        # }
-        # apt::source { "${repo_mirror}-ubuntu-updates" :
-        #   location => "http://${repo_mirror}/mirrors/apt/ubuntu",
+        class { 'apt' :
+          # purge_sources_list => true,
+        }
+
+        apt::source { "${repo_mirror}_saucy" :
+          location    => "http://${repo_mirror}/mirrors/apt/ubuntu/",
+          repos       => 'main restricted',
+          include_src => false,
+        }
+        # apt::source { "${repo_mirror}-saucy-updates" :
+        #   location => "http://${repo_mirror}/mirrors/apt/ubuntu/",
         #   repos    => 'saucy-updates main restricted',
         # }
       }
       default : {
         fail("Unsupported operatingsystem ${::operatingsystem}")
       }
-    }    
+    }
   } else {
     # no mirror, so ensure repos are avaiable
     case $::operatingsystem {
@@ -136,7 +162,7 @@ class master::basenode (
           gpgkey      => 'file:///etc/pki/rpm-gpg/PaulJohnson-BinaryPackageSigningKey',
         }
       }
-      'ubuntu' : {
+      'ubuntu' : { # todo
       }
       default : {
         fail("unsupported operatingsystem ${::operatingsystem}")
@@ -146,20 +172,17 @@ class master::basenode (
 
   case $::osfamily {
     'redhat' : {
-      package { 'redhat-lsb' :
-        ensure => 'installed',
-      }
+      ensure_packages(['redhat-lsb',])
       file { '/var/log/yum.log' :
         mode  => '0644',
       }
     }
+    default : {
+    }
   }
-  package { $os_pkgs :
-    ensure => 'installed',
-  }
-  package { $common_pkgs :
-    ensure => 'installed',
-  }
+  ensure_packages( $os_pkgs )
+  ensure_packages( $common_pkgs )
+
   service { 'zfs-fuse' :
     ensure  => 'running',
     enable  => true,
@@ -168,7 +191,7 @@ class master::basenode (
   file { '/root/scripts' :
     ensure => 'directory',
     owner  => 'root',
-    group  => 'root',   
+    group  => 'root',
   }->
   file { '/root/scripts/pagent' :
     ensure => 'file',
@@ -177,21 +200,63 @@ class master::basenode (
     group  => 'root',
     source => 'puppet:///modules/master/pagent',
   }
-  group { 'sudo' :
+
+  # addmin groups
+  $admgroups = $::osfamily ? {
+    'RedHat' => ['sudo','adm','wheel','puppet'],
+    'debian' => ['sudo','adm','puppet'],
+    default  => ['puppet'],
+  }
+  group { $admgroups :
     ensure => 'present',
   }
   ->
-  sudo::conf { "group: sudo" :
+  class { 'sudo' :
+    purge               => false,
+    config_file_replace => false,
+  }
+  ->
+  sudo::conf { 'group: sudo' :
     priority => 10,
     content  => "%sudo ALL=(ALL) NOPASSWD: ALL\n",
   }
-  if $auth_key_value {
-    ssh_authorized_key { 'root-paul' :
+  if $auth_key_value and $auth_key_name and $auth_key_type {
+    ssh_authorized_key { "root:${auth_key_name}" :
       ensure => 'present',
       user   => 'root',
       name   => $auth_key_name,
       key    => $auth_key_value,
       type   => $auth_key_type,
+    }
+  }
+
+  Firewall {
+    before  => Class['master::firewall::post'],
+    require => Class['master::firewall::pre'],
+  }
+
+  # FIXME - some 'firewall' still being applied to fedora - looks ok though
+  # does not work with fedora - todo
+  if $::operatingsystem != 'Fedora' {
+    class { ['master::firewall::pre', 'master::firewall::post']: }
+    class { 'firewall': }
+    firewall { '010 accept http(s)(80,443)' :
+      proto   => 'tcp',
+      port    => [80,443],
+      action  => 'accept',
+    }
+  } else {
+    # FIXME - there has to be a better way
+    exec { ['firewall-cmd --zone=public --add-service=http',
+            'firewall-cmd --permanent --zone=public --add-service=http',
+            'firewall-cmd --zone=public --add-service=https',
+            'firewall-cmd --permanent --zone=public --add-service=https',
+            ] : }
+  }
+
+  if $bacula_director {
+    class { 'bacula::fd' :
+      dir_host => $bacula_director,
     }
   }
   file { '/usr/bin/info-dir-update.bash' :
@@ -202,5 +267,9 @@ class master::basenode (
   exec { 'update info dir' :
     command => 'info-dir-update.bash',
     cwd     => '/usr/share/info',
+  }
+  file { '/etc/profile.d/custom.sh' :
+    ensure => 'file',
+    source => 'puppet:///modules/master/custom.sh',
   }
 }

@@ -11,7 +11,7 @@ Usse:
 
     Add values as needed to your gitolite.conf
     repo @all
-    
+
     repo myproduct.git
         config gitolite.url = git@gitolite.host.com
         config jenkins.url = http://host.com/jenkins
@@ -20,10 +20,10 @@ Usse:
         config git.mirror.repo = git@github:USER/pubprod.git
 
     Install this script as ~GIT/REPO_DIR/MYPRODUCT.git/hooks/post-receive
-    
-Both jenkins.build.job and jenkins.build.token are provided by the 
-build configuration that will be signaled by the push.    
-    
+
+Both jenkins.build.job and jenkins.build.token are provided by the
+build configuration that will be signaled by the push.
+
 NOTE: the trac-admin app used is either 'trac-admin' or the value of
 the TRAC_ADMIN_APP environment variable. This is set to 'echo' for
 unit testing.
@@ -39,14 +39,14 @@ import shutil
 def show_post_receive_env():
     '''For testing / debugging only
     Show the user that did the push all the values available to the
-    post-receive hook    
+    post-receive hook
     Values may be args (none expected), environment variables and
     read from stdin in the formation of: OLDREV NEWREV REFNAME
     '''
     print('ARGLIST:')
     for a in sys.argv:
         print('ARG: '+a)
-        
+
     print('ENVLIST:')
     for k,v in os.environ.items():
         print('ENV: '+k+'='+v)
@@ -54,7 +54,7 @@ def show_post_receive_env():
 
 def git_config(repoVar):
     '''return the value from a git config variable
-    
+
     This is able to retrieve gitolite repo variables when
     the script is a gitolite hook.
     '''
@@ -67,17 +67,17 @@ def git_config(repoVar):
                                          ).decode('utf-8').strip()
     except:
         pass
-    
+
     return cfgVal
 
 def notify_jenkins(jenkinsUrl, branches):
     '''Send notification to jenkinsUrl of the push
-    
+
     '''
     gitoliteUrl = git_config('gitolite.url')
     jenkinsBuildJob = git_config('jenkins.build.job')
     jenkinsBuildToken = git_config('jenkins.build.token')
-    
+
 
     reqUrl = jenkinsUrl
     if jenkinsBuildJob and jenkinsBuildToken:
@@ -94,12 +94,12 @@ def notify_jenkins(jenkinsUrl, branches):
             reqUrl += '&branches='+','.join(branches)
     else:
         reqUrl = None
-        
+
     #print('ReqUrl:',reqUrl)
     if reqUrl:
         try:
             resp = urllib.request.urlopen(reqUrl)
-            if resp and resp.status == 201:
+            if resp and resp.status in [200,201] :
                 print('Jenkins notified via:',
                       reqUrl,
                       'response was:',
@@ -109,11 +109,11 @@ def notify_jenkins(jenkinsUrl, branches):
                 print('jenkins request failed: '+reqUrl + str(resp.status))
         except:
             print('Jenkins request failed: '+reqUrl)
-            
+
     else:
         print( 'Repo not configured for continuous integration.' )
 
-    
+
 def main():
     '''app entry
 
@@ -122,11 +122,11 @@ def main():
     # Notify Trac
     trac_dir = git_config('trac.dir')
     trac_repo = git_config('trac.repo')
-    
+
     trac_admin = 'trac-admin'
     if os.environ.get('TRAC_ADMIN_APP'):
         trac_admin = os.environ.get('TRAC_ADMIN_APP')
-        
+
     branches = []
     for l in sys.stdin:
         oldref, newref, refname = l.split()
@@ -168,6 +168,6 @@ def main():
             print('Pushed to mirror:',mir)
     else:
          print('Not mirrored')
-         
+
 if __name__ == '__main__':
     main()
