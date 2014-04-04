@@ -71,6 +71,8 @@ os_rel = {
   'Ubuntu' => '13',
 }
 
+rpmfusion_gpg_prefix = '/etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion'
+
 mirror  = 'tgandalf'
 tobject = 'master::basenode'
 ['Fedora','CentOS','Ubuntu'].each { |os|
@@ -170,6 +172,9 @@ tobject = 'master::basenode'
             }
           }
         end
+        it { should contain_file("#{rpmfusion_gpg_prefix}-free-fedora-20") }
+        it { should contain_file("#{rpmfusion_gpg_prefix}-nonfree-fedora-20") }
+
         it { should contain_file("/etc/yum.repos.d/#{mirror}-#{os}.repo").
           with_content(/#{$mirror}/)
         }

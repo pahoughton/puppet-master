@@ -57,6 +57,9 @@ class master::basenode (
                   ],
   }
 
+  $gpg_path = '/etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion'
+  $gpg_module = 'puppet:///modules/rpmfusion/RPM-GPG-KEY-rpmfusion'
+
   if $repo_mirror {
     case $::operatingsystem {
       'fedora' : {
@@ -71,6 +74,22 @@ class master::basenode (
 
         file { $existing_repo_files :
           ensure => 'absent',
+        }
+        ->
+        file { "${gpg_path}-free-fedora-20":
+          ensure => present,
+          owner  => 'root',
+          group  => 'root',
+          mode   => '0644',
+          source => "${gpg_module}-free-fedora-20",
+        }
+        ->
+        file { "${gpg_path}-nonfree-fedora-20":
+          ensure => present,
+          owner  => 'root',
+          group  => 'root',
+          mode   => '0644',
+          source => "${gpg_module}-nonfree-fedora-20",
         }
         ->
         file { "/etc/yum.repos.d/${repo_mirror}-${::operatingsystem}.repo" :
@@ -90,6 +109,8 @@ class master::basenode (
         }
       }
       'centos' : {
+        $gpg_path = '/etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion'
+        $gpg_module = 'puppet:///modules/rpmfusion/RPM-GPG-KEY-rpmfusion'
         $existing_repo_files =
           [ '/etc/yum.repos.d/CentOS-Base.repo',
             '/etc/yum.repos.d/CentOS-Debuginfo.repo',
@@ -97,6 +118,22 @@ class master::basenode (
             '/etc/yum.repos.d/CentOS-Vault.repo',]
         file { $existing_repo_files :
           ensure => 'absent',
+        }
+        ->
+        file { "${gpg_path}-free-fedora-20":
+          ensure => present,
+          owner  => 'root',
+          group  => 'root',
+          mode   => '0644',
+          source => "${gpg_module}-free-fedora-20",
+        }
+        ->
+        file { "${gpg_path}-nonfree-fedora-20":
+          ensure => present,
+          owner  => 'root',
+          group  => 'root',
+          mode   => '0644',
+          source => "${gpg_module}-nonfree-fedora-20",
         }
         ->
         file { "/etc/yum.repos.d/${repo_mirror}-${::operatingsystem}.repo" :
