@@ -22,6 +22,7 @@ os_rel = {
   'Ubuntu' => '13',
 }
 
+instcmd = 'bash atlassian-jira-6.2.2-x64.bin < jira-resp.txt'
 tobject = 'master::app::jira'
 ['Fedora','CentOS','Ubuntu'].each { |os|
   describe tobject, :type => :class do
@@ -43,7 +44,7 @@ tobject = 'master::app::jira'
       ].each { |cls|
         it { should contain_class(cls) }
       }
-      it { should contain_postgresql__server__db('jira') }
+      it { should contain_exec(instcmd) }
     end
   end
 }
