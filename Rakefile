@@ -34,6 +34,6 @@ end
 
 desc "Unit-suite tests w/ doc"
 RSpec::Core::RakeTask.new(:unittest_suite) do |t|
-  t.rspec_opts = ['--format=d','--out=unitsuite-results.txt']
+  t.rspec_opts = ['--format=d','--out=unittest-suite-results.txt']
   t.pattern = 'spec/unit-suite/**/*_spec.rb'
 end
