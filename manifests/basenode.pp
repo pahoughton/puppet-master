@@ -109,8 +109,6 @@ class master::basenode (
         }
       }
       'centos' : {
-        $gpg_path = '/etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion'
-        $gpg_module = 'puppet:///modules/rpmfusion/RPM-GPG-KEY-rpmfusion'
         $existing_repo_files =
           [ '/etc/yum.repos.d/CentOS-Base.repo',
             '/etc/yum.repos.d/CentOS-Debuginfo.repo',
