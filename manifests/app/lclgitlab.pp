@@ -3,14 +3,17 @@
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
 class master::app::lclgitlab (
-  $git_create_user = false,
+  $git_create_user = true,
   ) {
   # fixme args for all values
-  $servers   = hiera('servers',{ 'pgsql' => 'localhost' } )
+  $databases = hiera('databases', { 'gitlab' => 'gitlab' })
   $email     = hiera('emails', { 'gitlab' => "gitlab@${::hostname}" })
-  $passwords = hiera('passwords', { 'pgsql-gitlab' => 'gitlab' })
   $homedirs  = hiera('homedirs',{ 'git' => '/srv/gitolite'} )
-  $users     = hiera('users',{ 'git' => 'git' })
+  $passwords = hiera('passwords', { 'pgsql-gitlab' => 'gitlab' })
+  $servers   = hiera('servers',{ 'pgsql' => 'localhost' } )
+  $users     = hiera('users', { 'git' => 'git',
+                                'pgsql-gitlab' => 'gitlab', })
+
   # for templates
   $user    = $users['git']
   $homedir = $homedirs[$user]
@@ -24,18 +27,23 @@ class master::app::lclgitlab (
     enable => true,
   }
 
-  postgresql::server::role { 'gitlab' :
-    createdb      => true,
-    password_hash => postgresql_password( 'gitlab', $passwords['pgsql-gitlab']),
+  if $servers['pgsql'] == 'localhost' or $servers['pgsql'] == $::hostname {
+
+    postgresql::server::role { $users['pgsql-gitlab'] :
+      createdb      => true,
+      password_hash => postgresql_password( $users['gitlab'],
+                                            $passwords['pgsql-gitlab']),
+    }
+    ->
+    postgresql::server::db { $databases['pgsql-gitlab'] :
+      user     => $users['pgsql-gitlab'],
+      # fixme really!
+      encoding => 'unicode',
+      password => postgresql_password($users['pgsql-gitlab'],
+                                      $passwords['pgsql-gitlab']),
+    }
   }
-  ->
-  postgresql::server::db { 'gitlab' :
-    user     => 'gitlab',
-    # fixme really!
-    encoding => 'unicode',
-    password => postgresql_password( 'gitlab', $passwords['pgsql-gitlab']),
-  }
-  ->
+
   class { 'gitlab' :
     git_create_user => $git_create_user,
     git_home        => $homedirs['git'],
@@ -43,10 +51,10 @@ class master::app::lclgitlab (
     git_comment     => 'gitolite and gitlab user',
     gitlab_dbtype   => 'pgsql',
     gitlab_dbhost   => $servers['pgsql'],
-    gitlab_dbuser   => 'gitlab',
+    gitlab_dbuser   => $users['pgsql-gitlab'],
     gitlab_dbpwd    => $passwords['pgsql-gitlab'],
-    gitlab_dbname   => 'gitlab',
-    gitlab_repodir  => "${homedirs[git]}/repositories",
+    gitlab_dbname   => $databases['pgsql-gitlab'],
+    gitlab_repodir  => "${homedirs[gitlab]}/repositories",
     require         => Service['redis'],
   }
 }

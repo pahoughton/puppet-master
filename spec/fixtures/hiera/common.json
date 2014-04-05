@@ -4,7 +4,7 @@
   "databases" : { "mysql-agilefant" : "agilefant",
 		  "mysql-xoctool" : "xoctool",
 		  "pgsql-bacula" : "bacula",
-		  "pgsql-gitlab" : "gitlab"
+		  "pgsql-gitlab" : "tgitlab"
 		},
   "devices" : { "drobo5" : "UUID=test"
 	      },
@@ -21,6 +21,7 @@
 	     },
 
   "homedirs" : { "git" : "/srv/tgitolite",
+		 "gitlab" : "/srv/tgitlab",
 		 "paul" : "/home/tpaul"
 	       },
 
@@ -43,6 +44,14 @@
 		"mysql" : "tmysql",
 		"pgsql" : "tpostgres"
 	      },
-  "uris" : { "app" : "http://tappshost/mirrors/apps" }
-
+  "uris" : { "app" : "http://tappshost/mirrors/apps"
+	   },
+  "users" : { "git" : "git",
+	      "gitlab" : "git",
+	      "gitolite" : "git",
+	      "mysql-sched" : "tsched",
+	      "pgsql-gitlab" : "tgitlab",
+	      "nginx" : "nginx",
+	      "www" : "nginx"
+	    }
 }
