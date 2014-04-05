@@ -34,7 +34,7 @@
   "ports" : { "tomcat" : "1230",
 	      "tomcat-ssl" : "1233"
 	    },
-  "servers" : { "app" :  "tgandalf/mirrors/apps",
+  "servers" : { "app" :  "http://tgandalf/mirrors/apps",
 		"bacula-dir" : "tbacdir",
 	        "bacula-sd" : "tbacsd",
 		"gitlab" : "tgitlab",

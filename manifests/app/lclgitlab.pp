@@ -1,8 +1,8 @@
-# gitlab.pp - 2014-03-23 07:45
+# lclgitlab.pp - 2014-03-23 07:45
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
-class master::nginx::mygitlab (
+class master::app::lclgitlab (
   $git_create_user = false,
   ) {
   # fixme args for all values

@@ -1,4 +1,4 @@
-# master-nginx-mygitlab_spec.rb - 2014-03-23 07:31
+# master-nginx-lclgitlab_spec.rb - 2014-03-23 07:31
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
@@ -15,7 +15,7 @@ os_release = {
   'Ubuntu' => '13',
 }
 
-tobject = 'master::nginx::mygitlab'
+tobject = 'master::app::lclgitlab'
 ['Fedora','CentOS','Ubuntu',].each { |os|
   describe tobject, :type => :class do
     tfacts = {

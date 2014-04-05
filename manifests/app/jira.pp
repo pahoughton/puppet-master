@@ -8,10 +8,16 @@ class master::app::jira (
   $app     = 'jira',
   $port    = '27101',
   $ctlport = '27102',
-
+  $source  = undef, # http://blah/jira.bin
+  $bin     = 'atlassian-jira-6.2.2-x64.bin',
   ) {
 
+  $servers = hiera('servers')
 
+  $jirasource = $source ? {
+    undef   => "http://${servers[app]}/${bin}",
+    default => $source,
+  }
   if $vhost {
     nginx::resource::location { "${vhost}-${app}-proxy" :
       ensure              => 'present',
@@ -23,5 +29,19 @@ class master::app::jira (
     }
   }
 
-  notify { 'fixme - need run install with my params' : }
+  file { "${::root_home}/jira-resp.txt" :
+    ensure  => 'file',
+    content => template('master/app/jira-resp.txt.erb'),
+  }
+  ->
+  exec { "wget -q ${jirasource}" :
+    cwd     => $::root_home,
+    creates => "${::root_home}/${bin}",
+  }
+  ->
+  exec { "bash ${bin} < jira-resp.txt" :
+    cwd     => $::root_home,
+    creates => "${prefix}/${app}",
+  }
+
 }

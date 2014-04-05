@@ -1,4 +1,4 @@
-# master-app-jira_spec.rb - 2014-04-03 23:24
+# master-app-phpmyadmin_spec.rb - 2014-04-05 05:00
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
@@ -21,9 +21,11 @@ os_rel = {
   'CentOS' => '6',
   'Ubuntu' => '13',
 }
+# defined by fixtures/hiera/common.json
+twget   = 'wget http://tgandalf/mirrors/apps/phpmyadmin-4.1.12.tar.gz'
+tcfgfn  = '/srv/www/phpmyadmin/config.ini.php'
 
-instcmd = 'bash atlassian-jira-6.2.2-x64.bin < jira-resp.txt'
-tobject = 'master::app::jira'
+tobject = 'master::app::phpmyadmin'
 ['Fedora','CentOS','Ubuntu'].each { |os|
   describe tobject, :type => :class do
     tfacts = {
@@ -44,7 +46,15 @@ tobject = 'master::app::jira'
       ].each { |cls|
         it { should contain_class(cls) }
       }
-      it { should contain_exec(instcmd) }
+      it { should contain_exec(twget) }
+      it { should contain_file(tcfgfn).
+        with( 'owner' => 'www',
+              'group' => 'www',)
+      }
+      ['mysqli',
+      ].each { |pmod|
+        it { should contain_php__module(pmod) }
+      }
     end
   end
 }
