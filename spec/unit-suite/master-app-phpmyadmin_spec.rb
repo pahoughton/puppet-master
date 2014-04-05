@@ -48,8 +48,8 @@ tobject = 'master::app::phpmyadmin'
       }
       it { should contain_exec(twget) }
       it { should contain_file(tcfgfn).
-        with( 'owner' => 'www',
-              'group' => 'www',)
+        with( 'owner' => 'nginx',
+              'group' => 'nginx',)
       }
       ['mysqli',
       ].each { |pmod|
