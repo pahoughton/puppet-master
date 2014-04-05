@@ -20,6 +20,10 @@
 	       "gitlab" : "tester@nowhere.com"
 	     },
 
+  "groups" : { "nginx" : "nginx",
+	       "www" : "nginx"
+	     },
+
   "homedirs" : { "git" : "/srv/tgitolite",
 		 "gitlab" : "/srv/tgitlab",
 		 "paul" : "/home/tpaul"
