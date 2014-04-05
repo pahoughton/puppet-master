@@ -165,7 +165,7 @@ tobject = 'master::basenode'
       }
       context "params #{tparams}" do
         let :params do tparams end
-        context "disables existing repos provided by mirror: #{$mirror}" do
+        context "disables existing repos provided by mirror: #{mirror}" do
           repo_files[os].each {|rfile|
             it { should contain_file(rfile).
               with( 'ensure' => 'absent',)

@@ -5,8 +5,6 @@
 
 require 'spec_helper'
 
-username = 'paul'
-
 os_family = {
   'Fedora' => 'redhat',
   'CentOS' => 'redhat',

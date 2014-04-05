@@ -22,7 +22,7 @@ os_rel = {
   'Ubuntu' => '13',
 }
 # defined by fixtures/hiera/common.json
-twget   = 'wget http://tgandalf/mirrors/apps/phpmyadmin-4.1.12.tar.gz'
+twget   = 'wget http://tappshost/mirrors/apps/phpmyadmin-4.1.12.tar.gz'
 tcfgfn  = '/srv/www/phpmyadmin/config.ini.php'
 
 tobject = 'master::app::phpmyadmin'
@@ -48,8 +48,8 @@ tobject = 'master::app::phpmyadmin'
       }
       it { should contain_exec(twget) }
       it { should contain_file(tcfgfn).
-        with( 'owner' => 'www',
-              'group' => 'www',)
+        with( 'owner' => 'nginx',
+              'group' => 'nginx',)
       }
       ['mysqli',
       ].each { |pmod|

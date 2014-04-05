@@ -18,7 +18,6 @@ os_release = {
 tobject  = 'master::client::oracle'
 os       = 'Fedora'
 pkg      = 'oracle-instclnt-12.1-sdk.tar.gz'
-tappuri  = 'http://tappshost/mirrors/apps'
 tinstdir = '/srv/oracle'
 
 describe tobject, :type => :class do
