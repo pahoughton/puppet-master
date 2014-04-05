@@ -13,11 +13,11 @@ class master::app::phpmyadmin(
 
   $directories = hiera('directories',{'www' => '/srv/www'})
   $groups      = hiera('groups',{'www' => 'www'})
-  $servers     = hiera('servers',{'app' => 'http://appsrv/apps' })
+  $uris        = hiera('uris',{'app' => 'http://appsrv/apps' })
   $users       = hiera('users',{'www' => 'www'})
 
   $appsrc = $source ? {
-    undef   => $servers['app'],
+    undef   => $uris['app'],
     default => $source,
   }
 

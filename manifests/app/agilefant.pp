@@ -13,8 +13,9 @@ class master::app::agilefant (
   ) {
 
   $passwords = hiera('passwords',{})
-  $servers = hiera('servers')
-  $ports = hiera('ports',{ 'tomcat' => '8080' } )
+  $servers   = hiera('servers')
+  $ports     = hiera('ports',{ 'tomcat' => '8080' } )
+  $uris      = hiera('uris')
 
   # fixme - tomcatbase some how?
   Exec {
@@ -53,7 +54,7 @@ class master::app::agilefant (
   }
   exec { 'fetch-agilefant' :
     cwd      => $tomcatdir,
-    command  => "wget http://${servers[app]}/agilefant-3.4/agilefant.war",
+    command  => "wget ${uris[app]}/agilefant-3.4/agilefant.war",
     creates  => "${tomcatdir}/agilefant.war",
     notify   => Service['tomcat'],
     require  => File[$tomcatdir],

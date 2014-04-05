@@ -17,8 +17,6 @@ os_release = {
 
 tobject = 'master::service::oracle'
 os      = 'Fedora'
-tappuri = 'http://tappshost/mirrors/apps'
-tinstdir = '/srv/oracle/install'
 describe tobject, :type => :class do
   tfacts = {
     :osfamily               => os_family[os],

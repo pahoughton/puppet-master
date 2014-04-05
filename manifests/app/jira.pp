@@ -12,10 +12,10 @@ class master::app::jira (
   $bin     = 'atlassian-jira-6.2.2-x64.bin',
   ) {
 
-  $servers = hiera('servers')
+  $uris = hiera('uris')
 
   $jirasource = $source ? {
-    undef   => "http://${servers[app]}/${bin}",
+    undef   => $uris['app'],
     default => $source,
   }
   if $vhost {
