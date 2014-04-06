@@ -20,8 +20,10 @@
 	       "gitlab" : "tester@nowhere.com"
 	     },
 
-  "groups" : { "nginx" : "nginx",
-	       "www" : "nginx"
+  "groups" : { "git" :    "git",
+	       "gitlab" : "git",
+	       "nginx" :  "nginx",
+	       "www" :    "nginx"
 	     },
 
   "homedirs" : { "git" : "/srv/tgitolite",
