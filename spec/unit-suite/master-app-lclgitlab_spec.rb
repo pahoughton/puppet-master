@@ -31,7 +31,7 @@ tobject = 'master::app::lclgitlab'
       it { should contain_class(tobject) }
       it { should contain_class('gitlab').
         with( 'git_create_user' => true,
-              'git_home'        => '/srv/tgitolite',
+              'git_home'        => '/srv/tgitlab',
               'git_email'       => 'tester@nowhere.com',
               'git_comment'     => 'gitolite and gitlab user',
               'gitlab_dbtype'   => 'pgsql',
