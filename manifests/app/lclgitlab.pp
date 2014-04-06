@@ -8,7 +8,8 @@ class master::app::lclgitlab (
   # fixme args for all values
   $databases = hiera('databases', { 'gitlab' => 'gitlab' })
   $email     = hiera('emails', { 'gitlab' => "gitlab@${::hostname}" })
-  $homedirs  = hiera('homedirs',{ 'git' => '/srv/gitolite'} )
+  $groups    = hiera('groups',{'gitlab' => 'git' })
+  $homedirs  = hiera('homedirs',{ 'gitlab' => '/srv/gitlab'} )
   $passwords = hiera('passwords', { 'pgsql-gitlab' => 'gitlab' })
   $servers   = hiera('servers',{ 'pgsql' => 'localhost' } )
   $users     = hiera('users', { 'git' => 'git',
@@ -44,9 +45,14 @@ class master::app::lclgitlab (
     }
   }
 
+  # file { $homedirs['gitlab'] :
+  #   ensure   => 'directory',
+  #   owner    => $users['gitlab'],
+  #   group    => $groups['gitlab'],
+  # }
   class { 'gitlab' :
     git_create_user => $git_create_user,
-    git_home        => $homedirs['git'],
+    git_home        => $homedirs['gitlab'],
     git_email       => $email['gitlab'],
     git_comment     => 'gitolite and gitlab user',
     gitlab_dbtype   => 'pgsql',
