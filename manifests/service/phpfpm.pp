@@ -48,14 +48,10 @@ class master::service::phpfpm (
   }
 
   if $basedir {
-    file { $basedir :
-      ensure  => 'directory',
-      mode    => '0775',
-      require => Package['nginx'],
-    }->
     file { "${basedir}/phpinfo.php" :
       ensure  => 'file',
       content => "<?php phpinfo(); ?>\n",
+      require => File[$basedir],
     }
   }
 }
