@@ -51,7 +51,7 @@ tobject = 'master::app::phpmyadmin'
         with( 'owner' => 'nginx',
               'group' => 'nginx',)
       }
-      ['mysqli',
+      ['mbstring',
       ].each { |pmod|
         it { should contain_php__module(pmod) }
       }

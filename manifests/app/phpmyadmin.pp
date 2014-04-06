@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
-class master::app::phpmyadmin(
+class master::app::phpmyadmin (
   $appname = 'phpmyadmin' , # /srv/www/phpmysql & http://host/phpmysql
   $prefix  = undef, # $prefix/$appname
   $tarball = 'phpmyadmin-4.1.12.tar.gz',
@@ -56,6 +56,8 @@ class master::app::phpmyadmin(
   file { "${wwwdir}/${appname}/config.ini.php" :
     ensure  => 'file',
     content => template('master/app/phpmyadmin-config.inc.php.erb'),
+    require => Class['master::service::phpfpm'],
   }
-  php::module { 'mysqli' : }
+
+  php::module { 'mbstring' : }
 }
