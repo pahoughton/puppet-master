@@ -18,6 +18,9 @@ class master::app::jira (
     undef   => $uris['app'],
     default => $source,
   }
+  $jirahome = "${prefix}/${app}"
+  $jiradata = "${prefix}/${app}-data"
+
   if $vhost {
     nginx::resource::location { "${vhost}-${app}-proxy" :
       ensure              => 'present',
@@ -34,14 +37,14 @@ class master::app::jira (
     content => template('master/app/jira-resp.txt.erb'),
   }
   ->
-  exec { "wget -q ${jirasource}" :
+  exec { "wget -q '${jirasource}/${bin}'" :
     cwd     => $::root_home,
     creates => "${::root_home}/${bin}",
   }
   ->
   exec { "bash ${bin} < jira-resp.txt" :
     cwd     => $::root_home,
-    creates => "${prefix}/${app}",
+    creates => $jirahome
   }
 
 }
