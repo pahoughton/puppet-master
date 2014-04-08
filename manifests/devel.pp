@@ -29,17 +29,17 @@ class master::devel {
       $ruby_pkg = 'ruby-devel'
     }
     'debian' : {
-      package { [ 'libpq-devel',
-                  'mysql-client',
-                  'emacs24-el',] :
-        ensure => 'installed',
-      }
+      ensure_packages(['libpq-devel',
+                       'mysql-client',
+                       'emacs24-el',])
+
       $ruby_pkg = 'ruby-full'
     }
     default : {
       fail('unsupported osfamily')
     }
   }
+
   if ! defined( Package['bundler'] ) {
     package { 'bundler' :
       ensure   => 'installed',
@@ -67,10 +67,6 @@ class master::devel {
   package { [ 'rake', ] :
     ensure    => 'installed',
     provider  => 'gem',
-  }->
-  package { ['librarian-puppet'] :
-    ensure   => 'installed',
-    provider => 'gem',
   }->
   package { 'rspec-mocks' :
     ensure   => 'installed',
@@ -101,5 +97,11 @@ class master::devel {
     provider  => 'gem',
   }
 
+  if ! defined( Package['librarian-puppet'] ) {
+    package { 'librarian-puppet' :
+      ensure   => 'installed',
+      provider => 'gem',
+    }
+  }
   class { 'python' : }
 }

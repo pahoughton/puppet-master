@@ -15,10 +15,12 @@ class master::service::puppetmaster {
     ensure => 'directory',
     mode   => 'g+ws',
   }
-  package { ['librarian-puppet'] :
-    ensure   => 'installed',
-    provider => 'gem',
-    require  => Package['puppet-server'],
+  if ! defined( Package['librarian-puppet']) {
+    package { 'librarian-puppet' :
+      ensure   => 'installed',
+      provider => 'gem',
+      require  => Package['puppet-server'],
+    }
   }
   if $::operatingsystem == 'Fedora' {
     service { 'firewalld' :
