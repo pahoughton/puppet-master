@@ -23,7 +23,7 @@ os_rel = {
 }
 # defined by fixtures/hiera/common.json
 tappdir = '/srv/www/phppgadmin'
-tcfgfn  = '/srv/www/phppgadmin/config.ini.php'
+tcfgfn  = "#{tappdir}/conf/config.inc.php"
 
 tobject = 'master::app::phppgadmin'
 ['Fedora','CentOS','Ubuntu'].each { |os|
