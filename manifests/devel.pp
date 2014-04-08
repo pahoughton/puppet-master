@@ -68,6 +68,10 @@ class master::devel {
     ensure    => 'installed',
     provider  => 'gem',
   }->
+  package { ['librarian-puppet'] :
+    ensure   => 'installed',
+    provider => 'gem',
+  }->
   package { 'rspec-mocks' :
     ensure   => 'installed',
     provider => 'gem',
