@@ -64,5 +64,6 @@ class master::nginx::tomcat (
     owner   => $user,
     group   => $group,
     content => template('master/nginx-tomcat-server.xml.erb'),
+    require => Package[$package],
   }
 }
