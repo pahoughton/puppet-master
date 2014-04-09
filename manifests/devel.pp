@@ -29,9 +29,9 @@ class master::devel {
       $ruby_pkg = 'ruby-devel'
     }
     'debian' : {
-      ensure_packages(['libpq-devel',
-                       'mysql-client',
-                       'emacs24-el',])
+      ensure_packages([ 'libpq-devel',
+                        'mysql-client',
+                        'emacs24-el',])
 
       $ruby_pkg = 'ruby-full'
     }
