@@ -35,16 +35,16 @@ tobject = 'master::app::lclgitlab'
               'git_email'       => 'tester@nowhere.com',
               'git_comment'     => 'gitolite and gitlab user',
               'gitlab_dbtype'   => 'pgsql',
-              'gitlab_dbhost'   => 'tpostgres',
-              'gitlab_dbname'   => 'tgitlab',
-              'gitlab_dbuser'   => 'tgitlab',
-              'gitlab_dbpwd'    => 'tpsqlglab', )
+              'gitlab_dbhost'   => 'tpgsqlhost',
+              'gitlab_dbname'   => 'gitlab',
+              'gitlab_dbuser'   => 'gitlab',
+              'gitlab_dbpwd'    => 'tgitlab', )
       }
     end
-    tfacts[:hostname] = 'tpostgres'
+    tfacts[:hostname] = 'tpgsqlhost'
     context "supports facts #{tfacts} - host has pg server" do
       let(:facts) do tfacts end
-      it { should contain_postgresql__server__db('tgitlab') }
+      it { should contain_postgresql__server__db('gitlab') }
     end
   end
 }

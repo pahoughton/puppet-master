@@ -7,7 +7,7 @@ class master::app::agilefant (
   $vhost      = 'localhost',
   $tomcatport = undef,
   $app        = 'agilefant',
-  $warurl     = undef # wget ${uris[app]}/agilefant-3.4/agilefant.war
+  $warurl     = undef, # wget ${uris[app]}/agilefant-3.4/agilefant.war
   $db_create  = true,
   $db_host    = undef, # hiera databases['$app']['host']
   $db_name    = undef,
@@ -28,13 +28,12 @@ class master::app::agilefant (
   $tdir = $tomcatdir ? { undef => '/srv/webapps', default => $tomcatdir }
 
 
-  $databases   = hiera('databases',{
-    $app => { 'host' => $dhost,
+  $databases   = hiera('databases',{ 'agilefant' => { 'host' => $dhost,
               'name' => $dname,
               'user' => $duser,
               'pass' => $dpass, },})
-  }
-  $directories = hiera('directories',{ 'tomcat', $tdir })
+
+  $directories = hiera('directories',{ 'tomcat' => $tdir })
   $groups      = hiera('groups',{ 'tomcat' => $tgrp })
   $ports       = hiera('ports',{ 'tomcat' => $tport })
   #$servers    = hiera('servers')
@@ -59,7 +58,7 @@ class master::app::agilefant (
   }
 
   if $db_create {
-    mysql::db { $databases[$app]['name'],
+    mysql::db { $databases[$app]['name'] :
       host     => '%',
       user     => $databases[$app]['user'],
       password => $databases[$app]['pass'],

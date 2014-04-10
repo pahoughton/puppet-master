@@ -1,29 +1,38 @@
 { "common.json" : "2014-03-19 04:29",
   "Copyright" : "(c) 2014 Paul Houghton <paul4hough@gmail.com>",
 
-  "databases" : { "mysql-agilefant" : "agilefant",
-		  "mysql-xoctool" : "xoctool",
-		  "pgsql-bacula" : "bacula",
-		  "pgsql-gitlab" : "tgitlab"
+  "databases" : { "agilefant" : { "host": "tmysqlhost",
+				  "name": "agilefant",
+				  "user": "agilefant",
+				  "pass": "tagile" },
+		  "gitlab" : { "host": "tpgsqlhost",
+			       "name": "gitlab",
+			       "user": "gitlab",
+			       "pass": "tgitlab" }
 		},
+
   "devices" : { "drobo5" : "UUID=test"
 	      },
-  "directories" : { "mysqldb" : "/srv/mysql",
-		    "oracle" : "/srv/oracle",
-		    "pgsqldb" : "/srv/pgsql",
-		    "sched" : "/srv/sched",
-		    "srv" : "/srv",
-		    "tmp" : "/tmp",
-		    "www" : "/srv/www"
+
+  "directories" : { "gitlab":  "/srv/tgitlab",
+		    "mysqldb": "/srv/mysql",
+		    "oracle":  "/srv/oracle",
+		    "pgsqldb": "/srv/pgsql",
+		    "sched":   "/srv/sched",
+		    "srv":     "/srv",
+		    "tmp":     "/tmp",
+		    "tomcat":  "/srv/webapps",
+		    "www":     "/srv/www"
 		  },
   "emails" : { "bacula-dir" : "tester@nowhere.com",
 	       "gitlab" : "tester@nowhere.com"
 	     },
 
-  "groups" : { "git" :    "git",
-	       "gitlab" : "git",
-	       "nginx" :  "nginx",
-	       "www" :    "nginx"
+  "groups" : { "git":    "git",
+	       "gitlab": "git",
+	       "nginx":  "nginx",
+	       "tomcat": "tomcat",
+	       "www":    "nginx"
 	     },
 
   "homedirs" : { "git" : "/srv/tgitolite",
@@ -52,12 +61,11 @@
 	      },
   "uris" : { "app" : "http://tappshost/mirrors/apps"
 	   },
-  "users" : { "git" : "git",
-	      "gitlab" : "git",
-	      "gitolite" : "git",
-	      "mysql-sched" : "tsched",
-	      "pgsql-gitlab" : "tgitlab",
-	      "nginx" : "nginx",
-	      "www" : "nginx"
+  "users" : { "git":      "git",
+	      "gitlab":   "git",
+	      "gitolite": "git",
+	      "nginx":    "nginx",
+	      "tomcat":   "tomcat",
+	      "www":      "nginx"
 	    }
 }
