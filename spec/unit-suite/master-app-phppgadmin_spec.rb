@@ -41,7 +41,6 @@ tobject = 'master::app::phppgadmin'
     context "supports facts #{tfacts}" do
       # FIXME
       # it { should compile } - fail: expected that the catalogue would include
-      it { should contain_class(tobject) }
       [tobject,
       ].each { |cls|
         it { should contain_class(cls) }
