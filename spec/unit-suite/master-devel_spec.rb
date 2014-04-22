@@ -29,12 +29,18 @@ os_family = {
 }
 
 common_pkgs = ['git-svn',
-                'flex',
-                'meld',
-                'rspec-core',
-                'puppet-gem',
-                'rspec-mocks',
-                'rspec-expectations',]
+               'flex',
+               'libyaml-devel',
+               'meld',
+               'rspec-core',
+               'puppet-gem',
+               'python-virtualenv',
+               'rspec-mocks',
+               'rspec-expectations',
+              ]
+perl_modules = ['DBD::mysql',
+                'DBD::pg',]
+
 tobject = 'master::devel'
 ['Fedora','CentOS','Ubuntu'].each { |os|
   describe tobject, :type => :class do
@@ -53,11 +59,14 @@ tobject = 'master::devel'
         osfamily_pkgs[os_family[os]].each{|pkg|
           it { should contain_package(pkg) }
         }
-        os_pkgs[os].each{|pkg|
+        os_pkgs[os].each {|pkg|
           it { should contain_package(pkg) }
         }
-        common_pkgs.each{|pkg|
+        common_pkgs.each {|pkg|
           it { should contain_package(pkg) }
+        }
+        perl_modules.each { |pm|
+          it { should contain_perl__module(pm) }
         }
       end
     end

@@ -47,9 +47,11 @@ class master::devel {
     }
   }
 
-  ensure_packages( ['git-svn',
-                    'flex',
-                    'meld'] )
+  ensure_packages( ['flex',
+                    'git-svn',
+                    'meld',
+                    'libyaml-devel',
+                    'python-virtualenv',] )
 
   # ruby stuff
   package { $ruby_pkg :
@@ -104,4 +106,7 @@ class master::devel {
     }
   }
   class { 'python' : }
+  perl::module { ['DBD::mysql',
+                  'DBD::pg',] :
+  }
 }
