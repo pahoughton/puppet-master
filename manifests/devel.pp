@@ -105,8 +105,20 @@ class master::devel {
       provider => 'gem',
     }
   }
-  class { 'python' : }
+
+
   perl::module { ['DBD::mysql',
-                  'DBD::pg',] :
+                  'DBD::pg',
+                  'PHP::Serialization',
+                  ] :
+  }
+
+  php::module { ['pdo',
+                 'pgsql',
+                 'mysqlnd',] :
+  }
+
+  class { ['master::php::composer',
+           'python' ] :
   }
 }

@@ -39,7 +39,13 @@ common_pkgs = ['git-svn',
                'rspec-expectations',
               ]
 perl_modules = ['DBD::mysql',
-                'DBD::pg',]
+                'DBD::pg',
+                'PHP::Serialization',
+               ]
+php_modules = ['pdo',
+               'pgsql',
+               'mysqlnd',
+               ]
 
 tobject = 'master::devel'
 ['Fedora','CentOS','Ubuntu'].each { |os|
@@ -67,6 +73,9 @@ tobject = 'master::devel'
         }
         perl_modules.each { |pm|
           it { should contain_perl__module(pm) }
+        }
+        php_modules.each { |pm|
+          it { should contain_php__module(pm) }
         }
       end
     end
