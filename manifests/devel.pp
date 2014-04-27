@@ -113,12 +113,16 @@ class master::devel {
                   ] :
   }
 
-  php::module { ['pdo',
-                 'pgsql',
-                 'mysqlnd',] :
+  if ! defined( Php__Module['pgsql'] ) {
+    php::module { 'pgsql' :
+      notify => Service['php-fpm'],
+    }
+  }
+  php::module { [ 'pdo',
+                  'mysqlnd',] :
   }
 
-  class { ['master::php::composer',
-           'python' ] :
+  class { [ 'master::php::composer',
+            'python' ] :
   }
 }
