@@ -13,6 +13,7 @@ class master::desktop {
                 'dbus-x11',
                 'firefox',
                 'fvwm',
+                'jigdo',
                 'keepassx',
                 'pulseaudio',
                 'pulseaudio-utils',

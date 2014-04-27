@@ -13,6 +13,7 @@ $common_pkgs = [
     'firefox',
     'flash-plugin',
     'fvwm',
+    'jigdo',
     'keepassx',
     'pulseaudio',
     'pulseaudio-utils',
