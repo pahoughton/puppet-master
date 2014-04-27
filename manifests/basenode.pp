@@ -45,18 +45,24 @@ class master::basenode (
                   'bind-utils',
                   'xorg-x11-apps',
                   ],
-    'CentOS' => [ 'man',
+    'CentOS' => [ 'man', ],
+    'Ubuntu' => [],
+    'Debian' => [],
+    default  => [],
+  }
+
+  $ofam_pkgs = $::osfamily ? {
+    'RedHat' => [ 'bind-utils',
                   'policycoreutils-python',
-                  'bind-utils',
+                  'redhat-lsb',
                   'xorg-x11-apps',
                   ],
-    'Ubuntu' => [ 'unar',
+    'Debian' => ['unar',
                   'bind9utils',
                   'policycoreutils',
                   'x11-apps',
                   ],
   }
-
   $gpg_path = '/etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion'
   $gpg_module = 'puppet:///modules/rpmfusion/RPM-GPG-KEY-rpmfusion'
 
@@ -172,6 +178,9 @@ class master::basenode (
         #   repos    => 'saucy-updates main restricted',
         # }
       }
+      'debian' : {
+        # todo - mirror debian
+      }
       default : {
         fail("Unsupported operatingsystem ${::operatingsystem}")
       }
@@ -199,22 +208,26 @@ class master::basenode (
       }
       'ubuntu' : { # todo
       }
+      'debian' : { # todo
+        apt::source { 'puppetlabs':
+          location   => 'http://apt.puppetlabs.com',
+          repos      => 'main',
+          key        => '4BD6EC30',
+          key_server => 'pgp.mit.edu',
+        }
+      }
       default : {
         fail("unsupported operatingsystem ${::operatingsystem}")
       }
     }
   }
 
-  case $::osfamily {
-    'redhat' : {
-      ensure_packages(['redhat-lsb',])
-      file { '/var/log/yum.log' :
-        mode  => '0644',
-      }
-    }
-    default : {
-    }
-  }
+  # case $::osfamily {
+  #   'RedHat' : { }
+  #   'Debian' : { }
+  # }
+
+  ensure_packages( $ofam_pkgs )
   ensure_packages( $os_pkgs )
   ensure_packages( $common_pkgs )
 

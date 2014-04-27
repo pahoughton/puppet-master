@@ -6,9 +6,11 @@ require 'spec_helper'
 
 os_lsbdist = {
   'Ubuntu' => 'ubuntu',
+  'Debian' => 'Debian',
 }
 os_lsbname = {
   'Ubuntu' => 'precise',
+  'Debian' => 'wheezy',
 }
 
 # these are the files for existing repos that the mirror provides.
@@ -22,7 +24,7 @@ repo_files = {
                '/etc/yum.repos.d/rpmfusion-nonfree-updates-released.repo',],
   'CentOS' => ['/etc/yum.repos.d/CentOS-Base.repo',
                '/etc/yum.repos.d/CentOS-Debuginfo.repo',
-               '/etc/yum.repos.d/CentOS-Media.repo',
+               '/etc/yum.repos.d/CentfaOS-Media.repo',
                '/etc/yum.repos.d/CentOS-Vault.repo',],
   'Ubuntu' => [''],
 }
@@ -42,40 +44,44 @@ common_pkgs = ['xterm',
                'lynx',
                'zfs-fuse',]
 os_pkgs = {
-  'Fedora' => ['redhat-lsb',
-               'policycoreutils-python',
-               'bind-utils',
-               'unar',
-               'xorg-x11-apps',
-              ],
-  'CentOS' => ['redhat-lsb',
-               'policycoreutils-python',
-               'man',
-               'bind-utils',
-               'xorg-x11-apps',
-              ],
-  'Ubuntu' => ['unar',
-               'policycoreutils',
-               'bind9utils',
-               'x11-apps',
-              ],
+    'Fedora' => [ 'unar',
+                  'policycoreutils-python',
+                  'bind-utils',
+                  'xorg-x11-apps',
+                  ],
+    'CentOS' => [ 'man', ],
+    'Ubuntu' => [],
+}
+ofam_pkgs = {
+    'RedHat' => [ 'bind-utils',
+                  'policycoreutils-python',
+                  'redhat-lsb',
+                  'xorg-x11-apps',
+                  ],
+    'Debian' => ['unar',
+                  'bind9utils',
+                  'policycoreutils',
+                  'x11-apps',
+                  ],
 }
 os_family = {
+  'Debian' => 'Debian',
   'Fedora' => 'RedHat',
   'CentOS' => 'RedHat',
-  'Ubuntu' => 'debian',
+  'Ubuntu' => 'Debian',
 }
 os_rel = {
   'Fedora' => '20',
   'CentOS' => '6',
   'Ubuntu' => '13',
+  'Debian' => '7.4',
 }
 
 rpmfusion_gpg_prefix = '/etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion'
 
 mirror  = 'tgandalf'
 tobject = 'master::basenode'
-['Fedora','CentOS','Ubuntu'].each { |os|
+['Fedora','CentOS','Ubuntu','Debian'].each { |os|
   describe tobject, :type => :class do
     tfacts = {
       :osfamily               => os_family[os],
@@ -101,9 +107,16 @@ tobject = 'master::basenode'
         common_pkgs.each{|pkg|
           it { should contain_package(pkg) }
         }
-        os_pkgs[os].each{|pkg|
-          it { should contain_package(pkg) }
-        }
+        if ofam_pkgs[os_family[os]]
+          ofam_pkgs[os_family[os]].each{|pkg|
+            it { should contain_package(pkg) }
+          }
+        end
+        if os_pkgs[os]
+          os_pkgs[os].each{|pkg|
+            it { should contain_package(pkg) }
+          }
+        end
         it { should contain_service('zfs-fuse').
           with( 'ensure' => 'running',
                 'enable' => true, )
