@@ -9,6 +9,7 @@ RSpec.configure do |c|
   c.hiera_config  = 'spec/fixtures/hiera.yaml'
   #c.warnings      = true,
   c.default_facts = {
+    :root_home      => '/root',
     :concat_basedir => 'ugg postgres',
     :kernel         => 'Linux',
   }
