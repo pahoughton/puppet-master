@@ -11,6 +11,7 @@ class master::desktop {
                 'alsa-utils',
                 'dbus-tools',
                 'dbus-x11',
+                'icedtea-web',
                 'firefox',
                 'fvwm',
                 'jigdo',

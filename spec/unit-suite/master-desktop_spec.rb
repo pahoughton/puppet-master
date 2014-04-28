@@ -10,6 +10,7 @@ $common_pkgs = [
     'alsa-utils',
     'dbus-tools',
     'dbus-x11',
+    'icedtea-web',
     'firefox',
     'flash-plugin',
     'fvwm',
