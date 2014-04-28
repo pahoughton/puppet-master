@@ -188,9 +188,10 @@ class master::basenode (
   } else {
     # no mirror, so ensure repos are avaiable
     case $::operatingsystem {
-      'fedora' : {
-        class { 'rpmfusion' : }
-      }
+      # FIXME - no time for this bs
+      # 'fedora' : {
+      #   class { 'rpmfusion' : }
+      # }
       'centos' : {
         class { 'rpmfusion' : }
         ->
