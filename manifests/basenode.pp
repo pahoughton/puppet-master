@@ -192,6 +192,8 @@ class master::basenode (
       # 'fedora' : {
       #   class { 'rpmfusion' : }
       # }
+      'fedora' : {
+      }
       'centos' : {
         class { 'rpmfusion' : }
         ->
