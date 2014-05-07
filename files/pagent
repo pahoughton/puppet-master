@@ -5,8 +5,8 @@
 #
 outfn="puppet.`/bin/date +%F-%H:%M:%S`.out"
 time puppet agent --test > ~/$outfn 2>&1
-if grep Error ~/outfn ; then
-  echo "* * ERRORS * *"
+if grep Error ~/$outfn ; then
+  echo "* * ERRORS * *" in ~/$outfn
 else
   fold -w 78 -s ~/$outfn
 fi
