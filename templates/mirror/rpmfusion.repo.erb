@@ -3,58 +3,58 @@
 #
 # Copyright (c) 2014 Paul Houghton <paul_houghton@cable.comcast.com>
 #
-[<%= @repo_mirror %>-rpmfusion-free]
-name=RPM Fusion for EL 6 - Free - <%= @repo_mirror %> -
-baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-free
+[<%= @mhost %>-rpmfusion-free]
+name=RPM Fusion for EL 6 - Free - <%= @mhost %> -
+baseurl=http://<%= @mhost %>/mirrors/yum/rpmfusion-free
 enabled=1
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-free.key
 
 [rpmfusion-free]
 name=RPM Fusion for EL 6 - Free - -
 mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?arch=x86_64&repo=free-fedora-20
 enabled=0
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-free.key
 
-[<%= @repo_mirror %>-rpmfusion-free-updates-released]
-name=RPM Fusion for EL 6 - Free - <%= @repo_mirror %> - updates-released
-baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-free-updates-released
+[<%= @mhost %>-rpmfusion-free-updates-released]
+name=RPM Fusion for EL 6 - Free - <%= @mhost %> - updates-released
+baseurl=http://<%= @mhost %>/mirrors/yum/rpmfusion-free-updates-released
 enabled=1
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-free.key
 
 [rpmfusion-free-updates-released]
 name=RPM Fusion for EL 6 - Free - updates-released
 mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?arch=x86_64&repo=free-fedora-updates-released-20
 enabled=0
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-free-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-free.key
 
-[<%= @repo_mirror %>-rpmfusion-nonfree]
-name=RPM Fusion for EL 6 - Nonfree - <%= @repo_mirror %> -
-baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-nonfree
+[<%= @mhost %>-rpmfusion-nonfree]
+name=RPM Fusion for EL 6 - Nonfree - <%= @mhost %> -
+baseurl=http://<%= @mhost %>/mirrors/yum/rpmfusion-nonfree
 enabled=1
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-nonfree.key
 
 [rpmfusion-nonfree]
 name=RPM Fusion for EL 6 - Nonfree - -
 mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?arch=x86_64&repo=nonfree-fedora-20
 enabled=0
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-nonfree.key
 
-[<%= @repo_mirror %>-rpmfusion-nonfree-updates-released]
-name=RPM Fusion for EL 6 - Nonfree - <%= @repo_mirror %> - updates-released
-baseurl=http://<%= @repo_mirror %>/mirrors/yum/rpmfusion-nonfree-updates-released
+[<%= @mhost %>-rpmfusion-nonfree-updates-released]
+name=RPM Fusion for EL 6 - Nonfree - <%= @mhost %> - updates-released
+baseurl=http://<%= @mhost %>/mirrors/yum/rpmfusion-nonfree-updates-released
 enabled=1
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-nonfree.key
 
 [rpmfusion-nonfree-updates-released]
 name=RPM Fusion for EL 6 - Nonfree - updates-released
 mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?arch=x86_64&repo=nonfree-fedora-updates-released-20
 enabled=0
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rpmfusion-nonfree-fedora-20
+gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-nonfree.key
