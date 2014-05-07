@@ -4,47 +4,190 @@
 #
 require 'spec_helper'
 
-os_family = {
-  'Fedora' => 'RedHat',
-  'CentOS' => 'RedHat',
-  'Ubuntu' => 'debian',
-}
-os_release = {
-  'Fedora' => '20',
-  'CentOS' => '6',
-  'Ubuntu' => '13',
+tobject = 'master::app::lclgitlab'
+
+classes = {
+  'Debian' => {
+    'undef' => {
+      'undef' => ['gitlab',],
+    },
+    'Ubuntu' => {
+      'undef' => [],
+      '13' => [],
+      '14' => [],
+    },
+    'Debian' => {
+      'undef' => [],
+      '7' => [],
+    },
+  },
+  'RedHat' => {
+    'undef' => {
+      'undef' => ['gitlab',],
+      },
+    'Fedora' => {
+      'undef' => [],
+      '19' => [],
+      '20' => [],
+      '21' => [],
+    },
+    'CentOS' => {
+      'undef' => [],
+      '6' => [],
+      '7' => [],
+    },
+  },
 }
 
-tobject = 'master::app::lclgitlab'
-['Fedora','CentOS','Ubuntu',].each { |os|
-  describe tobject, :type => :class do
-    tfacts = {
-      :osfamily               => os_family[os],
-      :operatingsystem        => os,
-      :operatingsystemrelease => os_release[os],
-      :os_maj_version         => os_release[os],
-      :hostname               => 'tgitlab',
+packages = {
+  'Debian' => {
+    'undef' => {
+      'undef' => ['redis-server',
+                  ],
+    },
+    'Ubuntu' => {
+      'undef' => [],
+      '13' => [],
+      '14' => [],
+    },
+    'Debian' => {
+      'undef' => [],
+      '7' => [],
+    },
+  },
+  'RedHat' => {
+    'undef' => {
+      'undef' => ['redis',
+                  ],
+    },
+    'Fedora' => {
+      'undef' => [],
+      '19' => [],
+      '20' => [],
+      '21' => [],
+    },
+    'CentOS' => {
+      'undef' => [],
+      '6' => [],
+      '7' => [],
+    },
+  },
+}
+
+services = {
+  'Debian' => {
+    'undef' => {
+      'undef' => ['redis-server'],
+    },
+    'Ubuntu' => {
+      'undef' => [],
+      '13' => [],
+      '14' => [],
+    },
+    'Debian' => {
+      'undef' => [],
+      '7' => [],
+    },
+  },
+  'RedHat' => {
+    'undef' => {
+      'undef' => ['redis'],
+      },
+    'Fedora' => {
+      'undef' => [],
+      '19' => [],
+      '20' => [],
+      '21' => [],
+    },
+    'CentOS' => {
+      'undef' => [],
+      '6' => [],
+      '7' => [],
+    },
+  },
+}
+
+lsbname = {
+  'Debian' => {
+    'undef' => {},
+    'Debian' => {
+      '7' => 'wheezy',
+    },
+    'Ubuntu' => {
+      'undef' => 'precise',
+      '12'    => 'precise',
+      '13'    => 'saucy',
+      '14'    => 'trusty',
+    },
+  },
+  'RedHat' => {
+    'undef' => {},
+    'Fedora' => {
+      '19' => '19',
+      '20' => '20',
+      '21' => '21',
+    },
+    'CentOS' => {
+      '6' => '6',
+      '7' => '7',
+    },
+  },
+}
+
+supported = {
+  'Debian' => {
+    'undef' => ['undef',
+               ],
+    'Debian' => ['undef',
+                 '7',
+                ],
+    'Ubuntu' => ['undef',
+                 '13',
+                 '14',
+                ],
+  },
+  'RedHat' => {
+    'undef' => ['undef'
+               ],
+    'Fedora' => ['undef',
+                '19',
+                '20',
+                '21',
+                ],
+    'CentOS' => ['undef',
+                '6',
+                '7',
+                ],
+  },
+}
+
+supported.keys.each { |fam|
+  osfam = supported[fam]
+  osfam.keys.each { |os|
+    osfam[os].each { |rel|
+      describe tobject, :type => :class do
+        tfacts = {
+          :osfamily               => fam,
+          :operatingsystem        => os,
+          :operatingsystemrelease => rel,
+          :os_maj_version         => rel,
+          :lsbdistid              => os,
+          :lsbdistcodename        => lsbname[fam][os][rel],
+        }
+        let(:facts) do tfacts end
+        context "supports facts #{tfacts}" do
+          #print "p:#{fam}:#{os}:#{rel}:#{packages[fam][os][rel]}\n"
+          classes[fam][os][rel].each { |cls|
+            it { should contain_class(cls) }
+          }
+          packages[fam][os][rel].each { |pkg|
+            it { should contain_package(pkg) }
+          }
+          services[fam][os][rel].each { |svc|
+            it { should contain_service(svc) }
+          }
+        end
+      end
     }
-    context "supports facts #{tfacts}" do
-      let(:facts) do tfacts end
-      #it { should compile } #?- fail: expected that the catalogue would include
-      it { should contain_class(tobject) }
-      it { should contain_class('gitlab').
-        with( 'git_create_user' => true,
-              'git_home'        => '/srv/tgitlab',
-              'git_email'       => 'tester@nowhere.com',
-              'git_comment'     => 'gitolite and gitlab user',
-              'gitlab_dbtype'   => 'pgsql',
-              'gitlab_dbhost'   => 'tpgsqlhost',
-              'gitlab_dbname'   => 'gitlab',
-              'gitlab_dbuser'   => 'gitlab',
-              'gitlab_dbpwd'    => 'tgitlab', )
-      }
-    end
-    tfacts[:hostname] = 'tpgsqlhost'
-    context "supports facts #{tfacts} - host has pg server" do
-      let(:facts) do tfacts end
-      it { should contain_postgresql__server__db('gitlab') }
-    end
-  end
+  }
 }

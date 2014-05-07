@@ -50,14 +50,15 @@
   "ports" : { "tomcat" : "1230",
 	      "tomcat-ssl" : "1233"
 	    },
-  "servers" : { "bacula-dir" : "tbacdir",
-	        "bacula-sd" : "tbacsd",
-		"gitlab" : "tgitlab",
-		"gitolite" : "tgitolite",
-		"jenkins" : "tjenkins",
-		"repo-mirror" : "tmirror",
-		"mysql" : "tmysql",
-		"pgsql" : "tpostgres"
+  "servers" : { "aptmirror":  "tgandalf",
+		"bacula-dir": "tbacdir",
+	        "bacula-sd":  "tbacsd",
+		"gitlab":     "tgitlab",
+		"gitolite":   "tgitolite",
+		"jenkins":    "tjenkins",
+		"mysql":      "tmysql",
+		"pgsql":      "tpostgres",
+		"yummirror":  "tgandalf"
 	      },
   "uris" : { "app" : "http://tappshost/mirrors/apps"
 	   },

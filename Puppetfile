@@ -16,26 +16,26 @@ mod 'puppetlabs/stdlib'
 mod 'saz/sudo'
 mod 'puppetlabs/vcsrepo'
 
-mod 'bacula',
+mod 'pahoughton/bacula',
   :git => 'http://github.com/pahoughton/puppet-bacula',
   :ref => 'pahoughton-devel'
-mod 'gitlab',
+mod 'pahoughton/gitlab',
   :git => 'http://github.com/pahoughton/puppet-gitlab',
   :ref => 'pahoughton-devel'
-mod 'mysql',
+mod 'pahoughton/mysql',
   :git => 'http://github.com/pahoughton/puppetlabs-mysql'
-mod 'nginx',
+mod 'pahoughton/nginx',
   :git => 'http://github.com/pahoughton/puppet-nginx',
   :ref => 'pahoughton-devel'
-mod 'perl',
+mod 'pahoughton/perl',
   :git => 'http://github.com/pahoughton/puppet-perl',
   :ref => 'pahoughton-devel'
-mod 'php',
+mod 'pahoughton/php',
   :git => 'http://github.com/pahoughton/puppet-php'
-mod 'policykit',
+mod 'pahoughton/policykit',
   :git => 'http://github.com/pahoughton/puppet-policykit'
-mod 'python',
+mod 'pahoughton/python',
   :git => 'http://github.com/pahoughton/puppet-python'
-mod 'rpmfusion',
+mod 'pahoughton/rpmfusion',
   :git => 'http://github.com/pahoughton/puppet-rpmfusion',
   :ref => 'pahoughton-devel'

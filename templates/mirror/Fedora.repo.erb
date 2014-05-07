@@ -3,9 +3,9 @@
 #
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
-[<%= @repo_mirror %>-fedora]
-name=Fedora - <%= @repo_mirror %> - $releasever - $basearch
-baseurl=http://<%= @repo_mirror %>/mirrors/yum/fedora
+[<%= @mhost %>-fedora]
+name=Fedora - <%= @mhost %> - $releasever - $basearch
+baseurl=http://<%= @mhost %>/mirrors/yum/fedora
 enabled=1
 metadata_expire=2d
 gpgcheck=1
@@ -17,7 +17,7 @@ name=Fedora $releasever - $basearch
 failovermethod=priority
 #baseurl=http://download.fedoraproject.org/pub/fedora/linux/releases/$releasever/Everything/$basearch/os/
 metalink=https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
-enabled=1
+enabled=0
 metadata_expire=7d
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
@@ -45,9 +45,9 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
 skip_if_unavailable=False
 
-[<%= @repo_mirror %>-fedora-updates]
-name=Fedora - <%= @repo_mirror %> - $releasever - $basearch - Updates
-baseurl=http://<%= @repo_mirror %>/mirrors/yum/fedora-updates
+[<%= @mhost %>-fedora-updates]
+name=Fedora - <%= @mhost %> - $releasever - $basearch - Updates
+baseurl=http://<%= @mhost %>/mirrors/yum/fedora-updates
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
@@ -82,4 +82,3 @@ enabled=0
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
 skip_if_unavailable=False
-
