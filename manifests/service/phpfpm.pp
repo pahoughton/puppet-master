@@ -43,7 +43,7 @@ class master::service::phpfpm (
     'debian'  => '/var/lib/php5',
     'redhat'  => '/var/lib/php',
   }
-  file { "${php_base_dir}/session" :
+  file { [$php_base_dir, "${php_base_dir}/session"] :
     ensure  => 'directory',
     mode    => '0775',
   }
