@@ -20,6 +20,7 @@ class master::service::phpfpm (
       display_errors  => 'On',
       short_open_tag  => 'Off',
       date_timezone   => 'America/Denver',
+      require         => Class['php::fpm::daemon'],
     }
   }
   php::ini { '/etc/php.ini' :
