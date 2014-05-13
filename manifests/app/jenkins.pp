@@ -58,15 +58,14 @@ class master::app::jenkins (
       $configfn = '/etc/default/jenkins'
 
       # apt::key { 'jenkins':
-      #   key        => 'D50582E6',
-      #   key_source => 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key',
       # }
       # -> # todo - this should not be needed
-      apt::source { 'jenkins' :
+      apt::source { 'jenkins':
         location    => 'http://pkg.jenkins-ci.org/debian',
-        release     => '',
         repos       => 'binary/',
-        include_src => false,
+        key        => 'D50582E6',
+        key_source => 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key',
+        notify     => Exec['apt_get_update_for_nginx'],
       }
     }
     default : {
