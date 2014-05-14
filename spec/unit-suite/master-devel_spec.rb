@@ -71,7 +71,7 @@ packages = {
                   # common
                   'flex',
                   'git-svn',
-                  'libyaml-devel',
+                  'libyaml-dev',
                   'meld',
                   'python-virtualenv',
                   'rake',
