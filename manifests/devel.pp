@@ -6,11 +6,13 @@ class master::devel {
 
   $ofpkgs = $::osfamily ? {
     'RedHat' => [ 'emacs-el',
+                  'libyaml-devel',
                   'postgresql-devel',
                   'ruby-devel',
                   'yum-utils',
                   ],
     'Debian' => [ 'emacs24-el',
+                  'libyaml-dev',
                   'libpq-devel',
                   'mysql-client',
                   'puppet-lint',
@@ -32,7 +34,6 @@ class master::devel {
 
   $pkgs = [ 'flex',
             'git-svn',
-            'libyaml-devel',
             'meld',
             'python-virtualenv',
             'rake',
