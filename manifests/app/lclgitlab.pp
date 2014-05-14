@@ -72,7 +72,7 @@ class master::app::lclgitlab (
     gitlab_dbpwd             => $databases['gitlab']['pass'],
     gitlab_http_port         => $tcpport,
     gitlab_relative_url_root => '/gitlab',
-    gitlab_repodir           => "${directories[gitlab]}/repositories",
+    gitlab_repodir           => $directories['gitlab'],
     require                  => Service[$redissvc],
   }
 
