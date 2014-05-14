@@ -61,8 +61,9 @@ class master::app::jenkins (
       # }
       # -> # todo - this should not be needed
       apt::source { 'jenkins':
-        location    => 'http://pkg.jenkins-ci.org/debian',
-        repos       => 'binary/',
+        location   => 'http://pkg.jenkins-ci.org/debian',
+        repos      => 'binary/',
+        release    => undef,
         key        => 'D50582E6',
         key_source => 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key',
         notify     => Exec['apt_get_update_for_nginx'],
