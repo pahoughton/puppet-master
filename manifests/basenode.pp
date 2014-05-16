@@ -15,69 +15,60 @@ class master::basenode (
   $auth_key_name   = undef,
   ) {
 
-  notify { 'FIXME - systest - package install attempted b4 repos.' : }
-  notify { 'fixme - all systemd files notify systemd' : }
+  notify { 'todo - systemd files notify systemd' : }
 
   # make all pacakges dependent on repos.
   Yumrepo <| |> -> Package <| |>
   Apt::Source <| |> -> Package <| |>
 
-  $common_clss = [ 'gcc',]
-
-  $common_pkgs = ['automake',
-                  'cvs',
-                  'emacs',
-                  'git',
-                  'iftop',
-                  'lsof',
-                  'lynx',
-                  'make',
-                  'nmap',
-                  'rcs',
-                  'subversion',
-                  'sysstat',
-                  'unar',
-                  'xterm',
-                  'zfs-fuse',
-                  ]
-  case $::osfamily {
-    'Debian' : {
-      class { 'master::mirror::aptmirror' :
-        host  => $mirror_host,
-        purge => $mirror_purge,
-      }
-      $ofam_pkgs = ['bind9utils',
-                    'policycoreutils',
-                    'x11-apps',
-                    ]
-    }
-    'RedHat' : {
-      class { 'master::mirror::yum' : }
-      $ofam_pkgs = ['bind-utils',
-                    'policycoreutils-python',
-                    'redhat-lsb',
-                    'xorg-x11-apps',
-                    ]
-    }
-    default : {
-      $ofam_pkgs = []
-    }
+  if ! defined(Class['gcc']) {
+    class { 'gcc' : }
   }
 
-  $os_pkgs = $::operatingsystem ? {
-    'Fedora' => [],
-    'CentOS' => ['man',],
-    'Ubuntu' => [],
-    'Debian' => [],
-    default  => [],
+  $pkgs = [ 'automake',
+            'cvs',
+            'emacs',
+            'git',
+            'iftop',
+            'lsof',
+            'lynx',
+            'make',
+            'nmap',
+            'rcs',
+            'subversion',
+            'sysstat',
+            'unar',
+            'xterm',
+            'zfs-fuse',
+            ]
+  $ofpkgs = $::osfamily ? {
+    'Debian' => [ 'bind9utils',
+                  'policycoreutils',
+                  'x11-apps',
+                  ],
+    'RedHat' => [ 'bind-utils',
+                  'policycoreutils-python',
+                  'redhat-lsb',
+                  'xorg-x11-apps',
+                  ],
+    default   => [],
   }
 
-  ensure_packages( $ofam_pkgs )
-  ensure_packages( $os_pkgs )
-  ensure_packages( $common_pkgs )
+
+  ensure_packages( $pkgs )
+  ensure_packages( $ofpkgs )
 
   if $::kernel == 'Linux' {
-    class { $common_clss : }
+
+    $ofmirror = $::osfamily ? {
+      'Debian' => 'master::mirror::aptmirror',
+      'RedHat' => 'master::mirror::yum',
+      default  => [],
+    }
+    class { $ofmirror :
+      host  => $mirror_host,
+      purge => $mirror_purge,
+    }
 
     $admgroups = $::osfamily ? {
       'RedHat' => ['sudo','adm','puppet'],

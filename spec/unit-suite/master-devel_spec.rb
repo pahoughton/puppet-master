@@ -61,7 +61,7 @@ packages = {
   'Debian' => {
     'undef' => {
       'undef' => ['emacs24-el',
-                  'libpq-devel',
+                  'libpq-dev',
                   'mysql-client',
                   'puppet-lint',
                   'puppet-syntax',
@@ -87,6 +87,7 @@ packages = {
                   'emacs-el',
                   'postgresql-devel',
                   'ruby-devel',
+                  'rubygem-rake',
                   'yum-utils',
                   # common
                   'flex',
@@ -94,7 +95,6 @@ packages = {
                   'libyaml-devel',
                   'meld',
                   'python-virtualenv',
-                  'rake',
                   ],
     },
     'CentOS' => {
@@ -103,6 +103,7 @@ packages = {
                   'emacs-el',
                   'postgresql-devel',
                   'ruby-devel',
+                  'rubygem-rake',
                   'yum-utils',
                   # common
                   'flex',
@@ -110,7 +111,6 @@ packages = {
                   'libyaml-devel',
                   'meld',
                   'python-virtualenv',
-                  'rake',
                   ],
     },
   },
@@ -152,11 +152,10 @@ gems = {
 }
 
 perl_modules = ['DBD::mysql',
-                'DBD::pg',
+                'DBD::Pg',
                 'PHP::Serialization',
                ]
-php_modules = ['pdo',
-               'pgsql',
+php_modules = ['pgsql',
                'mysqlnd',
                ]
 
