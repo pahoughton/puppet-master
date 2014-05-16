@@ -24,6 +24,11 @@ class master::mirror::aptmirror (
           repos       => 'main restricted',
           include_src => false,
         }
+        apt::source { 'ubuntu-universe' :
+          location    => 'http://us.archive.ubuntu.com/ubuntu/',
+          repos       => 'universe',
+          include_src => false,
+        }
       }
       default : {
         notify { "::operatingsystem '${::operatingsystem}' unsupported" : }
