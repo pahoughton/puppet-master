@@ -12,14 +12,9 @@ class master::app::phpmyadmin (
   ) {
 
   $directories = hiera('directories',{'www' => '/srv/www'})
-  $groups      = hiera('groups',{'www' => 'www'})
-  $uris        = hiera('uris',{'app' => 'http://appsrv/apps' })
-  $users       = hiera('users',{'www' => 'www'})
-
-  $appsrc = $source ? {
-    undef   => $uris['app'],
-    default => $source,
-  }
+  $groups      = hiera('groups',{'www' =>  {'RedHat'=>'nginx','Debian'=>'www-data'}})
+  $servers     = hiera('servers',{'pgsql' => 'localhost'})
+  $users       = hiera('users',{'www' => {'RedHat'=>'nginx','Debian'=>'www-data'}})
 
   $wwwdir = $prefix ? {
     undef   => $directories['www'],
@@ -43,21 +38,5 @@ class master::app::phpmyadmin (
     group => $appgroup,
   }
 
-  exec { "wget ${appsrc}/${tarball}" :
-    cwd     => $wwwdir,
-    creates => "${wwwdir}/${tarball}",
-  }
-  ->
-  exec { "unar ${tarball}" :
-    cwd     => $wwwdir,
-    creates => "${wwwdir}/${appname}",
-  }
-  ->
-  file { "${wwwdir}/${appname}/config.ini.php" :
-    ensure  => 'file',
-    content => template('master/app/phpmyadmin-config.inc.php.erb'),
-    require => Class['master::service::phpfpm'],
-  }
-
-  php::module { 'mbstring' : }
+  notify { 'fixme pending' : }
 }
