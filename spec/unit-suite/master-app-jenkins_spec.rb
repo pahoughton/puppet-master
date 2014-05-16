@@ -4,6 +4,8 @@
 #
 require 'spec_helper'
 
+tobject = 'master::app::jenkins'
+
 packages = {
   'Debian' => {
     'undef' => {
@@ -136,8 +138,6 @@ justone = {
   }
 }
 
-tobject = 'master::app::jenkins'
-
 justone.keys.each { |fam|
   osfam = justone[fam]
   osfam.keys.each { |os|
@@ -185,8 +185,6 @@ supported = {
                 ],
   },
   'RedHat' => {
-    'undef' => ['undef'
-               ],
     'Fedora' => ['undef',
                 '19',
                 '20',
