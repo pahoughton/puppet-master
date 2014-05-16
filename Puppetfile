@@ -15,6 +15,7 @@ mod 'puppetlabs/gcc'
 mod 'puppetlabs/stdlib'
 mod 'saz/sudo'
 mod 'puppetlabs/vcsrepo'
+mod 'puppetlabs/java'
 
 mod 'pahoughton/bacula',
   :git => 'http://github.com/pahoughton/puppet-bacula',
@@ -30,8 +31,6 @@ mod 'pahoughton/nginx',
 mod 'pahoughton/perl',
   :git => 'http://github.com/pahoughton/puppet-perl',
   :ref => 'pahoughton-devel'
-mod 'pahoughton/php',
-  :git => 'http://github.com/pahoughton/puppet-php'
 mod 'pahoughton/policykit',
   :git => 'http://github.com/pahoughton/puppet-policykit'
 mod 'pahoughton/python',
