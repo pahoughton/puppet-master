@@ -5,3 +5,4 @@ Puppetfile.lock
 _wiki_tmp
 unittest-suite-results.txt
 unittest-suite-results.md
+Gemfile.lock
