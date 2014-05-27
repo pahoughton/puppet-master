@@ -5,6 +5,7 @@
 class master::app::lclgitlab (
   $git_create_user = true,
   $vhost           = undef,
+  $port            = '8280',
   ) {
 
   # fixme args for all values
@@ -58,7 +59,6 @@ class master::app::lclgitlab (
                                       $databases['gitlab']['pass']),
     }
   }
-  $tcpport = '18212' # todo - hardcode gitlab defaults to 80
   # fixme - gitlab service not refreshing on config file change
   class { 'gitlab' :
     git_create_user          => $git_create_user,
@@ -70,7 +70,7 @@ class master::app::lclgitlab (
     gitlab_dbname            => $databases['gitlab']['name'],
     gitlab_dbuser            => $databases['gitlab']['user'],
     gitlab_dbpwd             => $databases['gitlab']['pass'],
-    gitlab_http_port         => $tcpport,
+    gitlab_http_port         => $port,
     gitlab_relative_url_root => '/gitlab',
     gitlab_repodir           => $directories['gitlab'],
     require                  => Service[$redissvc],
