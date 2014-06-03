@@ -14,11 +14,6 @@ class master::devel {
     class { 'python' : }
   }
   if ! defined(Class['php::cli']) {
-    php::ini { '/etc/php.ini' :
-      display_errors  => 'On',
-      short_open_tag  => 'Off',
-      date_timezone   => 'America/Denver',
-    }
     class { 'php::cli' : }
   }
 
