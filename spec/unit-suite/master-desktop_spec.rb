@@ -4,10 +4,7 @@
 #
 require 'spec_helper'
 
-$common_pkgs = [
-    'alsa-plugins-pulseaudio',
-    'alsa-tools',
-    'alsa-utils',
+$pkgs = [
     'dbus-tools',
     'dbus-x11',
     'icedtea-web',
@@ -16,8 +13,6 @@ $common_pkgs = [
     'fvwm',
     'jigdo',
     'keepassx',
-    'pulseaudio',
-    'pulseaudio-utils',
     'xorg-x11-docs',
     'xorg-x11-drivers',
     'xorg-x11-fonts-100dpi',
@@ -55,19 +50,13 @@ $common_pkgs = [
     context "supports operating system: #{os}" do
       context "provides master::desktop class which" do
         it { should contain_class('master::desktop') }
-        context "installs desktop packages" do
-          $common_pkgs.each{|pkg|
-            it "ensure #{pkg} is installed" do
-              should contain_package(pkg).with(
-                'ensure' => 'installed',
-              )
-            end
-          }
-        end
-        it "opens X11 port 6000" do
-          if os == 'Fedora'
-            should contain_exec('open X11 port')
-          end
+        $pkgs.each{ |pkg|
+          it { should contain_package(pkg) }
+        }
+      end
+      it "opens X11 port 6000" do
+        if os == 'Fedora'
+          should contain_exec('open X11 port')
         end
       end
     end
