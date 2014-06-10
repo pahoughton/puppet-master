@@ -5,6 +5,7 @@
 class master::mirror::yum (
   $baseurl  = '/mirrors/yum',
   $host     = undef,
+  $purge    = undef,
   ) {
   $servers = hiera('servers',{'yummirror' => undef})
   $mhost = $host ? {

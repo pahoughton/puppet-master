@@ -77,11 +77,6 @@ class master::app::lclgitlab (
   }
 
   if $vhost {
-    # todo - add unit test
-    file { '/etc/nginx/conf.d/gitlab.conf' :
-      ensure  => 'absent',
-      require => Class['gitlab'],
-    }
     nginx::resource::upstream { 'gitlab' :
       ensure  => 'present',
       members => ["unix:${directories[gitlab]}/gitlab/tmp/sockets/gitlab.socket",],

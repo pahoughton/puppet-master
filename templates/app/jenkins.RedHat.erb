@@ -14,7 +14,7 @@ PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 # Directory where Jenkins store its configuration and working
 # files (checkouts, build reports, artifacts, ...).
 #
-JENKINS_HOME="<%= @adir %>"
+JENKINS_HOME="<%= @basedir %>/jenkins"
 
 ## Type:        string
 ## Default:     ""
@@ -34,6 +34,7 @@ JENKINS_JAVA_CMD=""
 # permissions of $JENKINS_HOME and /var/log/jenkins.
 #
 JENKINS_USER="<%= @user %>"
+JENKINS_GROUP="<%= @group %>"
 
 ## Type:        string
 ## Default:     "-Djava.awt.headless=true"
@@ -50,7 +51,7 @@ JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true"
 # Port Jenkins is listening on.
 # Set to -1 to disable
 #
-JENKINS_PORT="<%= @port %>"
+JENKINS_PORT="<%= @pxyport %>"
 
 ## Type:        string
 ## Default:     ""
@@ -86,7 +87,7 @@ JENKINS_HTTPS_LISTEN_ADDRESS=""
 # Ajp13 Port Jenkins is listening on.
 # Set to -1 to disable
 #
-JENKINS_AJP_PORT="8009"
+JENKINS_AJP_PORT="<%= @ctlport %>"
 
 ## Type:        string
 ## Default:     ""

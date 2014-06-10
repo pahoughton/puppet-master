@@ -30,9 +30,13 @@
 
   "groups" : { "git":    "git",
 	       "gitlab": "git",
-	       "nginx":  "nginx",
 	       "tomcat": "tomcat",
-	       "www":    "nginx"
+	       "nginx":    { "RedHat": "nginx",
+			     "Debian": "www-data"
+			   },
+	       "www":      { "RedHat": "nginx",
+			     "Debian": "www-data"
+			   }
 	     },
 
   "homedirs" : { "git" : "/srv/tgitolite",
@@ -65,8 +69,12 @@
   "users" : { "git":      "git",
 	      "gitlab":   "git",
 	      "gitolite": "git",
-	      "nginx":    "nginx",
 	      "tomcat":   "tomcat",
-	      "www":      "nginx"
+	      "nginx":    { "RedHat": "nginx",
+			    "Debian": "www-data"
+			  },
+	      "www":      { "RedHat": "nginx",
+			    "Debian": "www-data"
+			  }
 	    }
 }

@@ -3,23 +3,24 @@
 # Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
 #
 class master::app::jenkins (
-  $appdir    = undef,
+  $vhost     = undef,
+  $location  = '/jenkins',
+  $wwwdir    = undef,
+  $port      = undef,
+  $cport     = undef,
   $appuser   = undef,
   $appgroup  = undef,
-  $appport   = undef,
-  $vhost     = undef,
-  $location  = '/jenkins'
   ) {
-  $directories = hiera('directories',{'jenkins' => '/var/lib/jenkins'})
-  $email       = hiera('emails', { 'gitlab' => "gitlab@${::hostname}" })
-  $groups      = hiera('groups',{'gitlab' => 'git' })
-  $ports       = hiera('ports',{'jenkins' => '8180' })
-  $servers     = hiera('servers',{'pgsql' => 'localhost','www' => undef } )
-  $users       = hiera('users', { 'git' => 'git', 'gitlab' => 'gitlab', })
 
-  $adir = $appdir ? {
-    undef   => $directories['jenkins'],
-    default => $appdir,
+  $directories = hiera('directories',{'www' => '/srv/www'})
+  $email       = hiera('emails', { 'gitlab' => "gitlab@${::hostname}" })
+  $groups      = hiera('groups',{'jenkins' => 'jenkins','www' => {'RedHat'=>'nginx','Debian'=>'www-data'}})
+  $ports       = hiera('ports',{'jenkins' => '8180','jenkins-ctl' => '8180'})
+  $users       = hiera('users', { 'git' => 'git', 'gitlab' => 'git','www' => {'RedHat'=>'nginx','Debian'=>'www-data'} })
+
+  $basedir = $wwwdir ? {
+    undef   => $directories['www'],
+    default => $wwwdir,
   }
   $user = $appuser ? {
     undef   => $users['jenkins'],
@@ -29,10 +30,15 @@ class master::app::jenkins (
     undef   => $groups['jenkins'],
     default => $appgroup,
   }
-  $port = $appport ? {
+  $pxyport = $port ? {
     undef   => $ports['jenkins'],
-    default => $appport,
+    default => $port,
   }
+  $ctlport = $cport ? {
+    undef   => $ports['jenkins-ctl'],
+    default => $cport,
+  }
+
   case $::osfamily {
     'RedHat' : {
       $configfn = '/etc/sysconfig/jenkins'
@@ -49,10 +55,6 @@ class master::app::jenkins (
         includepkgs => 'jenkins*',
         gpgkey      => "file:///etc/pki/rpm-gpg/${keyfn}",
       }
-      # fixme - add this to nginx as needed.
-      exec { 'setsebool -P httpd_can_network_connect 1' :
-        command => 'setsebool -P httpd_can_network_connect 1',
-      }
     }
     'Debian' : {
       $configfn = '/etc/default/jenkins'
@@ -61,17 +63,28 @@ class master::app::jenkins (
       # }
       # -> # todo - this should not be needed
       apt::source { 'jenkins':
-        location   => 'http://pkg.jenkins-ci.org/debian',
-        repos      => 'binary/',
-        release    => undef,
-        key        => 'D50582E6',
-        key_source => 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key',
-        notify     => Exec['apt_get_update_for_nginx'],
+        location    => 'http://pkg.jenkins-ci.org/debian',
+        repos       => 'binary/',
+        release     => ' ',
+        key         => 'D50582E6',
+        key_source  => 'http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key',
+        include_src => false,
+        notify      => Exec['apt_get_update_for_nginx'],
       }
     }
     default : {
       fail("unspported osfamily ${::osfamily}")
     }
+  }
+
+  if $::selinux == 'true' {
+    ensure_resource('selboolean','httpd_can_network_connect',{
+      value => 'on',
+    })
+  }
+
+  if ! defined(Class['java']) {
+    class { 'java' : }
   }
 
   package { 'jenkins' :
@@ -85,24 +98,43 @@ class master::app::jenkins (
     notify  => Service['jenkins'],
     require => Package['jenkins'],
   }
-  file { $adir :
+  file { "${basedir}/jenkins" :
     ensure  => 'directory',
     owner   => $user,
     group   => $group,
     mode    => '0775',
-    require => Package['jenkins'],
+    require => [File[$basedir],
+                Package['jenkins'],]
   }
   service { 'jenkins' :
     ensure  => 'running',
     enable  => true,
-    require => [File[$configfn],File[$adir],],
+    require => [File[$configfn],
+                File["${basedir}/jenkins"],],
   }
-  if $vhost {
+  if ! defined(Class['nginx']) {
+    class { 'nginx' : }
+    ensure_resource('file',$basedir,{
+      ensure  => 'directory',
+      owner   => $users['www'][$::osfamily],
+      group   => $groups['www'][$::osfamily],
+      mode    => '0775',
+      require => Class['nginx'],
+    })
+    if $vhost {
+      nginx::resource::vhost { $vhost :
+        ensure   => 'present',
+        www_root => $basedir,
+      }
+    }
+  }
+
+  if $vhost and $location {
     nginx::resource::location { 'jenkins' :
       ensure              => 'present',
       vhost               => $vhost,
       location            => $location,
-      proxy               => "http://${vhost}:${port}",
+      proxy               => "http://${vhost}:${pxyport}",
       proxy_read_timeout  => undef,
       location_cfg_append => { include => '/etc/nginx/conf.d/proxy.conf' },
     }

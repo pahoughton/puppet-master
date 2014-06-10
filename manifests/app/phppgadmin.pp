@@ -12,26 +12,20 @@ class master::app::phppgadmin (
   ) {
 
   $directories = hiera('directories',{'www' => '/srv/www'})
-  $groups      = hiera('groups',{'www' => 'www'})
+  $groups      = hiera('groups',{'www' =>  {'RedHat'=>'nginx','Debian'=>'www-data'}})
   $servers     = hiera('servers',{'pgsql' => 'localhost'})
-  $uris        = hiera('uris',{'app' => 'http://appsrv/apps' })
-  $users       = hiera('users',{'www' => 'www'})
-
-  $appsrc = $source ? {
-    undef   => $uris['app'],
-    default => $source,
-  }
+  $users       = hiera('users',{'www' => {'RedHat'=>'nginx','Debian'=>'www-data'}})
 
   $wwwdir = $prefix ? {
     undef   => $directories['www'],
     default => $prefix,
   }
   $appgroup = $group ? {
-    undef   => $groups['www'],
+    undef   => $groups['www'][$::osfamily],
     default => $group,
   }
   $appuser = $user ? {
-    undef   => $users['www'],
+    undef   => $users['www'][$::osfamily],
     default => $user,
   }
 
@@ -55,6 +49,9 @@ class master::app::phppgadmin (
     group   => $appgroup,
     content => template('master/app/phppgadmin-config.inc.php.erb'),
   }
+
+  php::module { 'pgsql' : }
+
   # fixme this should notify php-fpm (if installed)
   # if ! defined( Php__Module['pgsql'] ) {
   #   php::module { 'pgsql' :
