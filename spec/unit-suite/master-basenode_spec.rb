@@ -76,7 +76,7 @@ classes = {
       'undef' => [],
     },
     'Ubuntu' => {
-      'undef' => ['master::mirror::aptmirror',],
+      'undef' => [],
       '13' => [],
       '14' => [],
     },
@@ -87,7 +87,7 @@ classes = {
   },
   'RedHat' => {
     'undef' => {
-      'undef' => ['master::mirror::yum',],
+      'undef' => [],
       },
     'Fedora' => {
       'undef' => [],
@@ -231,6 +231,18 @@ supported.keys.each { |fam|
           files[fam][os][rel].each { |fn|
             it { should contain_file(fn) }
           }
+          tparams = {
+            :mirror_host => 'mirror',
+          }
+          context "supports params #{tparams}" do
+            let :params do tparams end
+            if fam == 'Fedora'
+              it { should contain_class('master::mirror::yum') }
+            end
+            if fam == 'Debian'
+              it { should contain_class('master::mirror::aptmirror') }
+            end
+          end
         end
       end
     }

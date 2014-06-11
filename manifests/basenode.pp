@@ -60,14 +60,16 @@ class master::basenode (
 
   if $::kernel == 'Linux' {
 
-    $ofmirror = $::osfamily ? {
-      'Debian' => 'master::mirror::aptmirror',
-      'RedHat' => 'master::mirror::yum',
-      default  => [],
-    }
-    class { $ofmirror :
-      host  => $mirror_host,
-      purge => $mirror_purge,
+    if $mirror_host {
+      $ofmirror = $::osfamily ? {
+        'Debian' => 'master::mirror::aptmirror',
+        'RedHat' => 'master::mirror::yum',
+        default  => [],
+      }
+      class { $ofmirror :
+        host  => $mirror_host,
+        purge => $mirror_purge,
+      }
     }
 
     $admgroups = $::osfamily ? {
