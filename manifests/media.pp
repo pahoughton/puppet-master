@@ -9,6 +9,20 @@ class master::media {
             'alsa-utils',
             'pulseaudio',
             'pulseaudio-utils',
+            #'pithos',
+            'vlc',
+            'sox',
+            #'google-chrome',
             ]
+
+  # fixme - downloaded - need link for hal-flash-0.2.0rc1-1.fc20.x86_64.rpm
+  $ofpkgs = $::osfamily  ? {
+    'Fedora' => [ 'hal-flash',
+                  ],
+    default  => [],
+  }
+
   ensure_packages($pkgs)
+  ensure_packages($ofpkgs)
+
 }
