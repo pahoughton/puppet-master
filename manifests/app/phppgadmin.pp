@@ -50,7 +50,9 @@ class master::app::phppgadmin (
     content => template('master/app/phppgadmin-config.inc.php.erb'),
   }
 
-  php::module { 'pgsql' : }
+  if ! defined( Php__Module['pgsql'] ) {
+    php::module { 'pgsql' : }
+  }
 
   # fixme this should notify php-fpm (if installed)
   # if ! defined( Php__Module['pgsql'] ) {
