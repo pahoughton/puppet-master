@@ -17,9 +17,9 @@ enabled=0
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-free.key
 
-[<%= @mhost %>-rpmfusion-free-updates-released]
-name=RPM Fusion for EL 6 - Free - <%= @mhost %> - updates-released
-baseurl=http://<%= @mhost %>/mirrors/yum/rpmfusion-free-updates-released
+[<%= @mhost %>-rpmfusion-free-updates]
+name=RPM Fusion for EL 6 - Free - <%= @mhost %> - updates
+baseurl=http://<%= @mhost %>/mirrors/yum/rpmfusion-free-updates
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-free.key
@@ -45,9 +45,9 @@ enabled=0
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-nonfree.key
 
-[<%= @mhost %>-rpmfusion-nonfree-updates-released]
-name=RPM Fusion for EL 6 - Nonfree - <%= @mhost %> - updates-released
-baseurl=http://<%= @mhost %>/mirrors/yum/rpmfusion-nonfree-updates-released
+[<%= @mhost %>-rpmfusion-nonfree-updates]
+name=RPM Fusion for EL 6 - Nonfree - <%= @mhost %> - updates
+baseurl=http://<%= @mhost %>/mirrors/yum/rpmfusion-nonfree-updates
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/rpmfusion-nonfree.key
