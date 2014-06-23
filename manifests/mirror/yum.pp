@@ -21,8 +21,10 @@ class master::mirror::yum (
     notify { "configuring to use ${mhost} yum mirror" : }
     $fusion_repo_files =
     [ '/etc/yum.repos.d/rpmfusion-free.repo',
+      '/etc/yum.repos.d/rpmfusion-free-updates.repo',
       '/etc/yum.repos.d/rpmfusion-free-updates-released.repo',
       '/etc/yum.repos.d/rpmfusion-nonfree.repo',
+      '/etc/yum.repos.d/rpmfusion-nonfree-updates.repo',
       '/etc/yum.repos.d/rpmfusion-nonfree-updates-released.repo',
       ]
     file { $fusion_repo_files :
