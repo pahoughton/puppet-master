@@ -176,9 +176,9 @@ describe tobject, :type => :class do
     perl_modules.each { |pm|
       it { should contain_perl__module(pm) }
     }
-    php_modules.each { |pm|
-      it { should contain_php__module(pm) }
-    }
+    # php_modules.each { |pm|
+    #   it { should contain_php__module(pm) }
+    # }
   end
 end
 

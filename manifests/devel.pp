@@ -13,9 +13,6 @@ class master::devel {
   if ! defined(Class['python']) {
     class { 'python' : }
   }
-  if ! defined(Class['php::cli']) {
-    class { 'php::cli' : }
-  }
 
   $pkgs = [ 'flex',
             'git-svn',
@@ -96,11 +93,15 @@ class master::devel {
     php::module { 'pgsql' : }
   }
 
-  $ofphpmods = $::osfamily ? {
-    'RedHat' => ['pdo'],
-    default  => [],
-  }
+  # fixme - dup w/ php module
+  # if ! defined(Class['php::cli']) {
+  #   class { 'php::cli' : }
+  # }
+  # $ofphpmods = $::osfamily ? {
+  #   'RedHat' => ['pdo'],
+  #   default  => [],
+  # }
 
-  php::module { $ofphpmods : }
-  php::module { 'mysqlnd' : }
+  # php::module { $ofphpmods : }
+  # php::module { 'mysqlnd' : }
 }
