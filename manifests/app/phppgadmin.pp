@@ -39,7 +39,7 @@ class master::app::phppgadmin (
     group      => $appgroup,
     require    => [ File[$wwwdir],
                     Package[git],
-                    Class['master::service::phpfpm'],
+                    Class['php::fpm'],
                     ],
   }
   ->
