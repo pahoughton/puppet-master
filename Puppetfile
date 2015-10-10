@@ -13,7 +13,7 @@ forge "https://forgeapi.puppetlabs.com"
 #mod 'puppetlabs/firewall'
 mod 'puppetlabs/gcc'
 mod 'puppetlabs/stdlib'
-mod 'saz/sudo'
+# mod 'saz/sudo'
 mod 'saz/ssh'
 #mod 'puppetlabs/java'
 
