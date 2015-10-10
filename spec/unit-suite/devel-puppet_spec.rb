@@ -1,13 +1,9 @@
 # 2015-10-10 (cc) <paul4hough@gmail.com>
-#
-# master-devel_spec.rb - 2014-03-09 09:40
-#
-# Copyright (c) 2014 Paul Houghton <paul4hough@gmail.com>
-#
+
 require 'spec_helper'
 
 tobject = 'master::devel::puppet'
-# ttype = class;
+ttype = :class
 
 supported = {
   'Debian' => {
@@ -58,7 +54,7 @@ supported.keys.each { |fam|
   osfam = supported[fam]
   osfam.keys.each { |os|
     osfam[os].each { |rel|
-      describe tobject, :type => :class do
+      describe tobject, :type => ttype do
         tfacts = {
           :osfamily               => fam,
           :operatingsystem        => os,
