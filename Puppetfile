@@ -11,9 +11,8 @@ forge "https://forgeapi.puppetlabs.com"
 #mod 'puppetlabs/apt' - FIXME conflict with bacula ? (postgres)
 #mod 'stahnma/epel'
 #mod 'puppetlabs/firewall'
-mod 'puppetlabs/gcc'
 mod 'puppetlabs/stdlib'
-# mod 'saz/sudo'
+mod 'saz/sudo'
 mod 'saz/ssh'
 #mod 'puppetlabs/java'
 
