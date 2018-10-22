@@ -5,7 +5,7 @@
 #
 # Used to install dependent modules for testing
 #
-forge "http://forge.puppetlabs.com"
+forge "https://forgeapi.puppetlabs.com"
 
 
 mod 'puppetlabs/apt'
